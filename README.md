@@ -1,4 +1,4 @@
-# 7Plus Learning Center Academy - Backend API
+
 
 **A comprehensive Learning Management System (LMS) backend built with FastAPI**
 
