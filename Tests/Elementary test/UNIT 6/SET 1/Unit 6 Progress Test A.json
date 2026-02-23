@@ -1,0 +1,579 @@
+{
+  "testId": "elem_u6_progress_a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 6,
+    "unitName": "Unit 6",
+    "testType": "progress",
+    "variant": "A",
+    "title": "Unit 6 Progress Test A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 70,
+    "estimatedTime": 45,
+    "sections": 7
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "past-simple-spelling-choice",
+          "marks": 10,
+          "instructions": "Circle the correct words to complete the sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeChoice": "I",
+                "options": ["skated", "skatted"],
+                "afterChoice": "across the ice.",
+                "correctAnswer": "skated"
+              },
+              {
+                "sentenceId": 2,
+                "beforeChoice": "The lions",
+                "options": ["stoped", "stopped"],
+                "afterChoice": "in the middle of the road.",
+                "correctAnswer": "stopped"
+              },
+              {
+                "sentenceId": 3,
+                "beforeChoice": "My teacher",
+                "options": ["helpped", "helped"],
+                "afterChoice": "me with my project.",
+                "correctAnswer": "helped"
+              },
+              {
+                "sentenceId": 4,
+                "beforeChoice": "We were there",
+                "options": ["last summer", "summer ago"],
+                "afterChoice": ".",
+                "correctAnswer": "last summer"
+              },
+              {
+                "sentenceId": 5,
+                "beforeChoice": "They were lost and",
+                "options": ["couldn't", "could"],
+                "afterChoice": "find the path.",
+                "correctAnswer": "couldn't"
+              },
+              {
+                "sentenceId": 6,
+                "beforeChoice": "He called",
+                "options": ["last five minutes", "five minutes ago"],
+                "afterChoice": ".",
+                "correctAnswer": "five minutes ago"
+              },
+              {
+                "sentenceId": 7,
+                "beforeChoice": "I",
+                "options": ["studyed", "studied"],
+                "afterChoice": "ten different subjects last year.",
+                "correctAnswer": "studied"
+              },
+              {
+                "sentenceId": 8,
+                "beforeChoice": "The safari park",
+                "options": ["was", "were"],
+                "afterChoice": "very crowded.",
+                "correctAnswer": "was"
+              },
+              {
+                "sentenceId": 9,
+                "beforeChoice": "We",
+                "options": ["carryed", "carried"],
+                "afterChoice": "the books for the teacher.",
+                "correctAnswer": "carried"
+              },
+              {
+                "sentenceId": 10,
+                "beforeChoice": "",
+                "options": ["Were", "Was"],
+                "afterChoice": "they in the school play?",
+                "correctAnswer": "Were"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "email-past-simple-fill",
+          "marks": 10,
+          "instructions": "Complete the email with the affirmative or negative past simple form of the verbs below.",
+          "content": {
+            "providedVerbs": ["arrive", "be x2", "can x2", "chat", "explore", "marry", "move", "try"],
+            "emailContext": {
+              "from": "Finlay",
+              "to": "Liam",
+              "greeting": "Hi Liam"
+            },
+            "emailText": "We 1___ in Australia a few days ago. The flight 2___ really long – 23 hours! But we 3___ see the Great Barrier Reef from the plane – amazing! We 4___ very tired at first, but I feel OK now. I 5___ to get up at the normal time on Tuesday, but I 6___ wake up. Yesterday we 7___ the area near the hotel. There is one really excellent restaurant nearby. I 8___ to the waiter. He's from England and 9___ here fifteen years ago! He 10___ a woman from Brisbane. He loves it and doesn't want to go back! No wonder – it's great here!\n\nWrite soon!\nBest wishes,\nFinlay",
+            "blanks": [
+              {
+                "blankId": 1,
+                "correctAnswers": ["arrived"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "arrive"
+              },
+              {
+                "blankId": 2,
+                "correctAnswers": ["was"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "be"
+              },
+              {
+                "blankId": 3,
+                "correctAnswers": ["could"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "can"
+              },
+              {
+                "blankId": 4,
+                "correctAnswers": ["were"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "be"
+              },
+              {
+                "blankId": 5,
+                "correctAnswers": ["tried"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "try"
+              },
+              {
+                "blankId": 6,
+                "correctAnswers": ["couldn't", "could not"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "can (negative)"
+              },
+              {
+                "blankId": 7,
+                "correctAnswers": ["explored"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "explore"
+              },
+              {
+                "blankId": 8,
+                "correctAnswers": ["chatted"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "chat"
+              },
+              {
+                "blankId": 9,
+                "correctAnswers": ["moved"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "move"
+              },
+              {
+                "blankId": 10,
+                "correctAnswers": ["married"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "marry"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "natural-world-first-letter",
+          "marks": 7,
+          "instructions": "Complete the sentences with words about the natural world. The first letter of each word has been given.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "The black c_____ moved across the sky.",
+                "firstLetter": "c",
+                "correctAnswers": ["clouds"],
+                "acceptableVariants": ["cloud"]
+              },
+              {
+                "sentenceId": 2,
+                "text": "I wanted to give you some pink f______ for your birthday.",
+                "firstLetter": "f",
+                "correctAnswers": ["flowers"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "I love to watch the s_____ at the end of the day.",
+                "firstLetter": "s",
+                "correctAnswers": ["sunset"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "I've got s___ in my shoes from the beach.",
+                "firstLetter": "s",
+                "correctAnswers": ["sand"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "The g____ in the garden is getting very long.",
+                "firstLetter": "g",
+                "correctAnswers": ["grass"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "text": "There are a lot of s____ in the sky tonight.",
+                "firstLetter": "s",
+                "correctAnswers": ["stars"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "text": "The snow is falling onto the g_____.",
+                "firstLetter": "g",
+                "correctAnswers": ["ground"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "multiple-choice",
+          "marks": 8,
+          "instructions": "Choose the correct words to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "question": "The kangaroo jumped ___ the tourists.",
+                "options": [
+                  {"id": "a", "text": "along"},
+                  {"id": "b", "text": "out of"},
+                  {"id": "c", "text": "towards"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 2,
+                "question": "The ___ has got very short legs but it can run very fast.",
+                "options": [
+                  {"id": "a", "text": "tiger"},
+                  {"id": "b", "text": "crocodile"},
+                  {"id": "c", "text": "bear"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 3,
+                "question": "The bear pushed the tree with its ___.",
+                "options": [
+                  {"id": "a", "text": "paw"},
+                  {"id": "b", "text": "tail"},
+                  {"id": "c", "text": "wing"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 4,
+                "question": "Most animals with four legs have ___, but gorillas and frogs don't have them.",
+                "options": [
+                  {"id": "a", "text": "a tooth"},
+                  {"id": "b", "text": "a tail"},
+                  {"id": "c", "text": "a mouth"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 5,
+                "question": "The train to London goes ___ my house every hour.",
+                "options": [
+                  {"id": "a", "text": "past"},
+                  {"id": "b", "text": "through"},
+                  {"id": "c", "text": "along"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 6,
+                "question": "Be careful! There's a big ___ inside that flower!",
+                "options": [
+                  {"id": "a", "text": "butterfly"},
+                  {"id": "b", "text": "eagle"},
+                  {"id": "c", "text": "bee"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 7,
+                "question": "My uncle is training to be a ___. He needs to study science for a long time.",
+                "options": [
+                  {"id": "a", "text": "journalist"},
+                  {"id": "b", "text": "pilot"},
+                  {"id": "c", "text": "politician"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 8,
+                "question": "___ created a new medicine using a plant found in the Amazon jungle.",
+                "options": [
+                  {"id": "a", "text": "Scientists"},
+                  {"id": "b", "text": "Fishermen"},
+                  {"id": "c", "text": "Soldiers"}
+                ],
+                "correctAnswer": "a"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v3",
+          "type": "activity-matching",
+          "marks": 5,
+          "instructions": "Match the adventure holiday activities with the descriptions of the people.",
+          "content": {
+            "providedActivities": ["abseiling", "exploring", "kayaking", "surfing", "trekking"],
+            "descriptions": [
+              {
+                "descriptionId": 1,
+                "person": "Isobel",
+                "description": "loves climbing down mountains with ropes",
+                "correctActivity": "abseiling"
+              },
+              {
+                "descriptionId": 2,
+                "person": "Jack",
+                "description": "loves travelling around new places",
+                "correctActivity": "exploring"
+              },
+              {
+                "descriptionId": 3,
+                "person": "Maria",
+                "description": "is keen on rowing",
+                "correctActivity": "kayaking"
+              },
+              {
+                "descriptionId": 4,
+                "person": "Mark",
+                "description": "likes walking through the countryside",
+                "correctActivity": "trekking"
+              },
+              {
+                "descriptionId": 5,
+                "person": "Ed",
+                "description": "likes riding the waves in the sea",
+                "correctActivity": "surfing"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "use-of-english",
+      "sectionName": "Use of English",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "ue1",
+          "type": "photo-description-prepositions",
+          "marks": 10,
+          "instructions": "Complete the text with the words below.",
+          "content": {
+            "providedWords": ["at", "background", "by", "foreground", "in", "in", "in", "on", "on", "top"],
+            "text": "I'm describing a photo of a National Park 1___ Spain. 2___ the centre, there is a large lake. Behind the lake, in the 3___, there are some mountains. There is snow on 4___ of them and a forest 5___ the bottom of the mountains. There are two eagles flying 6___ the air and a small boat 7___ the water. I can see a butterfly close up on one of the rocks in the 8___ of the photo, and 9___ the left of the photo there's a bear standing 10___ the lake.",
+            "blanks": [
+              {
+                "blankId": 1,
+                "correctAnswers": ["in"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 2,
+                "correctAnswers": ["In"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 3,
+                "correctAnswers": ["background"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 4,
+                "correctAnswers": ["top"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 5,
+                "correctAnswers": ["at"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 6,
+                "correctAnswers": ["in"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 7,
+                "correctAnswers": ["on"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 8,
+                "correctAnswers": ["foreground"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 9,
+                "correctAnswers": ["on"],
+                "acceptableVariants": ["On"]
+              },
+              {
+                "blankId": 10,
+                "correctAnswers": ["by"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "listening",
+      "sectionName": "Listening",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "l1",
+          "type": "speaker-matching",
+          "marks": 5,
+          "instructions": "Listen to five people talking. Match the speakers (1–5) with the statements (A–F). There is one extra statement.",
+          "content": {
+            "audioFile": "audio/unit6_listening.mp3",
+            "audioTrackNumber": 6,
+            "speakers": [1, 2, 3, 4, 5],
+            "statements": [
+              {
+                "id": "A",
+                "text": "Speaker ___ is describing a camping holiday."
+              },
+              {
+                "id": "B",
+                "text": "Speaker ___ is talking about a safari park."
+              },
+              {
+                "id": "C",
+                "text": "Speaker ___ is telling us about a study trip."
+              },
+              {
+                "id": "D",
+                "text": "Speaker ___ is describing a walking holiday."
+              },
+              {
+                "id": "E",
+                "text": "Speaker ___ is telling us about her photography course."
+              },
+              {
+                "id": "F",
+                "text": "Speaker ___ is describing a scene from a film."
+              }
+            ],
+            "correctMatches": {
+              "1": "C",
+              "2": "E",
+              "3": "B",
+              "4": "D",
+              "5": "A"
+            },
+            "extraStatement": "F"
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "reading",
+      "sectionName": "Reading",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "r1",
+          "type": "true-false-reading",
+          "marks": 5,
+          "instructions": "Read the text. Are the sentences true (T) or false (F)?",
+          "content": {
+            "title": "The Loch Ness Monster",
+            "textParagraphs": [
+              "In 1933 a man called George Spicer and his wife travelled to Scotland. They were driving on a road near Loch Ness, which is the largest lake in the UK. They described seeing a huge animal that ran in front of them and across the road with a smaller animal in its mouth. A few weeks later, a journalist called Alex Campbell published a story about this 'monster'. Other people started to tell stories about the 'Loch Ness Monster' in the newspapers.",
+              "In December 1993 a man called Hugh Gray photographed the 'monster' and the photo appeared in a London newspaper. The photo showed a huge creature with a long tail. People asked – was the photo real or was it fake? But it wasn't important – the Loch Ness Monster, or 'Nessie', was the most famous creature in the country!",
+              "Many people still believe that there is a sea monster that lives in the very deep water in Loch Ness. The place is popular with tourists, who come to look for the monster. They take photos, but scientists always say that they are fake. The scientists explain that the images on the photos are really elephants or water snakes or trees.",
+              "Jeremy Wade is a professional fisherman and is now famous for his TV programme called River Monsters. In 2013 he travelled to Loch Ness to look for the creature. He decided that it was actually a shark, similar to those in Antarctica that have dark coloured skin.",
+              "No one knows the truth. However, Nessie continues to be a modern-day myth and tourists continue to try to take the first authentic photograph of the 'Loch Ness Monster'."
+            ],
+            "statements": [
+              {
+                "statementId": 1,
+                "text": "The Spicers were in a car when they saw the animal.",
+                "correctAnswer": "T"
+              },
+              {
+                "statementId": 2,
+                "text": "Hugh Gray published a story about the Loch Ness Monster.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 3,
+                "text": "The opinion of the scientists is that the photos are not real.",
+                "correctAnswer": "T"
+              },
+              {
+                "statementId": 4,
+                "text": "Jeremy Wade is a journalist.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 5,
+                "text": "Wade believes that the Loch Ness Monster is a shark.",
+                "correctAnswer": "T"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "writing",
+      "sectionName": "Writing",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "w1",
+          "type": "guided-writing",
+          "marks": 10,
+          "instructions": "Imagine you are on safari. Write a postcard. Include information about:",
+          "content": {
+            "prompt": "Write a postcard from a safari.",
+            "requirements": [
+              "where you are and where you are staying",
+              "the weather",
+              "the animals you saw yesterday",
+              "other activities you are planning"
+            ],
+            "gradingCriteria": {
+              "content": 4,
+              "organization": 2,
+              "languageUse": 2,
+              "grammar": 2
+            },
+            "manualGrading": true
+          }
+        }
+      ]
+    }
+  ]
+}

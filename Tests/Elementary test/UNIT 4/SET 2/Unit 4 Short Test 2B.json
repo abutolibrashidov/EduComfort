@@ -1,0 +1,253 @@
+{
+  "testId": "elem_u4_short_2b",
+  "metadata": {
+    "level": "elementary",
+    "unit": 4,
+    "unitName": "Unit 4",
+    "testType": "short",
+    "variant": "2B",
+    "title": "Unit 4 Short Test 2B",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the words below. More than one answer may be possible.",
+          "content": {
+            "providedWords": [
+              "a lot of",
+              "how many",
+              "how much",
+              "many",
+              "much"
+            ],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "I don't have __________ homework.",
+                "correctAnswers": [
+                  "much",
+                  "a lot of"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "There's __________ butter in this cake.",
+                "correctAnswers": [
+                  "a lot of",
+                  "much"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "__________ fruit do you eat every day?",
+                "correctAnswers": [
+                  "How much"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "There aren't __________ people on the beach.",
+                "correctAnswers": [
+                  "many",
+                  "a lot of"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "__________ apples do you want?",
+                "correctAnswers": [
+                  "How many"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "error-correction",
+          "marks": 5,
+          "instructions": "There is a mistake in each sentence. Type the corrected word/phrase.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "sentence": "She has a little friends from judo club.",
+                "incorrectPart": "a little",
+                "correction": "a few",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "sentence": "Here you are – there's little orange juice in the bottle.",
+                "incorrectPart": "little",
+                "correction": "a little",
+                "acceptableVariants": [
+                  "some"
+                ]
+              },
+              {
+                "sentenceId": 3,
+                "sentence": "I can give you a few help after the class.",
+                "incorrectPart": "a few",
+                "correction": "a little",
+                "acceptableVariants": [
+                  "some"
+                ]
+              },
+              {
+                "sentenceId": 4,
+                "sentence": "There are a fews photos on my website.",
+                "incorrectPart": "fews",
+                "correction": "few",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "sentence": "Do you need a little onions?",
+                "incorrectPart": "a little",
+                "correction": "a few",
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "multiple-choice-vocabulary",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the gaps.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "I'm responsible ___ tidying my bedroom at the weekend.",
+                "options": [
+                  "a) with",
+                  "b) for",
+                  "c) of"
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 2,
+                "sentence": "My sister is very bad ___ listening to me.",
+                "options": [
+                  "a) in",
+                  "b) for",
+                  "c) at"
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 3,
+                "sentence": "Many people are afraid ___ flying.",
+                "options": [
+                  "a) of",
+                  "b) in",
+                  "c) for"
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 4,
+                "sentence": "Thanks! That's really kind ___ you!",
+                "options": [
+                  "a) at",
+                  "b) for",
+                  "c) of"
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 5,
+                "sentence": "My parents aren't keen ___ computer games.",
+                "options": [
+                  "a) in",
+                  "b) with",
+                  "c) on"
+                ],
+                "correctAnswer": "c"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "word-bank-fill",
+          "marks": 5,
+          "instructions": "Complete the email with the words below.",
+          "content": {
+            "providedWords": [
+              "chef",
+              "customers",
+              "knife",
+              "menu",
+              "tray"
+            ],
+            "emailText": "Hello Dan,\n\nHow are things? I'm really busy at the moment. Well, I'm studying at college because I want to be a {1}. I'm learning how to cut vegetables very quickly with a {2}. I'm also learning how to write an interesting {3}.\n\nNext week, I can practise serving real {4} in the college canteen! I hope I don't drop my {5}!\n\nBest wishes,\nMark",
+            "blanks": [
+              {
+                "blankId": 1,
+                "correctAnswers": [
+                  "chef"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 2,
+                "correctAnswers": [
+                  "knife"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 3,
+                "correctAnswers": [
+                  "menu"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 4,
+                "correctAnswers": [
+                  "customers"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 5,
+                "correctAnswers": [
+                  "tray"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

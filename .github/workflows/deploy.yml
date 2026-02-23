@@ -1,0 +1,100 @@
+name: EduComfort CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.12"
+  NODE_VERSION: "20"
+
+jobs:
+  # ─── Backend Tests ───────────────────────────────────────────────
+  backend-test:
+    name: Backend – Lint & Test
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ENVIRONMENT: production
+      CORS_ORIGINS: https://yourdomain.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install backend dependencies
+        run: |
+          pip install -r requirements_phase2.txt
+          pip install pytest pytest-cov
+
+      - name: Run Alembic migrations (staging DB)
+        run: .venv/bin/alembic upgrade head || python -m alembic upgrade head
+        continue-on-error: false
+
+      - name: Run backend tests
+        run: pytest Tests/ -v --tb=short
+
+  # ─── Frontend Build ───────────────────────────────────────────────
+  frontend-build:
+    name: Frontend – Lint & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "EduComfort frontend"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ env.NODE_VERSION }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: "EduComfort frontend/package-lock.json"
+
+      - name: Install frontend dependencies
+        run: npm ci
+
+      - name: Lint frontend
+        run: npm run lint
+        continue-on-error: true  # Treat lint failures as warnings until fully clean
+
+      - name: Build frontend
+        run: npm run build
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+  # ─── Deploy (runs only on push to main after both jobs pass) ──────
+  deploy:
+    name: Deploy to Production
+    needs: [backend-test, frontend-build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── Example: Deploy to Railway ──
+      # Uncomment and configure for your chosen provider.
+      #
+      # - name: Deploy backend to Railway
+      #   uses: bervProject/railway-deploy@main
+      #   with:
+      #     railway_token: ${{ secrets.RAILWAY_TOKEN }}
+      #     service: educomfort-backend
+      #
+      # - name: Deploy frontend to Vercel / Netlify
+      #   uses: amondnet/vercel-action@v25
+      #   with:
+      #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
+      #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+      #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+      #     working-directory: "EduComfort frontend"
+
+      - name: Deployment placeholder
+        run: echo "✅ CI passed. Configure deploy steps above for your hosting provider."

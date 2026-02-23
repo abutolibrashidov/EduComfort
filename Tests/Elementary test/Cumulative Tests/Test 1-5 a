@@ -1,0 +1,432 @@
+{
+  "test_info": {
+    "title": "Solutions Third Edition Elementary Tests",
+    "test_name": "Cumulative Test 1–5 A",
+    "total_marks": 70
+  },
+  "sections": [
+    {
+      "section_name": "Grammar",
+      "section_number": 1,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 1,
+          "instruction": "Complete the sentences with the correct present simple or present continuous form of the verbs in brackets.",
+          "marks": 10,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "She never _______________________ (miss) the bus."
+            },
+            {
+              "question_number": 2,
+              "text": "_______________________ (he / like) bananas for breakfast?"
+            },
+            {
+              "question_number": 3,
+              "text": "I _______________________ (sit) on a tram at the moment."
+            },
+            {
+              "question_number": 4,
+              "text": "How often _______________________ (you / visit) museums?"
+            },
+            {
+              "question_number": 5,
+              "text": "Are you busy? What _______________________ (you / do)?"
+            },
+            {
+              "question_number": 6,
+              "text": "We usually _______________________ (take) the plane to Ireland."
+            },
+            {
+              "question_number": 7,
+              "text": "Who _______________________ (she / talk) to on her phone?"
+            },
+            {
+              "question_number": 8,
+              "text": "The number 9 coach _______________________ (not / go) to Oxford from here."
+            },
+            {
+              "question_number": 9,
+              "text": "I _______________________ (not / enjoy) this film. Let's leave!"
+            },
+            {
+              "question_number": 10,
+              "text": "Look, they're over there! They _______________________ (wear) green tracksuits."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Grammar",
+      "section_number": 2,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 2,
+          "instruction": "Choose the correct answers to complete the dialogue.",
+          "marks": 10,
+          "dialogue": [
+            {
+              "speaker": "Sam",
+              "line": "Hi Ryan! 1___ people are coming on the school trip?"
+            },
+            {
+              "speaker": "Ryan",
+              "line": "Thirty, I think. There aren't 2___ more places on the coach."
+            },
+            {
+              "speaker": "Sam",
+              "line": "I know. 3___ students are very disappointed."
+            },
+            {
+              "speaker": "Ryan",
+              "line": "Well, it's 4___ trip of the year!"
+            },
+            {
+              "speaker": "Sam",
+              "line": "Let's get on the coach now! 5___ do you want to sit?"
+            },
+            {
+              "speaker": "Ryan",
+              "line": "6___ any seats at the front?"
+            },
+            {
+              "speaker": "Sam",
+              "line": "I'm not sure. Do we have to sit there?"
+            },
+            {
+              "speaker": "Ryan",
+              "line": "Sorry, but yes, we 7___. I 8___ travel sick."
+            },
+            {
+              "speaker": "Sam",
+              "line": "OK, there are 9___ seats here. You're 10___ than me. Can you put my bags up there, please?"
+            }
+          ],
+          "questions": [
+            {
+              "question_number": 1,
+              "options": ["a) How much", "b) How many", "c) How often"]
+            },
+            {
+              "question_number": 2,
+              "options": ["a) some", "b) any", "c) much"]
+            },
+            {
+              "question_number": 3,
+              "options": ["a) A few", "b) A lot", "c) A little"]
+            },
+            {
+              "question_number": 4,
+              "options": ["a) the more popular", "b) the popularer", "c) the most popular"]
+            },
+            {
+              "question_number": 5,
+              "options": ["a) Where", "b) Why", "c) When"]
+            },
+            {
+              "question_number": 6,
+              "options": ["a) Is there", "b) Are there", "c) There is"]
+            },
+            {
+              "question_number": 7,
+              "options": ["a) have", "b) has", "c) do"]
+            },
+            {
+              "question_number": 8,
+              "options": ["a) get always", "b) always get", "c) always getting"]
+            },
+            {
+              "question_number": 9,
+              "options": ["a) some", "b) any", "c) a little"]
+            },
+            {
+              "question_number": 10,
+              "options": ["a) more tall", "b) tallest", "c) taller"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Vocabulary",
+      "section_number": 3,
+      "total_marks": 7,
+      "exercises": [
+        {
+          "exercise_number": 3,
+          "instruction": "Circle the correct words to complete the sentences.",
+          "marks": 7,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "I'm not very polite / patient – I don't like waiting for buses."
+            },
+            {
+              "question_number": 2,
+              "text": "I feel embarrassed / angry and nervous when I have to perform in the school play."
+            },
+            {
+              "question_number": 3,
+              "text": "These trousers are too small for me. They're too baggy / tight."
+            },
+            {
+              "question_number": 4,
+              "text": "It's dangerous / safe to ski on your own. Always go with someone."
+            },
+            {
+              "question_number": 5,
+              "text": "He cooks with usual / unusual food items that you can't find in a normal supermarket."
+            },
+            {
+              "question_number": 6,
+              "text": "I'm looking for the male / female changing rooms so I can try on this dress."
+            },
+            {
+              "question_number": 7,
+              "text": "It's a very ugly / attractive city. You don't need to take your camera!"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Vocabulary",
+      "section_number": 4,
+      "total_marks": 7,
+      "exercises": [
+        {
+          "exercise_number": 4,
+          "instruction": "Complete the sentences with the prepositions below.",
+          "preposition_bank": "about at for in of on to",
+          "marks": 7,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "Marco Pierre White is a chef who is famous ___________ his pasta dishes."
+            },
+            {
+              "question_number": 2,
+              "text": "I'm excited ___________ the next Olympics."
+            },
+            {
+              "question_number": 3,
+              "text": "The beach is more crowded ___________ the afternoon."
+            },
+            {
+              "question_number": 4,
+              "text": "Let's do something special ___________ the weekend."
+            },
+            {
+              "question_number": 5,
+              "text": "There's a wood close ___________ our house."
+            },
+            {
+              "question_number": 6,
+              "text": "Can you meet me in front ___________ the town hall?"
+            },
+            {
+              "question_number": 7,
+              "text": "My parents aren't keen ___________ fizzy drinks at mealtimes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Vocabulary",
+      "section_number": 5,
+      "total_marks": 6,
+      "exercises": [
+        {
+          "exercise_number": 5,
+          "instruction": "Complete the words in the sentences. The first letter of each word has been given.",
+          "marks": 6,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "You look very different with a b _ _ _ _ and moustache!"
+            },
+            {
+              "question_number": 2,
+              "text": "My uncle Bob's son is my favourite c _ _ _ _ _."
+            },
+            {
+              "question_number": 3,
+              "text": "They want to climb the highest m _ _ _ _ _ _ _ in Africa."
+            },
+            {
+              "question_number": 4,
+              "text": "I sleep in long-sleeved p _ _ _ _ _ _ because the nights are very cold."
+            },
+            {
+              "question_number": 5,
+              "text": "What music are you listening to on your h _ _ _ _ _ _ _ _ _?"
+            },
+            {
+              "question_number": 6,
+              "text": "Carrots and onions are my least favourite v _ _ _ _ _ _ _ _ _."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Use of English",
+      "section_number": 6,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 6,
+          "instruction": "Complete the second sentence so that it has a similar meaning to the first. Use the words in brackets. Use 2–4 words, including the words in brackets.",
+          "marks": 10,
+          "questions": [
+            {
+              "question_number": 1,
+              "first_sentence": "It isn't the same as mine.",
+              "word_in_brackets": "different",
+              "second_sentence": "It's __________________________________________ mine."
+            },
+            {
+              "question_number": 2,
+              "first_sentence": "He's an excellent writer.",
+              "word_in_brackets": "good",
+              "second_sentence": "He's __________________________________________ writing."
+            },
+            {
+              "question_number": 3,
+              "first_sentence": "He leaves hospital tomorrow.",
+              "word_in_brackets": "in",
+              "second_sentence": "He is __________________________________________ tomorrow."
+            },
+            {
+              "question_number": 4,
+              "first_sentence": "We always visit our friends on 1st January.",
+              "word_in_brackets": "Day",
+              "second_sentence": "We always visit our friends __________________________________________ ."
+            },
+            {
+              "question_number": 5,
+              "first_sentence": "In my opinion, it's too dangerous.",
+              "word_in_brackets": "honest",
+              "second_sentence": "To __________________________________________, it's too dangerous."
+            },
+            {
+              "question_number": 6,
+              "first_sentence": "I can't – I'm doing other things.",
+              "word_in_brackets": "busy",
+              "second_sentence": "Sorry, __________________________________________ ."
+            },
+            {
+              "question_number": 7,
+              "first_sentence": "We want to pay now.",
+              "word_in_brackets": "bill",
+              "second_sentence": "Can we __________________________________________, please?"
+            },
+            {
+              "question_number": 8,
+              "first_sentence": "I want soup first and then salad.",
+              "word_in_brackets": "followed",
+              "second_sentence": "I'd like soup __________________________________________ salad."
+            },
+            {
+              "question_number": 9,
+              "first_sentence": "Don't take any left or right turns.",
+              "word_in_brackets": "straight",
+              "second_sentence": "Go __________________________________________ ."
+            },
+            {
+              "question_number": 10,
+              "first_sentence": "You should walk.",
+              "word_in_brackets": "foot",
+              "second_sentence": "You should __________________________________________."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Listening",
+      "section_number": 7,
+      "total_marks": 5,
+      "exercises": [
+        {
+          "exercise_number": 7,
+          "instruction": "Listen to Laura talking about her job. Choose the correct answers.",
+          "audio_track": "10",
+          "marks": 5,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "Laura works at her ___ school.",
+              "options": ["a) son's", "b) sister's", "c) nephew's"]
+            },
+            {
+              "question_number": 2,
+              "text": "She wears ___ to work.",
+              "options": ["a) trainers", "b) shoes", "c) boots"]
+            },
+            {
+              "question_number": 3,
+              "text": "She normally arrives at work at ___.",
+              "options": ["a) 11.00", "b) 11.50", "c) 11.15"]
+            },
+            {
+              "question_number": 4,
+              "text": "The field is ___ the school.",
+              "options": ["a) in the middle of", "b) behind", "c) next to"]
+            },
+            {
+              "question_number": 5,
+              "text": "What happens at 1.40?",
+              "options": ["a) They throw away the food.", "b) She gets home.", "c) She loads the dishwashers."]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Reading",
+      "section_number": 8,
+      "total_marks": 5,
+      "exercises": [
+        {
+          "exercise_number": 8,
+          "instruction": "Read the text. Match sentences A–E with gaps 1–5.",
+          "marks": 5,
+          "text_title": "Celebrating World Food Day",
+          "text_content": "1___ Millions of people celebrate World Food Day every year on 16 October in over 150 different countries. They take part in events, give money and talk about ways of helping hungry people around the world.\n\nMost people believe that the right to food is a basic human right. 2___ Who is this situation the worst for? 60% of hungry people in the world are women. 70% of these people live in the countryside in Africa, Asia and South America. Many of them are family farmers. The USA is one of the richest countries in the world, but food is still too expensive for many. 3___\n\n4___ When you are hungry, you are sick more often and live a shorter life. Almost five million children under the age of five die every year because they are not getting the right food into their bodies.\n\nWhat can we do? First, let's plan our meals better so we don't use too much food. And don't throw away food! Save it for the next meal. 5___ That means buy winter vegetables, like carrots, in winter and buy summer food items, like tomatoes, in the summer. We should also give money to charities like Oxfam that work in poorer countries. And finally, give food donations to food banks. If everyone gives a little bit, together we can make a big difference.",
+          "sentences_to_match": [
+            "A) One in seven Americans does not have enough to eat.",
+            "B) What is World Food Day?",
+            "C) But 805 million people, or one in nine people in the world, are hungry.",
+            "D) Also, buy fresh food that is in season.",
+            "E) What is the effect of not having enough food?"
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Writing",
+      "section_number": 9,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 9,
+          "instruction": "Write an article about reusing and recycling things (food, clothes, household items, etc.). Follow the instructions below.",
+          "marks": 10,
+          "requirements": [
+            "Include information about these topics: recycling at your school; how and what you recycle at home; recycling in your country.",
+            "Write in paragraphs of two or more sentences.",
+            "Introduce the topic in the first sentence.",
+            "Use the comparative and superlative to make comparisons.",
+            "Use linking words (and, but, so, or and because)."
+          ]
+        }
+      ]
+    }
+  ]
+}

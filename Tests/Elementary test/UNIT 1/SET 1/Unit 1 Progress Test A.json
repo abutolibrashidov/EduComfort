@@ -1,0 +1,773 @@
+{
+  "testId": "elem_u1_progress_a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 1,
+    "unitName": "Unit 1",
+    "testType": "progress",
+    "variant": "A",
+    "title": "Unit 1 Progress Test A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 70,
+    "estimatedTime": 45,
+    "sections": 7
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "fill-in-blanks-dialogue",
+          "marks": 10,
+          "instructions": "Complete the dialogues with the correct present simple form of the verbs in brackets.",
+          "content": {
+            "dialogues": [
+              {
+                "dialogueId": "d1",
+                "exchanges": [
+                  {
+                    "speaker": "A",
+                    "blanks": [
+                      {
+                        "blankId": 1,
+                        "beforeText": "",
+                        "prompt": "(you / use)",
+                        "afterText": "your smartphone in your English lessons?",
+                        "correctAnswers": ["Do you use"],
+                        "acceptableVariants": ["do you use"]
+                      }
+                    ]
+                  },
+                  {
+                    "speaker": "B",
+                    "blanks": [
+                      {
+                        "blankId": 2,
+                        "beforeText": "No, we",
+                        "prompt": null,
+                        "afterText": ". We",
+                        "correctAnswers": ["don't"],
+                        "acceptableVariants": ["do not"]
+                      },
+                      {
+                        "blankId": 3,
+                        "beforeText": "",
+                        "prompt": "(not / have)",
+                        "afterText": "Wi-Fi in our classroom.",
+                        "correctAnswers": ["don't have"],
+                        "acceptableVariants": ["do not have"]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dialogueId": "d2",
+                "exchanges": [
+                  {
+                    "speaker": "A",
+                    "blanks": [
+                      {
+                        "blankId": 4,
+                        "beforeText": "",
+                        "prompt": "(your cousin / study)",
+                        "afterText": "languages at university?",
+                        "correctAnswers": ["Does your cousin study"],
+                        "acceptableVariants": ["does your cousin study"]
+                      }
+                    ]
+                  },
+                  {
+                    "speaker": "B",
+                    "blanks": [
+                      {
+                        "blankId": 5,
+                        "beforeText": "Yes, she",
+                        "prompt": null,
+                        "afterText": ". She",
+                        "correctAnswers": ["does"],
+                        "acceptableVariants": []
+                      },
+                      {
+                        "blankId": 6,
+                        "beforeText": "",
+                        "prompt": "(speak)",
+                        "afterText": "English, Arabic and French.",
+                        "correctAnswers": ["speaks"],
+                        "acceptableVariants": []
+                      }
+                    ]
+                  },
+                  {
+                    "speaker": "A",
+                    "blanks": [
+                      {
+                        "blankId": 7,
+                        "beforeText": "That's good! I",
+                        "prompt": "(not / understand)",
+                        "afterText": "Arabic but I",
+                        "correctAnswers": ["don't understand"],
+                        "acceptableVariants": ["do not understand"]
+                      },
+                      {
+                        "blankId": 8,
+                        "beforeText": "",
+                        "prompt": "(want)",
+                        "afterText": "to learn it.",
+                        "correctAnswers": ["want"],
+                        "acceptableVariants": []
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "dialogueId": "d3",
+                "exchanges": [
+                  {
+                    "speaker": "A",
+                    "blanks": [
+                      {
+                        "blankId": 9,
+                        "beforeText": "This bus",
+                        "prompt": "(not / stop)",
+                        "afterText": "near our school.",
+                        "correctAnswers": ["doesn't stop"],
+                        "acceptableVariants": ["does not stop"]
+                      }
+                    ]
+                  },
+                  {
+                    "speaker": "B",
+                    "blanks": [
+                      {
+                        "blankId": 10,
+                        "beforeText": "Let's wait for the number 8. It",
+                        "prompt": "(go)",
+                        "afterText": "to the park and we can walk from there.",
+                        "correctAnswers": ["goes"],
+                        "acceptableVariants": []
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "verb-conjugation",
+          "marks": 5,
+          "instructions": "Complete the sentences with the verbs below. Use the affirmative, negative or interrogative form of the present simple.",
+          "content": {
+            "providedVerbs": ["arrive", "come", "finish", "not play", "not watch"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "What time",
+                "blank1": {
+                  "correctAnswers": ["does"],
+                  "acceptableVariants": []
+                },
+                "middleText": "the film",
+                "blank2": {
+                  "correctAnswers": ["finish"],
+                  "acceptableVariants": []
+                },
+                "afterBlank": "?",
+                "correctVerbUsed": "finish"
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "She",
+                "blank1": {
+                  "correctAnswers": ["doesn't play", "does not play"],
+                  "acceptableVariants": []
+                },
+                "afterBlank": "the trumpet.",
+                "correctVerbUsed": "not play"
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "The teacher",
+                "blank1": {
+                  "correctAnswers": ["arrives"],
+                  "acceptableVariants": []
+                },
+                "afterBlank": "at school before us.",
+                "correctVerbUsed": "arrive"
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "",
+                "blank1": {
+                  "correctAnswers": ["Does"],
+                  "acceptableVariants": []
+                },
+                "middleText": "your best friend",
+                "blank2": {
+                  "correctAnswers": ["come"],
+                  "acceptableVariants": []
+                },
+                "afterBlank": "from Brazil?",
+                "correctVerbUsed": "come"
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "I",
+                "blank1": {
+                  "correctAnswers": ["don't watch", "do not watch"],
+                  "acceptableVariants": []
+                },
+                "afterBlank": "TV in the week.",
+                "correctVerbUsed": "not watch"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g3",
+          "type": "error-correction",
+          "marks": 5,
+          "instructions": "Find the mistake in each sentence. Circle the mistake and write the correction.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "sentence": "Sorry, I not like this music.",
+                "incorrectPart": "not like",
+                "correction": "don't like",
+                "acceptableVariants": ["do not like"]
+              },
+              {
+                "sentenceId": 2,
+                "sentence": "Does you live in that apartment?",
+                "incorrectPart": "Does you",
+                "correction": "Do you",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "sentence": "My aunt visit us every weekend.",
+                "incorrectPart": "visit",
+                "correction": "visits",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "sentence": "My mum go to London every Monday.",
+                "incorrectPart": "go",
+                "correction": "goes",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "sentence": "She don't cycle to school.",
+                "incorrectPart": "don't",
+                "correction": "doesn't",
+                "acceptableVariants": ["does not"]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct form of the verbs below.",
+          "content": {
+            "providedWords": ["do", "not cook", "set", "tidy", "unload"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "My older brother __________ the ironing on Saturday morning.",
+                "correctAnswers": ["does"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "Wait for the dishwasher to finish before you __________ it.",
+                "correctAnswers": ["unload"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "My step-father __________ dinner for my mother.",
+                "correctAnswers": ["doesn't cook", "does not cook"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "The grandchildren like to __________ the table.",
+                "correctAnswers": ["set"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "It's important to __________ your bedroom.",
+                "correctAnswers": ["tidy"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "fill-and-match",
+          "marks": 10,
+          "instructions": "Complete the names of the family members. Then match the people with the personality adjectives below.",
+          "content": {
+            "providedAdjectives": ["creative", "friendly", "hard-working", "patient", "sensible"],
+            "items": [
+              {
+                "itemId": 1,
+                "clue": "aunt's daughter",
+                "context": "waits for me after school for an hour every day",
+                "correctWord": "cousin",
+                "correctAdjective": "patient"
+              },
+              {
+                "itemId": 2,
+                "clue": "mum's mother",
+                "context": "cooks and cleans for the family",
+                "correctWord": "grandmother",
+                "correctAdjective": "hard-working"
+              },
+              {
+                "itemId": 3,
+                "clue": "sister's son",
+                "context": "likes to help people",
+                "correctWord": "nephew",
+                "correctAdjective": "friendly"
+              },
+              {
+                "itemId": 4,
+                "clue": "wife's brother",
+                "context": "loves making things",
+                "correctWord": "brother-in-law",
+                "correctAdjective": "creative"
+              },
+              {
+                "itemId": 5,
+                "clue": "son's son",
+                "context": "five-year-old, knows how to cross the road",
+                "correctWord": "grandson",
+                "correctAdjective": "sensible"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v3",
+          "type": "multiple-choice",
+          "marks": 5,
+          "instructions": "Choose the correct answers to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "question": "He's tall and ___.",
+                "options": [
+                  {"id": "a", "text": "long looking"},
+                  {"id": "b", "text": "good-looking"},
+                  {"id": "c", "text": "short"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 2,
+                "question": "She's got long ___.",
+                "options": [
+                  {"id": "a", "text": "hair"},
+                  {"id": "b", "text": "glasses"},
+                  {"id": "c", "text": "beard"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 3,
+                "question": "Tim's got fair ___.",
+                "options": [
+                  {"id": "a", "text": "moustache"},
+                  {"id": "b", "text": "hair"},
+                  {"id": "c", "text": "eyes"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 4,
+                "question": "I've got ___ brown hair.",
+                "options": [
+                  {"id": "a", "text": "good-looking"},
+                  {"id": "b", "text": "beard"},
+                  {"id": "c", "text": "wavy"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 5,
+                "question": "My aunt wears ___ and has curly hair.",
+                "options": [
+                  {"id": "a", "text": "beard"},
+                  {"id": "b", "text": "moustache"},
+                  {"id": "c", "text": "glasses"}
+                ],
+                "correctAnswer": "c"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "use-of-english",
+      "sectionName": "Use of English",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "ue1",
+          "type": "dialogue-multiple-choice",
+          "marks": 10,
+          "instructions": "Complete the dialogue with the correct answers.",
+          "content": {
+            "dialogue": [
+              {
+                "speaker": "Lucy",
+                "text": "Your sister's got",
+                "blank": 1,
+                "afterText": ", wavy hair now!"
+              },
+              {
+                "speaker": "Helen",
+                "text": "Yes, I know! It's very different",
+                "blank": 2,
+                "afterText": "before!"
+              },
+              {
+                "speaker": "Lucy",
+                "text": "Is she pleased",
+                "blank": 3,
+                "afterText": "her new haircut?"
+              },
+              {
+                "speaker": "Helen",
+                "text": "She loves it! Remi is her hairdresser."
+              },
+              {
+                "speaker": "Lucy",
+                "text": "What does Remi look",
+                "blank": 4,
+                "afterText": "? A lot of",
+                "blank2": 5,
+                "afterText2": "work there and I don't know who he is."
+              },
+              {
+                "speaker": "Helen",
+                "text": "Well, he's very good-",
+                "blank": 6,
+                "afterText": "!"
+              },
+              {
+                "speaker": "Lucy",
+                "text": "Is he the man with a",
+                "blank": 7,
+                "afterText": "and a moustache?"
+              },
+              {
+                "speaker": "Helen",
+                "text": "No, that's Jonny. Remi's got medium-",
+                "blank": 8,
+                "afterText": "black hair and wears red",
+                "blank2": 9,
+                "afterText2": "."
+              },
+              {
+                "speaker": "Lucy",
+                "text": "Oh, I think I know him. Is he very",
+                "blank": 10,
+                "afterText": "?"
+              },
+              {
+                "speaker": "Helen",
+                "text": "Yes, that's right."
+              }
+            ],
+            "questions": [
+              {
+                "blankNumber": 1,
+                "options": [
+                  {"id": "A", "text": "short"},
+                  {"id": "B", "text": "straight"},
+                  {"id": "C", "text": "tall"}
+                ],
+                "correctAnswer": "A"
+              },
+              {
+                "blankNumber": 2,
+                "options": [
+                  {"id": "A", "text": "from"},
+                  {"id": "B", "text": "about"},
+                  {"id": "C", "text": "at"}
+                ],
+                "correctAnswer": "A"
+              },
+              {
+                "blankNumber": 3,
+                "options": [
+                  {"id": "A", "text": "for"},
+                  {"id": "B", "text": "with"},
+                  {"id": "C", "text": "to"}
+                ],
+                "correctAnswer": "B"
+              },
+              {
+                "blankNumber": 4,
+                "options": [
+                  {"id": "A", "text": "for"},
+                  {"id": "B", "text": "like"},
+                  {"id": "C", "text": "as"}
+                ],
+                "correctAnswer": "B"
+              },
+              {
+                "blankNumber": 5,
+                "options": [
+                  {"id": "A", "text": "man"},
+                  {"id": "B", "text": "mans"},
+                  {"id": "C", "text": "men"}
+                ],
+                "correctAnswer": "C"
+              },
+              {
+                "blankNumber": 6,
+                "options": [
+                  {"id": "A", "text": "looks"},
+                  {"id": "B", "text": "looker"},
+                  {"id": "C", "text": "looking"}
+                ],
+                "correctAnswer": "C"
+              },
+              {
+                "blankNumber": 7,
+                "options": [
+                  {"id": "A", "text": "hair"},
+                  {"id": "B", "text": "beard"},
+                  {"id": "C", "text": "glasses"}
+                ],
+                "correctAnswer": "B"
+              },
+              {
+                "blankNumber": 8,
+                "options": [
+                  {"id": "A", "text": "long"},
+                  {"id": "B", "text": "short"},
+                  {"id": "C", "text": "length"}
+                ],
+                "correctAnswer": "C"
+              },
+              {
+                "blankNumber": 9,
+                "options": [
+                  {"id": "A", "text": "glasses"},
+                  {"id": "B", "text": "beard"},
+                  {"id": "C", "text": "moustache"}
+                ],
+                "correctAnswer": "A"
+              },
+              {
+                "blankNumber": 10,
+                "options": [
+                  {"id": "A", "text": "long"},
+                  {"id": "B", "text": "tall"},
+                  {"id": "C", "text": "straight"}
+                ],
+                "correctAnswer": "B"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "listening",
+      "sectionName": "Listening",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "l1",
+          "type": "true-false-listening",
+          "marks": 5,
+          "instructions": "Listen to the dialogue. Are the sentences true (T) or false (F)?",
+          "content": {
+            "audioFile": "audio/unit1_listening.mp3",
+            "audioTrackNumber": 1,
+            "statements": [
+              {
+                "statementId": 1,
+                "text": "Jenny's father asks her to set the table.",
+                "correctAnswer": "T"
+              },
+              {
+                "statementId": 2,
+                "text": "Jenny's hair is wet.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 3,
+                "text": "It's pizza for dinner.",
+                "correctAnswer": "T"
+              },
+              {
+                "statementId": 4,
+                "text": "Jenny's test is on Thursday.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 5,
+                "text": "Jenny's mum wants Dan to do his homework.",
+                "correctAnswer": "T"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "reading",
+      "sectionName": "Reading",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "r1",
+          "type": "gap-fill-matching",
+          "marks": 5,
+          "instructions": "Read the text. Match sentences A–E with gaps 1–5.",
+          "content": {
+            "title": "One child families – are they good for us?",
+            "textWithGaps": [
+              {
+                "type": "gap",
+                "gapNumber": 1
+              },
+              {
+                "type": "text",
+                "content": "Or are you an only child? Parents in China are excited about the news that now they can have more than one child. So how are family sizes different around the world?"
+              },
+              {
+                "type": "gap",
+                "gapNumber": 2
+              },
+              {
+                "type": "text",
+                "content": "In Turkey, parents usually have three children. Four out of five children in the USA have brothers or sisters. Most American families have two children. But the American actors Angelina Jolie and Brad Pitt are famous for their very big family. They have three children and three other children from different countries. Zahara comes from Ethiopia, Pax comes from Vietnam and Maddox comes from Cambodia."
+              },
+              {
+                "type": "gap",
+                "gapNumber": 3
+              },
+              {
+                "type": "text",
+                "content": "You can talk to your brother or sister when you are worried about your problems. You can learn lots of things from your siblings. They can teach you new facts. And learning how to get on with each other can teach you life skills too."
+              },
+              {
+                "type": "text",
+                "content": "What about only children?"
+              },
+              {
+                "type": "gap",
+                "gapNumber": 4
+              },
+              {
+                "type": "text",
+                "content": "Many of the parents of only children worry about this. People say that only children can't share and are not friendly."
+              },
+              {
+                "type": "text",
+                "content": "However, according to lots of studies, only children are no different from children with siblings. They learn to share in the classroom, or with cousins, step-brothers and step-sisters and their friends. So do only children get benefits?"
+              },
+              {
+                "type": "gap",
+                "gapNumber": 5
+              },
+              {
+                "type": "text",
+                "content": "Only children usually get on very well with their parents and they are very independent."
+              }
+            ],
+            "sentences": [
+              {
+                "id": "A",
+                "text": "In Europe, the average family has two children."
+              },
+              {
+                "id": "B",
+                "text": "They don't have brothers or sisters to learn from or share with."
+              },
+              {
+                "id": "C",
+                "text": "Have you got any brothers or sisters?"
+              },
+              {
+                "id": "D",
+                "text": "The answer is yes."
+              },
+              {
+                "id": "E",
+                "text": "According to research, a sister or brother is an advantage."
+              }
+            ],
+            "correctMatches": {
+              "1": "C",
+              "2": "A",
+              "3": "E",
+              "4": "B",
+              "5": "D"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "writing",
+      "sectionName": "Writing",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "w1",
+          "type": "guided-writing",
+          "marks": 10,
+          "instructions": "You want to chat online with English-speaking students to practise your English. Write your personal profile.",
+          "content": {
+            "prompt": "Write your personal profile.",
+            "requirements": [
+              "Start with: Hi, my name's _____.",
+              "Include information about your interests, your personality, why you want to improve your English and the type of person you want to chat with.",
+              "Make a paragraph plan.",
+              "Use contractions.",
+              "Check your spelling and grammar."
+            ],
+            "gradingCriteria": {
+              "content": 4,
+              "organization": 2,
+              "languageUse": 2,
+              "grammar": 2
+            },
+            "manualGrading": true
+          }
+        }
+      ]
+    }
+  ]
+}

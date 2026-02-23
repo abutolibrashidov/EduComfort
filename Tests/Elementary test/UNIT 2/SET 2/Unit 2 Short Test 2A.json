@@ -1,0 +1,211 @@
+{
+  "testId": "elem_u2_short_2a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 2,
+    "unitName": "Unit 2",
+    "testType": "short",
+    "variant": "2A",
+    "title": "Unit 2 Short Test 2A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "rewrite-sentence",
+          "marks": 5,
+          "instructions": "Rewrite the sentences. Put the adverb of frequency in the correct place.",
+          "content": {
+            "items": [
+              {
+                "itemId": 1,
+                "original": "The teacher gives us a lot of homework. (hardly ever)",
+                "correctAnswer": "The teacher hardly ever gives us a lot of homework.",
+                "acceptableVariants": []
+              },
+              {
+                "itemId": 2,
+                "original": "You are first! (always)",
+                "correctAnswer": "You are always first!",
+                "acceptableVariants": []
+              },
+              {
+                "itemId": 3,
+                "original": "My brother has lunch at school. (never)",
+                "correctAnswer": "My brother never has lunch at school.",
+                "acceptableVariants": []
+              },
+              {
+                "itemId": 4,
+                "original": "My father wears glasses. (sometimes)",
+                "correctAnswer": "My father sometimes wears glasses.",
+                "acceptableVariants": [
+                  "Sometimes my father wears glasses."
+                ]
+              },
+              {
+                "itemId": 5,
+                "original": "I am tired at the end of the school day. (usually)",
+                "correctAnswer": "I am usually tired at the end of the school day.",
+                "acceptableVariants": [
+                  "Usually I am tired at the end of the school day."
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the questions with the correct question words.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "__________ cousins have you got?",
+                "correctAnswers": [
+                  "How many"
+                ]
+              },
+              {
+                "sentenceId": 2,
+                "text": "__________ is that man over there?",
+                "correctAnswers": [
+                  "Who"
+                ]
+              },
+              {
+                "sentenceId": 3,
+                "text": "__________ do you sit in class? Here?",
+                "correctAnswers": [
+                  "Where"
+                ]
+              },
+              {
+                "sentenceId": 4,
+                "text": "__________ does the match start? Midday?",
+                "correctAnswers": [
+                  "When",
+                  "What time"
+                ]
+              },
+              {
+                "sentenceId": 5,
+                "text": "__________ does he do the ironing? Every week?",
+                "correctAnswers": [
+                  "How often",
+                  "When"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "rewrite-sentence",
+          "marks": 5,
+          "instructions": "There is a mistake in each sentence. Rewrite the sentence correctly.",
+          "content": {
+            "items": [
+              {
+                "itemId": 1,
+                "original": "I prefer to do sport on the morning.",
+                "correctAnswer": "I prefer to do sport in the morning.",
+                "acceptableVariants": []
+              },
+              {
+                "itemId": 2,
+                "original": "She always meets her friends in the weekend.",
+                "correctAnswer": "She always meets her friends at the weekend.",
+                "acceptableVariants": [
+                  "She always meets her friends on the weekend."
+                ]
+              },
+              {
+                "itemId": 3,
+                "original": "Wait before I get there, please!",
+                "correctAnswer": "Wait until I get there, please!",
+                "acceptableVariants": [
+                  "Wait till I get there, please!"
+                ]
+              },
+              {
+                "itemId": 4,
+                "original": "I have lunch at home in Fridays.",
+                "correctAnswer": "I have lunch at home on Fridays.",
+                "acceptableVariants": []
+              },
+              {
+                "itemId": 5,
+                "original": "My mum works at eight o'clock to four during the week.",
+                "correctAnswer": "My mum works from eight o'clock to four during the week.",
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct word. The first letter is given.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "A lot of animals live in the j__________ .",
+                "correctAnswers": [
+                  "jungle"
+                ]
+              },
+              {
+                "sentenceId": 2,
+                "text": "Can we swim in this r__________ ?",
+                "correctAnswers": [
+                  "river"
+                ]
+              },
+              {
+                "sentenceId": 3,
+                "text": "The bridge is very n__________ . We can't drive across it.",
+                "correctAnswers": [
+                  "narrow"
+                ]
+              },
+              {
+                "sentenceId": 4,
+                "text": "Have a s__________ journey!",
+                "correctAnswers": [
+                  "safe"
+                ]
+              },
+              {
+                "sentenceId": 5,
+                "text": "My family have got a small b__________ on the river.",
+                "correctAnswers": [
+                  "boat"
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

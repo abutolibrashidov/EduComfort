@@ -1,0 +1,253 @@
+{
+  "testId": "elem_u4_short_2a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 4,
+    "unitName": "Unit 4",
+    "testType": "short",
+    "variant": "2A",
+    "title": "Unit 4 Short Test 2A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the words below. More than one answer may be possible.",
+          "content": {
+            "providedWords": [
+              "a lot of",
+              "how many",
+              "how much",
+              "many",
+              "much"
+            ],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "__________ TVs are in your house?",
+                "correctAnswers": [
+                  "How many"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "__________ pasta would you like?",
+                "correctAnswers": [
+                  "How much"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "There's __________ snow on the roads.",
+                "correctAnswers": [
+                  "a lot of",
+                  "much"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "There aren't __________ books on this subject.",
+                "correctAnswers": [
+                  "many",
+                  "a lot of"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "I don't drink __________ coffee.",
+                "correctAnswers": [
+                  "much",
+                  "a lot of"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "error-correction",
+          "marks": 5,
+          "instructions": "There is a mistake in each sentence. Type the corrected word/phrase.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "sentence": "There are a fews eggs in the fridge.",
+                "incorrectPart": "fews",
+                "correction": "few",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "sentence": "It's OK – there's little rice left here for you.",
+                "incorrectPart": "little",
+                "correction": "a little",
+                "acceptableVariants": [
+                  "some"
+                ]
+              },
+              {
+                "sentenceId": 3,
+                "sentence": "She's got a little answers correct.",
+                "incorrectPart": "a little",
+                "correction": "a few",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "sentence": "Can I have a few milk in my tea, please?",
+                "incorrectPart": "a few",
+                "correction": "a little",
+                "acceptableVariants": [
+                  "some"
+                ]
+              },
+              {
+                "sentenceId": 5,
+                "sentence": "I need a little minutes to finish my exam.",
+                "incorrectPart": "a little",
+                "correction": "a few",
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "multiple-choice-vocabulary",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the gaps.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "The Italian city Naples is famous ___ pizza.",
+                "options": [
+                  "a) with",
+                  "b) for",
+                  "c) of"
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 2,
+                "sentence": "Alex is interested ___ science.",
+                "options": [
+                  "a) in",
+                  "b) with",
+                  "c) at"
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 3,
+                "sentence": "I'm good ___ sport.",
+                "options": [
+                  "a) in",
+                  "b) of",
+                  "c) at"
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 4,
+                "sentence": "My parents are worried ___ my brother.",
+                "options": [
+                  "a) with",
+                  "b) for",
+                  "c) about"
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 5,
+                "sentence": "This restaurant is popular ___ families.",
+                "options": [
+                  "a) in",
+                  "b) with",
+                  "c) for"
+                ],
+                "correctAnswer": "b"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "word-bank-fill",
+          "marks": 5,
+          "instructions": "Complete the email with the words below.",
+          "content": {
+            "providedWords": [
+              "chef",
+              "customers",
+              "menu",
+              "trays",
+              "waiter"
+            ],
+            "emailText": "Hi Polly,\n\nHow are you? My brother's got a new job at the pizza restaurant! He's a {1} and he works at the weekend. He has to serve the {2}. He also helps the {3} to write the {4}. They are adding some new pizzas this week! And he says he's getting good at carrying {5} with one hand now!\n\nWrite to me soon with your news.\n\nLove,\nEsme",
+            "blanks": [
+              {
+                "blankId": 1,
+                "correctAnswers": [
+                  "waiter"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 2,
+                "correctAnswers": [
+                  "customers"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 3,
+                "correctAnswers": [
+                  "chef"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 4,
+                "correctAnswers": [
+                  "menu"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 5,
+                "correctAnswers": [
+                  "trays"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

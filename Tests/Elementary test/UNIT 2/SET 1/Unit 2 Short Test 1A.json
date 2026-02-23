@@ -1,0 +1,237 @@
+{
+  "testId": "sol3e_elem_u2_short_1a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 2,
+    "variant": "A",
+    "title": "Unit 2 Short Test 1A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 20,
+    "sections": 2
+  },
+  "sections": [
+    {
+      "sectionId": "grammar_1",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "q1",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the verbs below and the affirmative or negative form of have to.",
+          "content": {
+            "providedWords": [
+              "eat",
+              "pay",
+              "ride",
+              "use",
+              "wear"
+            ],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "We __________ lunch at school. We can go home at midday for an hour.",
+                "correctAnswers": [
+                  "don't have to eat"
+                ],
+                "acceptableVariants": [
+                  "do not have to eat"
+                ]
+              },
+              {
+                "sentenceId": 2,
+                "text": "You __________ for the museum visit. It isn't free entry.",
+                "correctAnswers": [
+                  "have to pay"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "In the UK students usually __________ school uniform for the school photo.",
+                "correctAnswers": [
+                  "have to wear"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "My brother is really good at maths, so he __________ a calculator.",
+                "correctAnswers": [
+                  "doesn't have to use"
+                ],
+                "acceptableVariants": [
+                  "does not have to use"
+                ]
+              },
+              {
+                "sentenceId": 5,
+                "text": "In some places in the UK you __________ your bike on the road, because there aren't always cycle paths.",
+                "correctAnswers": [
+                  "have to ride"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "q2",
+          "type": "sentence-ordering",
+          "marks": 5,
+          "instructions": "Put the words in the correct order to make questions. Use the interrogative form of have to.",
+          "content": {
+            "items": [
+              {
+                "id": 1,
+                "words": [
+                  "we",
+                  "here",
+                  "meet"
+                ],
+                "correctSentence": "Do we have to meet here?"
+              },
+              {
+                "id": 2,
+                "words": [
+                  "arrive",
+                  "you",
+                  "early"
+                ],
+                "correctSentence": "Do you have to arrive early?"
+              },
+              {
+                "id": 3,
+                "words": [
+                  "take",
+                  "I",
+                  "an exam"
+                ],
+                "correctSentence": "Do I have to take an exam?"
+              },
+              {
+                "id": 4,
+                "words": [
+                  "work",
+                  "on Sundays",
+                  "they"
+                ],
+                "correctSentence": "Do they have to work on Sundays?"
+              },
+              {
+                "id": 5,
+                "words": [
+                  "he",
+                  "remember",
+                  "the email address"
+                ],
+                "correctSentence": "Does he have to remember the email address?"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary_3",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "q3",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct word.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "My mother wakes __________ at six o'clock in the morning.",
+                "correctAnswers": [
+                  "up"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "The students arrive __________ school very early.",
+                "correctAnswers": [
+                  "at"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "Do you __________ to bed at nine o'clock?",
+                "correctAnswers": [
+                  "go"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "I eat breakfast early, so I also like to have __________ early usually at midday.",
+                "correctAnswers": [
+                  "lunch"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "Do you __________ dressed after breakfast?",
+                "correctAnswers": [
+                  "get"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "q4",
+          "type": "matching",
+          "marks": 5,
+          "instructions": "Match the descriptions of the people with the school subjects.",
+          "content": {
+            "providedOptions": [
+              "art and design",
+              "geography",
+              "I.C.T.",
+              "maths",
+              "P.E."
+            ],
+            "items": [
+              {
+                "id": 1,
+                "text": "Jim is good with numbers.",
+                "answer": "maths"
+              },
+              {
+                "id": 2,
+                "text": "Ana loves reading about other countries.",
+                "answer": "geography"
+              },
+              {
+                "id": 3,
+                "text": "Arash is good at sport.",
+                "answer": "P.E."
+              },
+              {
+                "id": 4,
+                "text": "Zeynep is creative.",
+                "answer": "art and design"
+              },
+              {
+                "id": 5,
+                "text": "Martin likes computers.",
+                "answer": "I.C.T."
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

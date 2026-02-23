@@ -1,0 +1,252 @@
+{
+    "testId": "sol3e_elem_u6_short_2b",
+    "metadata": {
+        "level": "elementary",
+        "unit": 6,
+        "unitName": "Unit 6",
+        "testType": "short",
+        "variant": "2B",
+        "title": "Unit 6 Short Test 2B",
+        "source": "Solutions Third Edition",
+        "totalMarks": 20,
+        "estimatedTime": 20,
+        "sections": 2
+    },
+    "sections": [
+        {
+            "sectionId": "grammar",
+            "sectionName": "Grammar",
+            "totalMarks": 10,
+            "questions": [
+                {
+                    "questionId": "g1",
+                    "type": "multiple-choice-past-be",
+                    "marks": 5,
+                    "instructions": "Choose the correct past simple forms of be to complete the sentences.",
+                    "content": {
+                        "questions": [
+                            {
+                                "questionId": 1,
+                                "sentence": "They ___ very noisy during the class.",
+                                "options": [
+                                    "was",
+                                    "were"
+                                ],
+                                "correctAnswer": "were"
+                            },
+                            {
+                                "questionId": 2,
+                                "sentence": "He ___ the fastest runner.",
+                                "options": [
+                                    "wasn't",
+                                    "weren't"
+                                ],
+                                "correctAnswer": "wasn't"
+                            },
+                            {
+                                "questionId": 3,
+                                "sentence": "___ the animals outside at the zoo?",
+                                "options": [
+                                    "Was",
+                                    "Were"
+                                ],
+                                "correctAnswer": "Were"
+                            },
+                            {
+                                "questionId": 4,
+                                "sentence": "I ___ really tired last night.",
+                                "options": [
+                                    "was",
+                                    "were"
+                                ],
+                                "correctAnswer": "was"
+                            },
+                            {
+                                "questionId": 5,
+                                "sentence": "___ you in the library?",
+                                "options": [
+                                    "Was",
+                                    "Were"
+                                ],
+                                "correctAnswer": "Were"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "questionId": "g2",
+                    "type": "fill-in-blanks-dialogue",
+                    "marks": 5,
+                    "instructions": "Complete the dialogue with the correct past simple form of be and can (affirmative or negative).",
+                    "content": {
+                        "dialogue": [
+                            {
+                                "speaker": "Lizzie",
+                                "text": "My brother (1) ___ talk before he (2) ___ four.",
+                                "blanks": [
+                                    {
+                                        "id": 1,
+                                        "correctAnswers": [
+                                            "could"
+                                        ],
+                                        "hint": "can"
+                                    },
+                                    {
+                                        "id": 2,
+                                        "correctAnswers": [
+                                            "was"
+                                        ],
+                                        "hint": "be"
+                                    }
+                                ]
+                            },
+                            {
+                                "speaker": "Lizzie",
+                                "text": "He only started talking when he was four and a half. My parents (3) ___ really worried at that time, but now he's a journalist!",
+                                "blanks": [
+                                    {
+                                        "id": 3,
+                                        "correctAnswers": [
+                                            "were"
+                                        ],
+                                        "hint": "be"
+                                    }
+                                ]
+                            },
+                            {
+                                "speaker": "Rose",
+                                "text": "That's interesting. (4) ___ you talk when you (5) ___ two?",
+                                "blanks": [
+                                    {
+                                        "id": 4,
+                                        "correctAnswers": [
+                                            "Could"
+                                        ],
+                                        "hint": "can"
+                                    },
+                                    {
+                                        "id": 5,
+                                        "correctAnswers": [
+                                            "were"
+                                        ],
+                                        "hint": "be"
+                                    }
+                                ]
+                            },
+                            {
+                                "speaker": "Lizzie",
+                                "text": "Yes, but I couldn't walk until quite late.",
+                                "blanks": []
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "sectionId": "vocabulary",
+            "sectionName": "Vocabulary",
+            "totalMarks": 10,
+            "questions": [
+                {
+                    "questionId": "v1",
+                    "type": "word-bank-fill",
+                    "marks": 5,
+                    "instructions": "Complete the sentences with the prepositions below.",
+                    "content": {
+                        "providedWords": [
+                            "across",
+                            "along",
+                            "away from",
+                            "into",
+                            "past"
+                        ],
+                        "sentences": [
+                            {
+                                "id": 1,
+                                "prompt": "The animals are scared – they're running ___ that tiger.",
+                                "correctAnswers": [
+                                    "away from"
+                                ]
+                            },
+                            {
+                                "id": 2,
+                                "prompt": "We can't cycle ___ that field to the other side – it's private.",
+                                "correctAnswers": [
+                                    "across"
+                                ]
+                            },
+                            {
+                                "id": 3,
+                                "prompt": "I dropped my phone ___ the bath.",
+                                "correctAnswers": [
+                                    "into"
+                                ]
+                            },
+                            {
+                                "id": 4,
+                                "prompt": "There's a busy road outside our house and cars drive ___ all night.",
+                                "correctAnswers": [
+                                    "past"
+                                ]
+                            },
+                            {
+                                "id": 5,
+                                "prompt": "Walk ___ this street until you get to the end.",
+                                "correctAnswers": [
+                                    "along"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "questionId": "v2",
+                    "type": "fill-in-blanks-initials",
+                    "marks": 5,
+                    "instructions": "Complete the sentences with the correct profession. The first letter of the word has been given.",
+                    "content": {
+                        "sentences": [
+                            {
+                                "id": 1,
+                                "prompt": "A group of e___ travelled to an island in the middle of the ocean.",
+                                "correctAnswers": [
+                                    "explorers"
+                                ]
+                            },
+                            {
+                                "id": 2,
+                                "prompt": "J___ always love to write about unusual stories.",
+                                "correctAnswers": [
+                                    "Journalists"
+                                ]
+                            },
+                            {
+                                "id": 3,
+                                "prompt": "The p___ decided to spend more money on transport.",
+                                "correctAnswers": [
+                                    "politician",
+                                    "politicians"
+                                ]
+                            },
+                            {
+                                "id": 4,
+                                "prompt": "My sister is an excellent s___. She raced her yacht in the 2012 Olympics.",
+                                "correctAnswers": [
+                                    "sailor"
+                                ]
+                            },
+                            {
+                                "id": 5,
+                                "prompt": "S___ are trying to discover life on other planets.",
+                                "correctAnswers": [
+                                    "Scientists"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

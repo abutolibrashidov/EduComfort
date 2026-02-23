@@ -1,0 +1,224 @@
+{
+  "testId": "elem_u5_short_2a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 5,
+    "unitName": "Unit 5",
+    "testType": "short",
+    "variant": "2A",
+    "title": "Unit 5 Short Test 2A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "multiple-choice-superlatives",
+          "marks": 5,
+          "instructions": "Choose the correct form of the superlative adjectives to complete the gaps.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "I think Spanish is ___ language to learn.",
+                "options": [
+                  {"label": "a", "value": "the most easiest"},
+                  {"label": "b", "value": "the more easy"},
+                  {"label": "c", "value": "the easiest"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 2,
+                "sentence": "This is ___ T-shirt I've got.",
+                "options": [
+                  {"label": "a", "value": "the plainest"},
+                  {"label": "b", "value": "the more plain"},
+                  {"label": "c", "value": "the most plain"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 3,
+                "sentence": "Summer is ___ season.",
+                "options": [
+                  {"label": "a", "value": "driest"},
+                  {"label": "b", "value": "the driest"},
+                  {"label": "c", "value": "the most dry"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 4,
+                "sentence": "What is ___ job in the world?",
+                "options": [
+                  {"label": "a", "value": "the difficultest"},
+                  {"label": "b", "value": "the more difficult"},
+                  {"label": "c", "value": "the most difficult"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 5,
+                "sentence": "Is this ___ path to cycle on?",
+                "options": [
+                  {"label": "a", "value": "the safest"},
+                  {"label": "b", "value": "the saferest"},
+                  {"label": "c", "value": "the most safest"}
+                ],
+                "correctAnswer": "a"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "superlative-completion",
+          "marks": 5,
+          "instructions": "Complete the sentences with the superlative form of the adjectives in brackets.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "Who is",
+                "afterBlank": "person in your family?",
+                "adjective": "funny",
+                "correctAnswers": ["the funniest"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "We live on",
+                "afterBlank": "street in Cambridge.",
+                "adjective": "wide",
+                "correctAnswers": ["the widest"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "Which is",
+                "afterBlank": "piece of clothing you have?",
+                "adjective": "comfortable",
+                "correctAnswers": ["the most comfortable"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "Marco is",
+                "afterBlank": "student in the class. He never listens.",
+                "adjective": "bad",
+                "correctAnswers": ["the worst"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "Richmond Park is",
+                "afterBlank": "park in London.",
+                "adjective": "big",
+                "correctAnswers": ["the biggest"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "cloze-text",
+          "marks": 5,
+          "instructions": "Complete the text with the words below.",
+          "content": {
+            "providedWords": ["buy", "go by", "miss", "take", "wait for"],
+            "text": "When you {1} tube on the London Underground, the first thing you have to do is {2} a ticket. Then {3} the escalator or stairs, because the stations are very deep. When you {4} your train, don't stand at the front of the platform – it can be dangerous. If you {5} a train, don't worry. The trains usually come every two to three minutes!",
+            "blanks": [
+              {
+                "blankId": 1,
+                "correctAnswers": ["go by"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 2,
+                "correctAnswers": ["buy"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 3,
+                "correctAnswers": ["take"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 4,
+                "correctAnswers": ["wait for"],
+                "acceptableVariants": []
+              },
+              {
+                "blankId": 5,
+                "correctAnswers": ["miss"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "first-letter-completion",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct continent or compass point. The first letter of the word has been given.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "The sun always rises in the e ___ ___ ___ .",
+                "firstLetter": "e",
+                "correctAnswers": ["east"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "Malta and Andorra are two of the smallest states in E ___ ___ ___ ___ ___ .",
+                "firstLetter": "E",
+                "correctAnswers": ["Europe"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "Brazil is the largest country in S ___ ___ ___ ___ A ___ ___ ___ ___ ___ ___ .",
+                "firstLetter": "S",
+                "correctAnswers": ["South America"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "Manchester is a city in the n ___ ___ ___ ___ of England.",
+                "firstLetter": "n",
+                "correctAnswers": ["north"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "No one lives in A ___ ___ ___ ___ ___ ___ ___ ___ ___ all the time, but a few thousand scientists work and study there.",
+                "firstLetter": "A",
+                "correctAnswers": ["Antarctica"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

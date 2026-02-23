@@ -1,0 +1,229 @@
+{
+    "testId": "sol3e_elem_u5_short_2b",
+    "metadata": {
+        "level": "elementary",
+        "unit": 5,
+        "unitName": "Unit 5",
+        "testType": "short",
+        "variant": "2B",
+        "title": "Unit 5 Short Test 2B",
+        "source": "Solutions Third Edition",
+        "totalMarks": 20,
+        "estimatedTime": 20,
+        "sections": 2
+    },
+    "sections": [
+        {
+            "sectionId": "grammar",
+            "sectionName": "Grammar",
+            "totalMarks": 10,
+            "questions": [
+                {
+                    "questionId": "g1",
+                    "type": "multiple-choice-superlatives",
+                    "marks": 5,
+                    "instructions": "Choose the correct form of the superlative adjectives to complete the gaps.",
+                    "content": {
+                        "questions": [
+                            {
+                                "questionId": 1,
+                                "sentence": "My mum is ___ person in the family.",
+                                "options": [
+                                    "the most sensible",
+                                    "the more sensible",
+                                    "the sensiblest"
+                                ],
+                                "correctAnswer": "the most sensible"
+                            },
+                            {
+                                "questionId": 2,
+                                "sentence": "This is ___ day of the summer.",
+                                "options": [
+                                    "the most sunny",
+                                    "b sunniest",
+                                    "the sunniest"
+                                ],
+                                "correctAnswer": "the sunniest"
+                            },
+                            {
+                                "questionId": 3,
+                                "sentence": "He is ___ player on the team.",
+                                "options": [
+                                    "the younger",
+                                    "the youngest",
+                                    "the most young"
+                                ],
+                                "correctAnswer": "the youngest"
+                            },
+                            {
+                                "questionId": 4,
+                                "sentence": "October and November are ___ months of the year in the UK.",
+                                "options": [
+                                    "the wetest",
+                                    "the wettest",
+                                    "the most wet"
+                                ],
+                                "correctAnswer": "the wettest"
+                            },
+                            {
+                                "questionId": 5,
+                                "sentence": "What time is ___ train we can catch?",
+                                "options": [
+                                    "the earliest",
+                                    "b earliest",
+                                    "the most earlier"
+                                ],
+                                "correctAnswer": "the earliest"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "questionId": "g2",
+                    "type": "fill-in-blanks-superlatives",
+                    "marks": 5,
+                    "instructions": "Complete the sentences with the superlative form of the adjectives in brackets.",
+                    "content": {
+                        "sentences": [
+                            {
+                                "id": 1,
+                                "prompt": "What is ___ room in your house? (untidy)",
+                                "correctAnswers": [
+                                    "the untidiest"
+                                ]
+                            },
+                            {
+                                "id": 2,
+                                "prompt": "Flying is ___ way to get to Scotland from London. (quick)",
+                                "correctAnswers": [
+                                    "the quickest"
+                                ]
+                            },
+                            {
+                                "id": 3,
+                                "prompt": "Indian restaurants are ___ restaurants in the UK. (popular)",
+                                "correctAnswers": [
+                                    "the most popular"
+                                ]
+                            },
+                            {
+                                "id": 4,
+                                "prompt": "Who always gets ___ results in your class? (good)",
+                                "correctAnswers": [
+                                    "the best"
+                                ]
+                            },
+                            {
+                                "id": 5,
+                                "prompt": "Death Valley is ___ part of the USA. (hot)",
+                                "correctAnswers": [
+                                    "the hottest"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "sectionId": "vocabulary",
+            "sectionName": "Vocabulary",
+            "totalMarks": 10,
+            "questions": [
+                {
+                    "questionId": "v1",
+                    "type": "word-bank-fill",
+                    "marks": 5,
+                    "instructions": "Complete the text with the words below.",
+                    "content": {
+                        "providedWords": [
+                            "cross",
+                            "get off",
+                            "give",
+                            "lose",
+                            "wait for"
+                        ],
+                        "text": "Let's meet at midday on Saturday! You have to take a tram and (1) [get off] opposite the library. (2) [cross] the road and (3) [wait for] me outside the main door of the museum. If you (4) [lose] your way, you can text me. My dad works at the museum, so he can (5) [give] you a lift home.",
+                        "blanks": [
+                            {
+                                "id": 1,
+                                "correctAnswers": [
+                                    "get off"
+                                ]
+                            },
+                            {
+                                "id": 2,
+                                "correctAnswers": [
+                                    "cross"
+                                ]
+                            },
+                            {
+                                "id": 3,
+                                "correctAnswers": [
+                                    "wait for"
+                                ]
+                            },
+                            {
+                                "id": 4,
+                                "correctAnswers": [
+                                    "lose"
+                                ]
+                            },
+                            {
+                                "id": 5,
+                                "correctAnswers": [
+                                    "give"
+                                ]
+                            }
+                        ]
+                    }
+                },
+                {
+                    "questionId": "v2",
+                    "type": "fill-in-blanks-initials",
+                    "marks": 5,
+                    "instructions": "Complete the sentences with the correct continent or compass point. The first letter of the word has been given.",
+                    "content": {
+                        "sentences": [
+                            {
+                                "id": 1,
+                                "prompt": "Russia covers two continents, including A___.",
+                                "correctAnswers": [
+                                    "Asia"
+                                ]
+                            },
+                            {
+                                "id": 2,
+                                "prompt": "Marseilles is a town in the s___ of France.",
+                                "correctAnswers": [
+                                    "south"
+                                ]
+                            },
+                            {
+                                "id": 3,
+                                "prompt": "The sun goes down in the w___.",
+                                "correctAnswers": [
+                                    "west"
+                                ]
+                            },
+                            {
+                                "id": 4,
+                                "prompt": "Mexico is a country in N___ A___.",
+                                "correctAnswers": [
+                                    "North America"
+                                ]
+                            },
+                            {
+                                "id": 5,
+                                "prompt": "England is one of the most crowded countries in E___.",
+                                "correctAnswers": [
+                                    "Europe"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

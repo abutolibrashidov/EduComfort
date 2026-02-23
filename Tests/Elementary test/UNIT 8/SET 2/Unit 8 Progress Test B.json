@@ -1,0 +1,624 @@
+{
+  "testId": "elem_u8_progress_b",
+  "metadata": {
+    "level": "elementary",
+    "unit": 8,
+    "unitName": "Unit 8",
+    "testType": "progress",
+    "variant": "B",
+    "title": "Unit 8 Progress Test B",
+    "source": "Solutions Third Edition",
+    "totalMarks": 70,
+    "estimatedTime": 45,
+    "sections": 6
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "error-correction",
+          "marks": 10,
+          "instructions": "Find the mistake in each sentence. Circle the mistake and write the correction.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "I not going to do judo this evening.",
+                "mistake": "not",
+                "correctAnswers": ["'m not", "am not"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "They is going to stop in China on the way to Australia.",
+                "mistake": "is",
+                "correctAnswers": ["are"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "I'll to study languages at university",
+                "mistake": "to",
+                "correctAnswers": ["study"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "I think she won't be tired.",
+                "mistake": "won't",
+                "correctAnswers": ["will"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "What he is going to do?",
+                "mistake": "he is",
+                "correctAnswers": ["is he"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "text": "'Have a good time at the party.' 'Yes, I'll.'",
+                "mistake": "I'll",
+                "correctAnswers": ["I will"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "text": "I don't think the train won't be late.",
+                "mistake": "won't",
+                "correctAnswers": ["will"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 8,
+                "text": "He's going to cycling in a few minutes.",
+                "mistake": "cycling",
+                "correctAnswers": ["cycle"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 9,
+                "text": "He will go to the Olympics next year?",
+                "mistake": "He will",
+                "correctAnswers": ["Will he"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 10,
+                "text": "My brother is going live on a boat.",
+                "mistake": "going live",
+                "correctAnswers": ["going to live"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "multiple-choice-circle",
+          "marks": 10,
+          "instructions": "Circle the correct words to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "She ___ / ___ going to sit at the front of the coach.",
+                "options": ["isn't", "not"],
+                "correctAnswer": "isn't"
+              },
+              {
+                "questionId": 2,
+                "sentence": "I'm going to ___ / ___ badminton tomorrow.",
+                "options": ["playing", "play"],
+                "correctAnswer": "play"
+              },
+              {
+                "questionId": 3,
+                "sentence": "You ___ / ___ get cold without your coat on!",
+                "options": ["'ll", "won't"],
+                "correctAnswer": "'ll"
+              },
+              {
+                "questionId": 4,
+                "sentence": "He's going to write his essay ___ / ___ afternoon.",
+                "options": ["next", "this"],
+                "correctAnswer": "this"
+              },
+              {
+                "questionId": 5,
+                "sentence": "He ___ / ___ get up early tomorrow – he went to bed very late last night.",
+                "options": ["will", "won't"],
+                "correctAnswer": "won't"
+              },
+              {
+                "questionId": 6,
+                "sentence": "Becky ___ / ___ be worried when she hears about your hospital appointment.",
+                "options": ["won't", "will"],
+                "correctAnswer": "will"
+              },
+              {
+                "questionId": 7,
+                "sentence": "___ / ___ they going to drive all the way?",
+                "options": ["Is", "Are"],
+                "correctAnswer": "Are"
+              },
+              {
+                "questionId": 8,
+                "sentence": "'Will he come on foot?' 'Yes, he ___ / ___.'",
+                "options": ["will", "won't"],
+                "correctAnswer": "will"
+              },
+              {
+                "questionId": 9,
+                "sentence": "We're going to watch Star Wars the day ___ / ___ tomorrow.",
+                "options": ["before", "after"],
+                "correctAnswer": "after"
+              },
+              {
+                "questionId": 10,
+                "sentence": "I think cars ___ / ___ get smaller and smaller because petrol will be more expensive.",
+                "options": ["will", "won't"],
+                "correctAnswer": "will"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "first-letter-completion-dialogue",
+          "marks": 5,
+          "instructions": "Complete the dialogue with sports and sports equipment words. The first letter of each word has been given.",
+          "content": {
+            "dialogue": [
+              {
+                "speaker": "Ann",
+                "text": "The sea doesn't look too bad this morning. There are some lovely big waves! Shall we go",
+                "blankId": 1,
+                "firstLetter": "s",
+                "afterBlank": "?",
+                "correctAnswers": ["surfing"],
+                "acceptableVariants": []
+              },
+              {
+                "speaker": "Charlie",
+                "text": "I can't. I forgot to bring my",
+                "blankId": 2,
+                "firstLetter": "w",
+                "afterBlank": ".",
+                "correctAnswers": ["wetsuit"],
+                "acceptableVariants": []
+              },
+              {
+                "speaker": "Ann",
+                "text": "Oh no. Why don't you play",
+                "blankId": 3,
+                "firstLetter": "v",
+                "afterBlank": "on the beach then?",
+                "correctAnswers": ["volleyball"],
+                "acceptableVariants": []
+              },
+              {
+                "speaker": "Charlie",
+                "text": "No, I think I'll just go for a swim in the hotel pool."
+              },
+              {
+                "speaker": "Ann",
+                "text": "OK. Do you want to borrow my",
+                "blankId": 4,
+                "firstLetter": "g",
+                "afterBlank": "?",
+                "correctAnswers": ["goggles"],
+                "acceptableVariants": []
+              },
+              {
+                "speaker": "Charlie",
+                "text": "Yes, please. Oh look! I can do a water",
+                "blankId": 5,
+                "firstLetter": "a",
+                "afterBlank": "class in the pool at midday! Cool!",
+                "correctAnswers": ["aerobics"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "matching-athletics",
+          "marks": 6,
+          "instructions": "Match the description with the athletics events below.",
+          "content": {
+            "providedWords": ["high jump", "long jump", "marathon", "pole vault", "relay", "shot put"],
+            "descriptions": [
+              {
+                "descriptionId": 1,
+                "text": "This is the highest jump in athletics.",
+                "correctAnswers": ["pole vault"],
+                "acceptableVariants": []
+              },
+              {
+                "descriptionId": 2,
+                "text": "An athlete runs 100 metres and passes something to the next person in the team.",
+                "correctAnswers": ["relay"],
+                "acceptableVariants": []
+              },
+              {
+                "descriptionId": 3,
+                "text": "You jump a long distance into a small area of sand.",
+                "correctAnswers": ["long jump"],
+                "acceptableVariants": []
+              },
+              {
+                "descriptionId": 4,
+                "text": "A long-distance race on foot.",
+                "correctAnswers": ["marathon"],
+                "acceptableVariants": []
+              },
+              {
+                "descriptionId": 5,
+                "text": "You have to jump as high as you can without a pole.",
+                "correctAnswers": ["high jump"],
+                "acceptableVariants": []
+              },
+              {
+                "descriptionId": 6,
+                "text": "This event tests how far you can throw a heavy ball.",
+                "correctAnswers": ["shot put"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v3",
+          "type": "word-formation",
+          "marks": 9,
+          "instructions": "Complete the sentences with the correct form of the words in brackets.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "Murray's greatest",
+                "afterBlank": "was to win Wimbledon.",
+                "baseWord": "achieve",
+                "correctAnswers": ["achievement"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "We are going to a",
+                "afterBlank": "restaurant this evening.",
+                "baseWord": "Turkey",
+                "correctAnswers": ["Turkish"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "Can I make a",
+                "afterBlank": "for the weekend?",
+                "baseWord": "suggest",
+                "correctAnswers": ["suggestion"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "We had to write a",
+                "afterBlank": "of the weather in English for homework.",
+                "baseWord": "describe",
+                "correctAnswers": ["description"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "You can study the",
+                "afterBlank": "language at many schools in the UK.",
+                "baseWord": "Germany",
+                "correctAnswers": ["German"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "beforeBlank": "Doctors say that",
+                "afterBlank": "is not the same as depression.",
+                "baseWord": "sad",
+                "correctAnswers": ["sadness"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "beforeBlank": "She's got a",
+                "afterBlank": "brother-in-law.",
+                "baseWord": "Spain",
+                "correctAnswers": ["Spanish"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 8,
+                "beforeBlank": "Walking for just ten minutes a day can improve",
+                "afterBlank": "levels.",
+                "baseWord": "fit",
+                "correctAnswers": ["fitness"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 9,
+                "beforeBlank": "American English isn't the same as",
+                "afterBlank": "English.",
+                "baseWord": "Britain",
+                "correctAnswers": ["British"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "use_of_english",
+      "sectionName": "Use of English",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "uoe1",
+          "type": "sentence-transformation",
+          "marks": 10,
+          "instructions": "Complete the second sentence so that it has a similar meaning to the first. Use the words in brackets. Use 2–4 words, including the words in brackets.",
+          "content": {
+            "transformations": [
+              {
+                "transformationId": 1,
+                "firstSentence": "Let's go climbing at the weekend.",
+                "keyword": "why",
+                "secondSentence": "___ go climbing at the weekend?",
+                "correctAnswers": ["Why don't we"],
+                "acceptableVariants": ["Why don't you"]
+              },
+              {
+                "transformationId": 2,
+                "firstSentence": "That's true, it's expensive.",
+                "keyword": "right",
+                "secondSentence": "You ___ , it's expensive.",
+                "correctAnswers": ["are right", "'re right"],
+                "acceptableVariants": []
+              },
+              {
+                "transformationId": 3,
+                "firstSentence": "I'm not sure I really want to do yoga.",
+                "keyword": "fancy",
+                "secondSentence": "I ___ yoga.",
+                "correctAnswers": ["don't fancy doing", "don't really fancy"],
+                "acceptableVariants": []
+              },
+              {
+                "transformationId": 4,
+                "firstSentence": "I don't want to.",
+                "keyword": "rather",
+                "secondSentence": "I ___ .",
+                "correctAnswers": ["'d rather not", "would rather not"],
+                "acceptableVariants": []
+              },
+              {
+                "transformationId": 5,
+                "firstSentence": "Really?",
+                "keyword": "think",
+                "secondSentence": "Do ___ ?",
+                "correctAnswers": ["you think so"],
+                "acceptableVariants": []
+              },
+              {
+                "transformationId": 6,
+                "firstSentence": "Yes, you're right.",
+                "keyword": "see",
+                "secondSentence": "I ___ mean.",
+                "correctAnswers": ["see what you"],
+                "acceptableVariants": []
+              },
+              {
+                "transformationId": 7,
+                "firstSentence": "I'm not sure about that.",
+                "keyword": "think",
+                "secondSentence": "I ___ good idea.",
+                "correctAnswers": ["don't think that's a"],
+                "acceptableVariants": []
+              },
+              {
+                "transformationId": 8,
+                "firstSentence": "She'd rather go surfing.",
+                "keyword": "prefer",
+                "secondSentence": "She ___ surfing.",
+                "correctAnswers": ["would prefer to go", "'d prefer to go"],
+                "acceptableVariants": []
+              },
+              {
+                "transformationId": 9,
+                "firstSentence": "If you don't want to play tennis, what about football?",
+                "keyword": "fancy",
+                "secondSentence": "Do ___ instead?",
+                "correctAnswers": ["you fancy football"],
+                "acceptableVariants": ["you fancy playing football"]
+              },
+              {
+                "transformationId": 10,
+                "firstSentence": "I'm sorry that my reply is so late.",
+                "keyword": "apologies",
+                "secondSentence": "___ sooner.",
+                "correctAnswers": ["Apologies for not replying"],
+                "acceptableVariants": ["My apologies for not replying"]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "listening",
+      "sectionName": "Listening",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "l1",
+          "type": "multiple-choice-listening",
+          "marks": 5,
+          "instructions": "Listen to the radio news item about a professional skier. Choose the correct answers to the questions.",
+          "audioReference": "Track 8",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "question": "Where is Angel from?",
+                "options": [
+                  {"label": "a", "value": "Montreal"},
+                  {"label": "b", "value": "Utah"},
+                  {"label": "c", "value": "Alaska"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 2,
+                "question": "How far did she fall down the mountain?",
+                "options": [
+                  {"label": "a", "value": "thirteen hundred metres"},
+                  {"label": "b", "value": "a hundred metres"},
+                  {"label": "c", "value": "three hundred metres"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 3,
+                "question": "Why was Angel in Alaska?",
+                "options": [
+                  {"label": "a", "value": "she was on holiday"},
+                  {"label": "b", "value": "she was in a competition"},
+                  {"label": "c", "value": "she was at work"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 4,
+                "question": "How many fingers did she hurt?",
+                "options": [
+                  {"label": "a", "value": "one"},
+                  {"label": "b", "value": "two"},
+                  {"label": "c", "value": "none"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 5,
+                "question": "How many people watched the video on YouTube?",
+                "options": [
+                  {"label": "a", "value": "350"},
+                  {"label": "b", "value": "50,000"},
+                  {"label": "c", "value": "350,000"}
+                ],
+                "correctAnswer": "c"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "reading",
+      "sectionName": "Reading",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "r1",
+          "type": "multiple-choice-reading",
+          "marks": 5,
+          "instructions": "Read the text. Choose the correct answers.",
+          "content": {
+            "text": "A life of challenge\n\nEllen MacArthur is an inspiring British sportswoman. On 7 February 2005, she broke the world record for sailing alone around the world. She recorded her amazing journey through the world's most dangerous seas with a video diary, surviving Cape Horn in South America. And she immediately became internationally famous. The following year, a Frenchman called Francis Joyon made the same voyage and beat her record. He was faster than her by two weeks.\n\nEllen was born in Derbyshire, England in 1976 and lived there with her parents, who were both teachers, and her two brothers. She began sailing with her aunt Thea when she was just four years old, and spent the rest of her time reading books about sailing.\n\nWhen she was eight, she started to save her school dinner money to buy her first boat. She was eleven when she had enough money to buy it. When she was seventeen, Ellen bought another boat and named it 'Iduna'. In 1995 she sailed it on her own around Great Britain.\n\nIn 2009 she announced that she was going to stop sailing, and a year later she donated £500,000 of her own money to create a charity called the Ellen MacArthur Foundation. The charity works through business and education to inspire young people to think differently about the future. She wants to help the next generation to design different ways of reusing energy and to get more people using renewable energy.\n\nBy 2050, Ellen says there will be more plastic than fish in the sea, and she wants her charity to do something about this. Ellen says that changing people's attitudes to the way they use things and throw them away is the greatest challenge of her life yet.",
+            "questions": [
+              {
+                "questionId": 1,
+                "question": "Ellen MacArthur broke the world record when she was ___.",
+                "options": [
+                  {"label": "a", "value": "25"},
+                  {"label": "b", "value": "26"},
+                  {"label": "c", "value": "29"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 2,
+                "question": "Joyon beat MacArthur's record in ___.",
+                "options": [
+                  {"label": "a", "value": "2005"},
+                  {"label": "b", "value": "2006"},
+                  {"label": "c", "value": "2007"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 3,
+                "question": "Ellen's ___ was a teacher.",
+                "options": [
+                  {"label": "a", "value": "mother"},
+                  {"label": "b", "value": "brother"},
+                  {"label": "c", "value": "aunt"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 4,
+                "question": "___ bought her first boat.",
+                "options": [
+                  {"label": "a", "value": "Ellen"},
+                  {"label": "b", "value": "Her aunt"},
+                  {"label": "c", "value": "Her parents"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 5,
+                "question": "Ellen paid £500,000 to ___.",
+                "options": [
+                  {"label": "a", "value": "start a charity for renewable energy."},
+                  {"label": "b", "value": "help a charity for renewable energy."},
+                  {"label": "c", "value": "start a renewable energy business for young people."}
+                ],
+                "correctAnswer": "a"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "writing",
+      "sectionName": "Writing",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "w1",
+          "type": "informal-letter",
+          "marks": 10,
+          "instructions": "You are going on a walking holiday with your school. Write an informal letter to a friend.",
+          "content": {
+            "guidelines": [
+              "Apologise for not writing sooner.",
+              "Describe the other sports events that the school has organised for the last day of the trip.",
+              "Ask your friend to lend you some sports equipment for the holiday. What do you need?"
+            ],
+            "wordCount": "100-120 words (suggested)"
+          }
+        }
+      ]
+    }
+  ]
+}

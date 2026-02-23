@@ -1,0 +1,602 @@
+{
+  "testId": "elem_u9_progress_b",
+  "metadata": {
+    "level": "elementary",
+    "unit": 9,
+    "unitName": "Unit 9",
+    "testType": "progress",
+    "variant": "B",
+    "title": "Unit 9 Progress Test B",
+    "source": "Solutions Third Edition",
+    "totalMarks": 70,
+    "estimatedTime": 45,
+    "sections": 6
+  },
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "fill-in-blanks-dialogue",
+          "marks": 10,
+          "instructions": "Complete the dialogue with the correct present perfect form of the verbs in brackets.",
+          "content": {
+            "dialogues": [
+              {
+                "speaker": "Emma",
+                "text": "(1) __________ yet?",
+                "blanks": [
+                  {
+                    "blankId": 1,
+                    "prompt": "(you / log on)",
+                    "correctAnswers": [
+                      "Have you logged on"
+                    ]
+                  }
+                ]
+              },
+              {
+                "speaker": "Kelly",
+                "text": "I can't. I think I (2) __________ the wrong password.",
+                "blanks": [
+                  {
+                    "blankId": 2,
+                    "prompt": "(enter)",
+                    "correctAnswers": [
+                      "have entered",
+                      "'ve entered"
+                    ]
+                  }
+                ]
+              },
+              {
+                "speaker": "Emma",
+                "text": "Oh! It (3) __________ and they (4) __________ us a new one.",
+                "blanks": [
+                  {
+                    "blankId": 3,
+                    "prompt": "(change)",
+                    "correctAnswers": [
+                      "has changed",
+                      "'s changed"
+                    ]
+                  },
+                  {
+                    "blankId": 4,
+                    "prompt": "(give)",
+                    "correctAnswers": [
+                      "have given",
+                      "'ve given"
+                    ]
+                  }
+                ]
+              },
+              {
+                "speaker": "Kelly",
+                "text": "Well, I (5) __________ any emails with the new password yet.",
+                "blanks": [
+                  {
+                    "blankId": 5,
+                    "prompt": "(not / receive)",
+                    "correctAnswers": [
+                      "haven't received"
+                    ]
+                  }
+                ]
+              },
+              {
+                "speaker": "Emma",
+                "text": "(6) __________ your texts?",
+                "blanks": [
+                  {
+                    "blankId": 6,
+                    "prompt": "(you / check)",
+                    "correctAnswers": [
+                      "Have you checked"
+                    ]
+                  }
+                ]
+              },
+              {
+                "speaker": "Kelly",
+                "text": "No, I (7) __________. Let me see. Oh yes. A text (8) __________ from the ICT department!",
+                "blanks": [
+                  {
+                    "blankId": 7,
+                    "prompt": "No, I...",
+                    "correctAnswers": [
+                      "haven't"
+                    ]
+                  },
+                  {
+                    "blankId": 8,
+                    "prompt": "(just / arrive)",
+                    "correctAnswers": [
+                      "has just arrived",
+                      "'s just arrived"
+                    ]
+                  }
+                ]
+              },
+              {
+                "speaker": "Emma",
+                "text": "Oh no! I think I (9) __________ all of my work! This morning (10) __________ a complete waste of time!",
+                "blanks": [
+                  {
+                    "blankId": 9,
+                    "prompt": "(just / lose)",
+                    "correctAnswers": [
+                      "have just lost",
+                      "'ve just lost"
+                    ]
+                  },
+                  {
+                    "blankId": 10,
+                    "prompt": "(be)",
+                    "correctAnswers": [
+                      "has been",
+                      "'s been"
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "error-correction",
+          "marks": 10,
+          "instructions": "Seven sentences contain mistakes. Circle the mistakes and write the corrections. Tick (✓) the correct sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "sentence": "The class not started yet.",
+                "incorrectPart": "not started",
+                "correction": "hasn't started"
+              },
+              {
+                "sentenceId": 2,
+                "sentence": "They already have had lunch.",
+                "incorrectPart": "already have had",
+                "correction": "have already had"
+              },
+              {
+                "sentenceId": 3,
+                "sentence": "Has she broke her arm?",
+                "incorrectPart": "broke",
+                "correction": "broken"
+              },
+              {
+                "sentenceId": 4,
+                "sentence": "Anna isn't here. She's left just.",
+                "incorrectPart": "left just",
+                "correction": "just left"
+              },
+              {
+                "sentenceId": 5,
+                "sentence": "Look what you've just did!",
+                "incorrectPart": "did",
+                "correction": "done"
+              },
+              {
+                "sentenceId": 6,
+                "sentence": "Have you met yet your new neighbour?",
+                "incorrectPart": "met yet your",
+                "correction": "met your new neighbour yet"
+              },
+              {
+                "sentenceId": 7,
+                "sentence": "She's taught me how to back up my work.",
+                "incorrectPart": null,
+                "correction": "Correct"
+              },
+              {
+                "sentenceId": 8,
+                "sentence": "He hasn't said 'hello' yet.",
+                "incorrectPart": null,
+                "correction": "Correct"
+              },
+              {
+                "sentenceId": 9,
+                "sentence": "I've already forgot what we have to do for homework!",
+                "incorrectPart": "forgot",
+                "correction": "forgotten"
+              },
+              {
+                "sentenceId": 10,
+                "sentence": "That taxi has just stopped.",
+                "incorrectPart": null,
+                "correction": "Correct"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "v3",
+          "type": "fill-in-blanks-simple",
+          "marks": 6,
+          "instructions": "Complete the modifiers in the sentences. The first letter of each word has been given. Then complete the sentences with the adjectives below.",
+          "content": {
+            "providedWords": [
+              "comfortable",
+              "cosy",
+              "dark",
+              "relaxing",
+              "small",
+              "untidy"
+            ],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "It's quite __________ in the hall because there aren't any windows and there's just a small lamp.",
+                "correctAnswers": [
+                  "dark"
+                ]
+              },
+              {
+                "sentenceId": 2,
+                "text": "The kitchen is always extremely __________ after you've been in there! Why don't you put your dirty things in the dishwasher?",
+                "correctAnswers": [
+                  "untidy"
+                ]
+              },
+              {
+                "sentenceId": 3,
+                "text": "We didn't do much and had a fairly __________ weekend.",
+                "correctAnswers": [
+                  "relaxing"
+                ]
+              },
+              {
+                "sentenceId": 4,
+                "text": "The dining room is a bit too __________ for all of the guests.",
+                "correctAnswers": [
+                  "small"
+                ]
+              },
+              {
+                "sentenceId": 5,
+                "text": "It's really warm and __________ inside – I don't want to go out!",
+                "correctAnswers": [
+                  "cosy"
+                ]
+              },
+              {
+                "sentenceId": 6,
+                "text": "This bed isn't very __________ – I won't be able to sleep.",
+                "correctAnswers": [
+                  "comfortable"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v4",
+          "type": "inline-choice",
+          "marks": 7,
+          "instructions": "Circle the correct words to complete the email.",
+          "content": {
+            "text": "Hi Jordan,\nI'm just writing to say good luck at university next week! I can't believe that you're leaving home! You'll have a great time and I'm sure you'll [make / bring] lots of friends really quickly.\nCan you [make / do] me favour before you go, please? Could you [bring / take] Mum to the doctor's on Thursday? I [did / made] an appointment but I can't go with her now. She can't [take / bring] the bus on her own because she still [makes / has] difficulty getting on and off.\nOK, I'd better go and [make / do] the shopping before the shops close. Let me know about Thursday.\nLots of love,\nEvie",
+            "questions": [
+              {
+                "id": 1,
+                "correctAnswer": "make"
+              },
+              {
+                "id": 2,
+                "correctAnswer": "do"
+              },
+              {
+                "id": 3,
+                "correctAnswer": "take"
+              },
+              {
+                "id": 4,
+                "correctAnswer": "made"
+              },
+              {
+                "id": 5,
+                "correctAnswer": "take"
+              },
+              {
+                "id": 6,
+                "correctAnswer": "has"
+              },
+              {
+                "id": 7,
+                "correctAnswer": "do"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v5",
+          "type": "inline-choice",
+          "marks": 7,
+          "instructions": "Circle the correct words to complete the sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "We're going on holiday to a [sandy / tropical] island full of palm trees.",
+                "correctAnswer": "tropical"
+              },
+              {
+                "sentenceId": 2,
+                "text": "She goes to the shops on Saturdays to buy her [next-door / basic] supplies for the week.",
+                "correctAnswer": "basic"
+              },
+              {
+                "sentenceId": 3,
+                "text": "I spend my [free / daily] time playing on computer games.",
+                "correctAnswer": "free"
+              },
+              {
+                "sentenceId": 4,
+                "text": "We need to cut down the tree at the back of our [garden / sink].",
+                "correctAnswer": "garden"
+              },
+              {
+                "sentenceId": 5,
+                "text": "You can find clean socks in the [chest of drawers / shelves].",
+                "correctAnswer": "chest of drawers"
+              },
+              {
+                "sentenceId": 6,
+                "text": "All of the children have a little [sofa / stool] to sit on in the classroom.",
+                "correctAnswer": "stool"
+              },
+              {
+                "sentenceId": 7,
+                "text": "Can you pull down the [curtains / blinds]? It's very bright in here.",
+                "correctAnswer": "blinds"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "use-of-english",
+      "sectionName": "Use of English",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "ue6",
+          "type": "multiple-choice-gap-fill",
+          "marks": 10,
+          "instructions": "Complete the text with the correct answers.",
+          "content": {
+            "text": "Both photos (1) __________ a group of people in a kitchen. (2) __________ the first photo there's a family having a meal, (3) __________ in the second photo there's a big group of people standing around a table. It looks (4) __________ if they're taking part in a cooking class (5) __________ they're looking at the food and pointing at the different dishes. They (6) __________ nervous. (7) __________ they're waiting for the teacher to give them a score for their food. The (8) __________ photo shows a long table with a lot of dishes on it, (9) __________ the first photo only shows some bread and fruit on the table. I (10) __________ they're probably having breakfast before they go to school and work.",
+            "questions": [
+              {
+                "id": 1,
+                "options": [
+                  "show",
+                  "look",
+                  "see"
+                ],
+                "correctAnswer": "show"
+              },
+              {
+                "id": 2,
+                "options": [
+                  "On",
+                  "In",
+                  "At"
+                ],
+                "correctAnswer": "In"
+              },
+              {
+                "id": 3,
+                "options": [
+                  "so",
+                  "because",
+                  "but"
+                ],
+                "correctAnswer": "but"
+              },
+              {
+                "id": 4,
+                "options": [
+                  "like",
+                  "as",
+                  "for"
+                ],
+                "correctAnswer": "as"
+              },
+              {
+                "id": 5,
+                "options": [
+                  "because",
+                  "whereas",
+                  "but"
+                ],
+                "correctAnswer": "because"
+              },
+              {
+                "id": 6,
+                "options": [
+                  "look",
+                  "probably",
+                  "see"
+                ],
+                "correctAnswer": "look"
+              },
+              {
+                "id": 7,
+                "options": [
+                  "Although",
+                  "So",
+                  "Perhaps"
+                ],
+                "correctAnswer": "Perhaps"
+              },
+              {
+                "id": 8,
+                "options": [
+                  "second",
+                  "secondly",
+                  "first"
+                ],
+                "correctAnswer": "second"
+              },
+              {
+                "id": 9,
+                "options": [
+                  "because",
+                  "so",
+                  "whereas"
+                ],
+                "correctAnswer": "whereas"
+              },
+              {
+                "id": 10,
+                "options": [
+                  "know",
+                  "say",
+                  "think"
+                ],
+                "correctAnswer": "think"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "listening",
+      "sectionName": "Listening",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "l7",
+          "type": "true-false-listening",
+          "marks": 5,
+          "instructions": "Listen to a conversation between some students. Are the sentences true (T) or false (F)?",
+          "content": {
+            "audioFile": "audio/elementary/unit9/listening.mp3",
+            "statements": [
+              {
+                "statementId": 1,
+                "text": "Emily is in her third year at university.",
+                "correctAnswer": "F",
+                "note": "Correction check: Placeholder. (Test A said she starts her NEXT year at uni in Sept, implying she's not in 3rd year yet?)"
+              },
+              {
+                "statementId": 2,
+                "text": "Emily found information about student accommodation in the student newspaper.",
+                "correctAnswer": "F",
+                "note": "Correction check: Placeholder."
+              },
+              {
+                "statementId": 3,
+                "text": "Jenny hasn't hoovered.",
+                "correctAnswer": "T",
+                "note": "Correction check: Placeholder."
+              },
+              {
+                "statementId": 4,
+                "text": "There's a chest of drawers in the bedroom.",
+                "correctAnswer": "T",
+                "note": "Correction check: Placeholder."
+              },
+              {
+                "statementId": 5,
+                "text": "The landlord is a doctor.",
+                "correctAnswer": "F",
+                "note": "Correction check: Placeholder."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "reading",
+      "sectionName": "Reading",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "r8",
+          "type": "true-false-reading",
+          "marks": 5,
+          "instructions": "Read the text. Are the sentences true (T) or false (F)?",
+          "content": {
+            "title": "Escape the crowds",
+            "text": "Would you like to stay in the only hotel on a remote, tropical island? Well, you'd better take your mobile phone with you, because there's only one telephone too! Welcome to Wittmer Lodge Hotel on Floreana Island. It's a great place to stay because it has amazing views of the ocean. It's also located on a black, sandy beach, which is quite unusual, and if you want to see green sand, you can visit the beach at Cormorant Point. So where is this island?\\n\\nFloreana Island is part of the Galapagos Islands, which lie in the Pacific Ocean 906 kilometres west of Ecuador. It was first called Charles Island, after King Charles II of England. It was later renamed Floreana Island after Juan Jose Flores, the first president of Ecuador, and the island is now ruled by Ecuador. Floreana Island has the most interesting human history of all of the Galapagos Islands. It was the home to the first Galapagos resident – a man from Ireland called Patrick Watkins. He lived there from 1807 to 1809.\\n\\nFloreana is only 67 square kilometres, and its highest point is Cerro Pajas at 640 metres, which is the highest point of the island's only volcano. There are approximately a hundred people living on the island. Around seventy people live in Puerto Velasco Ibarra, which is the port town; everyone else lives in the higher parts of the island.\\n\\nTwo of these islanders are the daughter and granddaughter of Margret Wittmer. Wittmer was the second person ever to settle on the island. She arrived in 1932 when she was pregnant, with her husband Heinz and her stepson Harry. When her son Rolf was born, he was the first person to be born in Galapagos. Margret lived to the age of 95 and welcomed hundreds of tourists to her hotel, including presidents. Today her daughter runs the hotel.\\n\\nWhat is daily life like on Floreana? It's quiet! There is not much transport to Floreana. There is only a boat that comes from Santa Cruz Island approximately every two weeks. There is just one school with two teachers, and there aren't any restaurants or bars. But if you are interested in the animals, birds and sea life then Floreana is the perfect destination for you!",
+            "statements": [
+              {
+                "statementId": 1,
+                "text": "The sand at Cormorant Point is black.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 2,
+                "text": "The first person to live on the island was Irish.",
+                "correctAnswer": "T"
+              },
+              {
+                "statementId": 3,
+                "text": "The majority of the islanders live near the top of the volcano.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 4,
+                "text": "Margret Wittner was pregnant with her son Harry when she landed on the island.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 5,
+                "text": "There isn't anywhere to eat out on the Floreana.",
+                "correctAnswer": "T"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "writing",
+      "sectionName": "Writing",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "w1",
+          "type": "guided-writing",
+          "marks": 10,
+          "instructions": "Write a description of a friend's home. Include the following:",
+          "content": {
+            "prompt": "Write a description of a friend's home.",
+            "requirements": [
+              "The location of the house or apartment.",
+              "Information about the rooms.",
+              "Compare it with your family home.",
+              "Use conjunctions and modifiers."
+            ],
+            "gradingCriteria": {
+              "content": 4,
+              "organization": 2,
+              "languageUse": 2,
+              "grammar": 2
+            },
+            "manualGrading": true
+          }
+        }
+      ]
+    }
+  ]
+}

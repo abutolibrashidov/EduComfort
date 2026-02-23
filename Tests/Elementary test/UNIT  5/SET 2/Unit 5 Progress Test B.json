@@ -1,0 +1,673 @@
+{
+  "testId": "elem_u5_progress_b",
+  "metadata": {
+    "level": "elementary",
+    "unit": 5,
+    "unitName": "Unit 5",
+    "testType": "progress",
+    "variant": "B",
+    "title": "Unit 5 Progress Test B",
+    "source": "Solutions Third Edition",
+    "totalMarks": 70,
+    "estimatedTime": 45,
+    "sections": 7
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "comparative-superlative-choice",
+          "marks": 6,
+          "instructions": "Circle the correct words to complete the sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "sentence": "Home-cooked food is ___ / ___ than fast food.",
+                "options": ["nicer", "the nicest"],
+                "correctAnswer": "nicer"
+              },
+              {
+                "sentenceId": 2,
+                "sentence": "Which is ___ / ___ hotel in the city?",
+                "options": ["smaller", "the smallest"],
+                "correctAnswer": "the smallest"
+              },
+              {
+                "sentenceId": 3,
+                "sentence": "Winter temperatures are ___ / ___ than summer temperatures.",
+                "options": ["lower", "the lowest"],
+                "correctAnswer": "lower"
+              },
+              {
+                "sentenceId": 4,
+                "sentence": "November is ___ / ___ month of the year.",
+                "options": ["the unhappier", "the unhappiest"],
+                "correctAnswer": "the unhappiest"
+              },
+              {
+                "sentenceId": 5,
+                "sentence": "Who is ___ / ___ person you know?",
+                "options": ["more patient", "the most patient"],
+                "correctAnswer": "the most patient"
+              },
+              {
+                "sentenceId": 6,
+                "sentence": "She's ___ / ___ than me.",
+                "options": ["more excited", "the most excited"],
+                "correctAnswer": "more excited"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "comparative-superlative-fill",
+          "marks": 7,
+          "instructions": "Complete the sentences with the comparative and superlative form of the adjectives in brackets.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "The north of the country is __________ than the west, but the south is __________ part.",
+                "adjective": "sunny",
+                "blank1Answer": ["sunnier"],
+                "blank2Answer": ["the sunniest"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "Sara is __________ than me about the trip, but Aisha is __________.",
+                "adjective": "disappointed",
+                "blank1Answer": ["more disappointed"],
+                "blank2Answer": ["the most disappointed"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "I normally wake up __________ than my sister, but my brother wakes up __________.",
+                "adjective": "early",
+                "blank1Answer": ["earlier"],
+                "blank2Answer": ["the earliest"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "Liam is __________ at maths than me, but Elena is __________ in the class.",
+                "adjective": "good",
+                "blank1Answer": ["better"],
+                "blank2Answer": ["the best"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "Happiness is __________ than money, but your health is __________.",
+                "adjective": "important",
+                "blank1Answer": ["more important"],
+                "blank2Answer": ["the most important"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "text": "The British Museum is __________ than the National Gallery, but the Louvre in Paris is __________ museum in the world.",
+                "adjective": "big",
+                "blank1Answer": ["bigger"],
+                "blank2Answer": ["the biggest"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "text": "The train station is __________ than the coach station from here, but the airport is __________.",
+                "adjective": "far",
+                "blank1Answer": ["farther", "further"],
+                "blank2Answer": ["the farthest", "the furthest"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g3",
+          "type": "error-correction",
+          "marks": 7,
+          "instructions": "Find the mistake in each sentence. Circle the mistake and write the correction.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "sentence": "This is the most bad day of my life!",
+                "incorrectPart": "most bad",
+                "correction": "worst",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "sentence": "What is the more exciting city in Asia?",
+                "incorrectPart": "more exciting",
+                "correction": "most exciting",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "sentence": "My dad is angryer than my mum.",
+                "incorrectPart": "angryer",
+                "correction": "angrier",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "sentence": "Coldplay are famouser than Ed Sheeran.",
+                "incorrectPart": "famouser",
+                "correction": "more famous",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "sentence": "I've got the most longest hair in my family.",
+                "incorrectPart": "most longest",
+                "correction": "longest",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "sentence": "Which is gooder, a shirt or T-shirt?",
+                "incorrectPart": "gooder",
+                "correction": "better",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "sentence": "Where is the hotest place on the planet?",
+                "incorrectPart": "hotest",
+                "correction": "hottest",
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 20,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "multiple-choice",
+          "marks": 7,
+          "instructions": "Choose the correct answers to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "question": "There is a school trip to see the animals at the ___.",
+                "options": [
+                  {"id": "a", "text": "park"},
+                  {"id": "b", "text": "car park"},
+                  {"id": "c", "text": "zoo"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 2,
+                "question": "I want to take a photo of the trees in that ___.",
+                "options": [
+                  {"id": "a", "text": "wood"},
+                  {"id": "b", "text": "lake"},
+                  {"id": "c", "text": "hill"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 3,
+                "question": "___ often share the road with cars.",
+                "options": [
+                  {"id": "a", "text": "Trains"},
+                  {"id": "b", "text": "The underground"},
+                  {"id": "c", "text": "Trams"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 4,
+                "question": "Brazil is in ___ America.",
+                "options": [
+                  {"id": "a", "text": "South"},
+                  {"id": "b", "text": "East"},
+                  {"id": "c", "text": "North"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 5,
+                "question": "The coach leaves the ___ at 8 o'clock.",
+                "options": [
+                  {"id": "a", "text": "fire station"},
+                  {"id": "b", "text": "police station"},
+                  {"id": "c", "text": "bus station"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 6,
+                "question": "It's too cold to swim ___ during the winter.",
+                "options": [
+                  {"id": "a", "text": "outside"},
+                  {"id": "b", "text": "inside"},
+                  {"id": "c", "text": "opposite"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 7,
+                "question": "Let's go to the ___ for some new clothes.",
+                "options": [
+                  {"id": "a", "text": "office block"},
+                  {"id": "b", "text": "shopping centre"},
+                  {"id": "c", "text": "farm"}
+                ],
+                "correctAnswer": "b"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "verb-completion-first-letter",
+          "marks": 7,
+          "instructions": "Complete the sentences with the correct verb. The first letter of each word has been given.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "I never t___ the stairs at work – I'm always too tired.",
+                "firstLetter": "t",
+                "correctAnswers": ["take"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "The best place to c____ the road is opposite the park.",
+                "firstLetter": "c",
+                "correctAnswers": ["cross"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "You have to c____ the next bus.",
+                "firstLetter": "c",
+                "correctAnswers": ["catch"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "I don't want to l___ my way.",
+                "firstLetter": "l",
+                "correctAnswers": ["lose"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "Can you r___ a horse?",
+                "firstLetter": "r",
+                "correctAnswers": ["ride"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "text": "Do your parents g___ you a lift in the morning?",
+                "firstLetter": "g",
+                "correctAnswers": ["give"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "text": "My mum leaves home at 8 a.m. and g___ to work at 8.20 a.m.",
+                "firstLetter": "g",
+                "correctAnswers": ["gets"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v3",
+          "type": "word-choice-in-context",
+          "marks": 6,
+          "instructions": "Circle the correct words to complete the text.",
+          "content": {
+            "text": "I'm staying in the capital 1___ / ___ with my family. It's a 2___ / ___ place, full of very old buildings and lots of museums. There's a lot of 3___ / ___ in the centre, so it's quite 4___ / ___. There is a main 5___ / ___ which is 6___ / ___ the hotel, so it's very noisy at night too.",
+            "choices": [
+              {
+                "choiceId": 1,
+                "options": ["city", "street"],
+                "correctAnswer": "city"
+              },
+              {
+                "choiceId": 2,
+                "options": ["modern", "historic"],
+                "correctAnswer": "historic"
+              },
+              {
+                "choiceId": 3,
+                "options": ["fields", "traffic"],
+                "correctAnswer": "traffic"
+              },
+              {
+                "choiceId": 4,
+                "options": ["polluted", "clean"],
+                "correctAnswer": "polluted"
+              },
+              {
+                "choiceId": 5,
+                "options": ["town hall", "square"],
+                "correctAnswer": "square"
+              },
+              {
+                "choiceId": 6,
+                "options": ["in front of", "inside"],
+                "correctAnswer": "in front of"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "use-of-english",
+      "sectionName": "Use of English",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "ue1",
+          "type": "email-multiple-choice",
+          "marks": 10,
+          "instructions": "Complete the email with the correct answers.",
+          "content": {
+            "emailContext": {
+              "from": "Nina",
+              "to": "Eva",
+              "subject": "Directions to my flat"
+            },
+            "emailText": "Hi Eva\n\nHow are you? I can't wait to see you next week!\n\nI'm sending you some directions so that you can find your way to my flat. Come out of the train station and go 1___ the taxis. 2___ the road and 3___ right at the traffic lights. 4___ along Victoria Road and go 5___ the bridge. Go to the 6___ of the road until you get to Queen's Square. 7___ the second right and go 8___ on. You should see a library 9___ your left. My flat is 10___ the library, on the other side of the road.\n\nHave a safe journey. See you soon!\n\nLove,\nNina",
+            "questions": [
+              {
+                "blankNumber": 1,
+                "options": [
+                  {"id": "A", "text": "along"},
+                  {"id": "B", "text": "past"},
+                  {"id": "C", "text": "under"}
+                ],
+                "correctAnswer": "B"
+              },
+              {
+                "blankNumber": 2,
+                "options": [
+                  {"id": "A", "text": "Cross"},
+                  {"id": "B", "text": "Take"},
+                  {"id": "C", "text": "Turn"}
+                ],
+                "correctAnswer": "A"
+              },
+              {
+                "blankNumber": 3,
+                "options": [
+                  {"id": "A", "text": "take"},
+                  {"id": "B", "text": "cross"},
+                  {"id": "C", "text": "turn"}
+                ],
+                "correctAnswer": "C"
+              },
+              {
+                "blankNumber": 4,
+                "options": [
+                  {"id": "A", "text": "Go"},
+                  {"id": "B", "text": "Take"},
+                  {"id": "C", "text": "Cross"}
+                ],
+                "correctAnswer": "A"
+              },
+              {
+                "blankNumber": 5,
+                "options": [
+                  {"id": "A", "text": "straight"},
+                  {"id": "B", "text": "between"},
+                  {"id": "C", "text": "over"}
+                ],
+                "correctAnswer": "C"
+              },
+              {
+                "blankNumber": 6,
+                "options": [
+                  {"id": "A", "text": "left"},
+                  {"id": "B", "text": "end"},
+                  {"id": "C", "text": "second"}
+                ],
+                "correctAnswer": "B"
+              },
+              {
+                "blankNumber": 7,
+                "options": [
+                  {"id": "A", "text": "Take"},
+                  {"id": "B", "text": "On"},
+                  {"id": "C", "text": "Turn"}
+                ],
+                "correctAnswer": "A"
+              },
+              {
+                "blankNumber": 8,
+                "options": [
+                  {"id": "A", "text": "along"},
+                  {"id": "B", "text": "past"},
+                  {"id": "C", "text": "straight"}
+                ],
+                "correctAnswer": "C"
+              },
+              {
+                "blankNumber": 9,
+                "options": [
+                  {"id": "A", "text": "in"},
+                  {"id": "B", "text": "for"},
+                  {"id": "C", "text": "on"}
+                ],
+                "correctAnswer": "C"
+              },
+              {
+                "blankNumber": 10,
+                "options": [
+                  {"id": "A", "text": "opposite"},
+                  {"id": "B", "text": "front of"},
+                  {"id": "C", "text": "next to"}
+                ],
+                "correctAnswer": "A"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "listening",
+      "sectionName": "Listening",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "l1",
+          "type": "true-false-listening",
+          "marks": 5,
+          "instructions": "Listen to three people talking about where they live and work. Are the sentences true (T) or false (F)?",
+          "content": {
+            "audioFile": "audio/unit5_listening_b.mp3",
+            "audioTrackNumber": 5,
+            "statements": [
+              {
+                "statementId": 1,
+                "speaker": "Speaker 1",
+                "text": "Speaker 1 prefers the city way of life.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 2,
+                "speaker": "Speaker 1",
+                "text": "They are cutting down some of the trees near her village.",
+                "correctAnswer": "T"
+              },
+              {
+                "statementId": 3,
+                "speaker": "Speaker 2",
+                "text": "Speaker 2 works in a quiet office.",
+                "correctAnswer": "F"
+              },
+              {
+                "statementId": 4,
+                "speaker": "Speaker 2",
+                "text": "The lake near Hambrook Farm isn't very big.",
+                "correctAnswer": "T"
+              },
+              {
+                "statementId": 5,
+                "speaker": "Speaker 3",
+                "text": "John drives Speaker 3 to work in his car when the weather is bad.",
+                "correctAnswer": "F"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "reading",
+      "sectionName": "Reading",
+      "totalMarks": 5,
+      "questions": [
+        {
+          "questionId": "r1",
+          "type": "gap-fill-matching",
+          "marks": 5,
+          "instructions": "Read the text. Match sentences A–E with gaps 1–5.",
+          "content": {
+            "title": "Unusual homes",
+            "textWithGaps": [
+              {
+                "type": "text",
+                "content": "There isn't enough space to build all of the houses we need in many cities. This means that the price of houses in London and the rest of the UK is getting more and more expensive. The average house price in London is now over £500,000, but most workers are still getting low salaries."
+              },
+              {
+                "type": "gap",
+                "gapNumber": 1
+              },
+              {
+                "type": "text",
+                "content": "But it costs a lot of money to buy train tickets too."
+              },
+              {
+                "type": "gap",
+                "gapNumber": 2
+              },
+              {
+                "type": "text",
+                "content": "Perhaps there is, as people are finding creative ways to live near their workplace. More and more people are following the example of the Netherlands. They are choosing to live on water – on the rivers that flow through our cities. Houseboats are a popular new form of accommodation for professionals working in towns and cities. The Netherlands has the most houseboats in Europe."
+              },
+              {
+                "type": "gap",
+                "gapNumber": 3
+              },
+              {
+                "type": "text",
+                "content": "There are around 6,000 houseboats in the whole of the UK at the moment. Some companies are even building offices on the water."
+              },
+              {
+                "type": "text",
+                "content": "What are the advantages of living on the water? First, they are beautiful spaces for people to live and work in. You can work in the city, but you can also enjoy living close to the countryside."
+              },
+              {
+                "type": "gap",
+                "gapNumber": 4
+              },
+              {
+                "type": "text",
+                "content": "You can buy a houseboat for as little as £60,000."
+              },
+              {
+                "type": "text",
+                "content": "You have to be careful if you want to buy a houseboat, because there are some disadvantages. They are cheaper, but the cost of living on a boat can be more expensive. For example, you have to pay for your 'parking' space on a river."
+              },
+              {
+                "type": "gap",
+                "gapNumber": 5
+              },
+              {
+                "type": "text",
+                "content": "In Amsterdam, you have to paint your boat every three years. And people complain that when it gets cold, it's very expensive to keep the boat warm."
+              }
+            ],
+            "sentences": [
+              {
+                "id": "A",
+                "text": "There are over 3,500 just in Amsterdam."
+              },
+              {
+                "id": "B",
+                "text": "Is there anything we can do about this problem?"
+              },
+              {
+                "id": "C",
+                "text": "This can be £7,000 a year in some parts of London."
+              },
+              {
+                "id": "D",
+                "text": "They have to move out of London into small towns and catch the train to work every day."
+              },
+              {
+                "id": "E",
+                "text": "Second, they are much cheaper than ordinary houses."
+              }
+            ],
+            "correctMatches": {
+              "1": "D",
+              "2": "B",
+              "3": "A",
+              "4": "E",
+              "5": "C"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "writing",
+      "sectionName": "Writing",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "w1",
+          "type": "guided-writing",
+          "marks": 10,
+          "instructions": "Write an article about a town or city in your country that is popular with tourists.",
+          "content": {
+            "prompt": "Write an article about a town or city in your country that is popular with tourists.",
+            "requirements": [
+              "Include information about three of these topics: places of interest; places to stay; history; entertainment; shopping; eating out; getting around",
+              "Use adjectives to describe the town or city.",
+              "Introduce the topic in the first sentence.",
+              "Write in paragraphs of two or more sentences."
+            ],
+            "gradingCriteria": {
+              "content": 4,
+              "organization": 2,
+              "languageUse": 2,
+              "grammar": 2
+            },
+            "manualGrading": true
+          }
+        }
+      ]
+    }
+  ]
+}

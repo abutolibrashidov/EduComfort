@@ -1,0 +1,223 @@
+{
+  "testId": "elem_u7_short_2a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 7,
+    "unitName": "Unit 7",
+    "testType": "short",
+    "variant": "2A",
+    "title": "Unit 7 Short Test 2A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "negative-rewrite",
+          "marks": 5,
+          "instructions": "Rewrite the sentences to make them negative.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "I thought about you yesterday.",
+                "correctAnswers": ["I didn't think about you yesterday.", "I did not think about you yesterday."],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "She went to the park.",
+                "correctAnswers": ["She didn't go to the park.", "She did not go to the park."],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "The teacher found your memory stick.",
+                "correctAnswers": ["The teacher didn't find your memory stick.", "The teacher did not find your memory stick."],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "We studied the history of the country.",
+                "correctAnswers": ["We didn't study the history of the country.", "We did not study the history of the country."],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "We gave Brett a lift to school.",
+                "correctAnswers": ["We didn't give Brett a lift to school.", "We did not give Brett a lift to school."],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "error-correction-questions",
+          "marks": 5,
+          "instructions": "There is a mistake in each question. Circle the mistake and correct it. Use the past simple.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "Did you helped Ben?",
+                "mistake": "helped",
+                "correctAnswers": ["help"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "You did use my phone?",
+                "mistake": "You did",
+                "correctAnswers": ["Did you"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "Did you can get Wi-Fi?",
+                "mistake": "Did you can",
+                "correctAnswers": ["Could you"],
+                "acceptableVariants": ["Were you able to"]
+              },
+              {
+                "sentenceId": 4,
+                "text": "Did she bought a new laptop?",
+                "mistake": "bought",
+                "correctAnswers": ["buy"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "Was you at home yesterday?",
+                "mistake": "Was",
+                "correctAnswers": ["Were"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "multiple-choice-phrasal-verbs",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the gaps.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "My computer ___ down yesterday. I have to buy a new one.",
+                "options": [
+                  {"label": "a", "value": "shut"},
+                  {"label": "b", "value": "turned"},
+                  {"label": "c", "value": "broke"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 2,
+                "sentence": "Press 'save' before you log ___ .",
+                "options": [
+                  {"label": "a", "value": "on"},
+                  {"label": "b", "value": "off"},
+                  {"label": "c", "value": "down"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 3,
+                "sentence": "Where can I ___ in the printer?",
+                "options": [
+                  {"label": "a", "value": "type"},
+                  {"label": "b", "value": "scan"},
+                  {"label": "c", "value": "plug"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 4,
+                "sentence": "Please turn ___ the speakers a bit! They're very loud.",
+                "options": [
+                  {"label": "a", "value": "down"},
+                  {"label": "b", "value": "off"},
+                  {"label": "c", "value": "up"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 5,
+                "sentence": "I never remember to back ___ my homework.",
+                "options": [
+                  {"label": "a", "value": "in"},
+                  {"label": "b", "value": "down"},
+                  {"label": "c", "value": "up"}
+                ],
+                "correctAnswer": "c"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "word-bank-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the words below.",
+          "content": {
+            "providedWords": ["account", "forum", "fundraising", "media", "viral"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "He posts comments on that internet",
+                "afterBlank": "every day.",
+                "correctAnswers": ["forum"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "She used a different password for her Twitter",
+                "afterBlank": ".",
+                "correctAnswers": ["account"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "A story is",
+                "afterBlank": "when almost everyone is talking about it.",
+                "correctAnswers": ["viral"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "The school set up a",
+                "afterBlank": "page to get money for a new swimming pool.",
+                "correctAnswers": ["fundraising"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "Many people use social",
+                "afterBlank": "to ask for and give advice.",
+                "correctAnswers": ["media"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

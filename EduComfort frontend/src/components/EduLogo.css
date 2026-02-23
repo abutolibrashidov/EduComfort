@@ -1,0 +1,87 @@
+/* EduComfort Logo – emergence animation */
+
+/* Rays breathe/pulse gently */
+@keyframes edu-rays-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Text slides out from the left (emerging from the rays) */
+@keyframes edu-text-emerge {
+    0% {
+        opacity: 0;
+        transform: translateX(-12px);
+        filter: blur(6px);
+    }
+
+    60% {
+        filter: blur(0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+    }
+}
+
+/* EDU emerges first */
+@keyframes edu-word-emerge {
+    0% {
+        opacity: 0;
+        transform: translateX(-16px) scaleX(0.85);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0) scaleX(1);
+    }
+}
+
+/* Comfort follows a bit later */
+@keyframes comfort-emerge {
+    0% {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.edu-logo-root {
+    cursor: default;
+    user-select: none;
+}
+
+/* Only apply animations when .edu-logo-anim is present */
+.edu-logo-anim .edu-logo-svg {
+    animation: edu-rays-pulse 3.5s ease-in-out infinite;
+}
+
+.edu-logo-anim .edu-logo-edu {
+    animation: edu-word-emerge 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.1s;
+}
+
+.edu-logo-anim .edu-logo-comfort {
+    animation: comfort-emerge 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: 0.28s;
+}
+
+/* Hover: rays brighten slightly */
+.edu-logo-root:hover .edu-logo-svg {
+    animation: none;
+    opacity: 1;
+    filter: brightness(1.15);
+    transition: filter 0.25s;
+}

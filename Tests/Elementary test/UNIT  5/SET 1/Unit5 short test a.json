@@ -1,0 +1,224 @@
+{
+  "testId": "elem_u5_short_a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 5,
+    "unitName": "Unit 5",
+    "testType": "short",
+    "variant": "A",
+    "title": "Unit 5 Short Test 1A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "comparative-form-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the comparative form of the adjectives in brackets and than.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "This restaurant is",
+                "adjective": "expensive",
+                "afterBlank": "the café in town.",
+                "correctAnswers": ["more expensive than"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "The classroom is",
+                "adjective": "noisy",
+                "afterBlank": "the library.",
+                "correctAnswers": ["noisier than"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "A shirt is",
+                "adjective": "smart",
+                "afterBlank": "a T-shirt.",
+                "correctAnswers": ["smarter than"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "London is",
+                "adjective": "big",
+                "afterBlank": "Oxford.",
+                "correctAnswers": ["bigger than"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "School dinners are",
+                "adjective": "bad",
+                "afterBlank": "food at home.",
+                "correctAnswers": ["worse than"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "error-correction",
+          "marks": 5,
+          "instructions": "There is a mistake in each sentence. Circle the mistake and correct it.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "sentence": "It's dangerouser to drive in the snow than in the rain.",
+                "incorrectPart": "dangerouser",
+                "correction": "more dangerous",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "sentence": "Which is more far, the park or the swimming pool?",
+                "incorrectPart": "more far",
+                "correction": "farther",
+                "acceptableVariants": ["further"]
+              },
+              {
+                "sentenceId": 3,
+                "sentence": "The guitar is easyer than the violin.",
+                "incorrectPart": "easyer",
+                "correction": "easier",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "sentence": "My aunt is kindder than my uncle.",
+                "incorrectPart": "kindder",
+                "correction": "kinder",
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "sentence": "Which country is weter, the USA or Russia?",
+                "incorrectPart": "weter",
+                "correction": "wetter",
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "definition-matching",
+          "marks": 5,
+          "instructions": "Match the definitions with the places.",
+          "content": {
+            "providedWords": ["airport", "bank", "gym", "library", "police station"],
+            "definitions": [
+              {
+                "definitionId": 1,
+                "definition": "You take flights to and from here.",
+                "correctAnswers": ["airport"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 2,
+                "definition": "You can do sport here.",
+                "correctAnswers": ["gym"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 3,
+                "definition": "You go here if you lose something.",
+                "correctAnswers": ["police station"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 4,
+                "definition": "You borrow books and DVDs from here.",
+                "correctAnswers": ["library"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 5,
+                "definition": "You change money here.",
+                "correctAnswers": ["bank"],
+                "acceptableVariants": []
+              }
+            ],
+            "extraWords": []
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "preposition-completion",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct preposition. The first letter of the word has been given.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "We live",
+                "firstLetter": "o",
+                "blanksCount": 8,
+                "afterBlank": "the train station – I can see it from our living room window.",
+                "correctAnswers": ["opposite"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "I usually sit",
+                "firstLetter": "n",
+                "blanksCount": 4,
+                "afterBlank": "to my best friend in class.",
+                "correctAnswers": ["next"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "Let's have lunch",
+                "firstLetter": "i",
+                "blanksCount": 6,
+                "afterBlank": "– it's starting to rain.",
+                "correctAnswers": ["inside"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "I can't stop here. There's a car",
+                "firstLetter": "b",
+                "blanksCount": 6,
+                "afterBlank": "me!",
+                "correctAnswers": ["behind"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "Is there a supermarket",
+                "firstLetter": "c",
+                "blanksCount": 5,
+                "afterBlank": "to your school?",
+                "correctAnswers": ["close"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

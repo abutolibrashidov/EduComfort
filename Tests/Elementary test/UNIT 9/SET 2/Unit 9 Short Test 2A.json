@@ -1,0 +1,210 @@
+{
+  "testId": "elem_u9_short_2a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 9,
+    "unitName": "Unit 9",
+    "testType": "short",
+    "variant": "2A",
+    "title": "Unit 9 Short Test 2A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "present-perfect-negative",
+          "marks": 5,
+          "instructions": "Complete the sentences with the present perfect negative form of the verbs below.",
+          "content": {
+            "providedVerbs": ["buy", "have", "reply", "see", "spend"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "I",
+                "afterBlank": "all of my money – I still have €20 left.",
+                "verb": "spend",
+                "correctAnswers": ["haven't spent", "have not spent"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "She",
+                "afterBlank": "an expensive dress for the event – she's wearing her sister's old one.",
+                "verb": "buy",
+                "correctAnswers": ["hasn't bought", "has not bought"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "You",
+                "afterBlank": "a very good time today. You fell over and you lost your phone!",
+                "verb": "have",
+                "correctAnswers": ["haven't had", "have not had"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "We",
+                "afterBlank": "a good film for a long time.",
+                "verb": "see",
+                "correctAnswers": ["haven't seen", "have not seen"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "The company",
+                "afterBlank": "to my email yet. I wrote to them two weeks ago!",
+                "verb": "reply",
+                "correctAnswers": ["hasn't replied", "has not replied"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "present-perfect-questions-yet",
+          "marks": 5,
+          "instructions": "Write present perfect questions using the words below and yet.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "words": "you / choose / something from the menu?",
+                "correctAnswers": ["Have you chosen something from the menu yet?"],
+                "acceptableVariants": []
+              },
+              {
+                "questionId": 2,
+                "words": "he / speak / to the teacher?",
+                "correctAnswers": ["Has he spoken to the teacher yet?"],
+                "acceptableVariants": []
+              },
+              {
+                "questionId": 3,
+                "words": "she / upload / the photos from the trip?",
+                "correctAnswers": ["Has she uploaded the photos from the trip yet?"],
+                "acceptableVariants": []
+              },
+              {
+                "questionId": 4,
+                "words": "they / learn / the words for the school play?",
+                "correctAnswers": ["Have they learned the words for the school play yet?", "Have they learnt the words for the school play yet?"],
+                "acceptableVariants": []
+              },
+              {
+                "questionId": 5,
+                "words": "I / do / enough washing-up?",
+                "correctAnswers": ["Have I done enough washing-up yet?"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "multiple-choice-verbs",
+          "marks": 5,
+          "instructions": "Choose the correct verbs to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "He ___ / ___ her a big favour yesterday.",
+                "options": ["did", "made"],
+                "correctAnswer": "did"
+              },
+              {
+                "questionId": 2,
+                "sentence": "She's ___ / ___ your advice to eat less sugar.",
+                "options": ["taken", "brought"],
+                "correctAnswer": "taken"
+              },
+              {
+                "questionId": 3,
+                "sentence": "They are ___ / ___ a conversation in the kitchen.",
+                "options": ["doing", "having"],
+                "correctAnswer": "having"
+              },
+              {
+                "questionId": 4,
+                "sentence": "The waiter hasn't ___ / ___ us the menu yet.",
+                "options": ["taken", "brought"],
+                "correctAnswer": "brought"
+              },
+              {
+                "questionId": 5,
+                "sentence": "You should ___ / ___ an appointment to see the doctor.",
+                "options": ["do", "make"],
+                "correctAnswer": "make"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "word-bank-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the words below. There is one extra word.",
+          "content": {
+            "providedWords": ["basic", "daily", "free", "next-door", "sandy", "tropical"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "We're just taking",
+                "afterBlank": "supplies on the trek.",
+                "correctAnswers": ["basic"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "I'm best friends with my",
+                "afterBlank": "neighbour.",
+                "correctAnswers": ["next-door"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "",
+                "afterBlank": "life in Alaska is completely different from Europe.",
+                "correctAnswers": ["Daily"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "The ocean is full of",
+                "afterBlank": "fish.",
+                "correctAnswers": ["tropical"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "My mum is always busy – she never has any",
+                "afterBlank": "time.",
+                "correctAnswers": ["free"],
+                "acceptableVariants": []
+              }
+            ],
+            "extraWord": "sandy"
+          }
+        }
+      ]
+    }
+  ]
+}

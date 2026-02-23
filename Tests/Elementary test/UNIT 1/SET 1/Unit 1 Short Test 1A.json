@@ -1,0 +1,215 @@
+{
+  "testId": "elem_u1_short_a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 1,
+    "unitName": "Unit 1",
+    "testType": "short",
+    "variant": "A",
+    "title": "Unit 1 Short Test 1A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "fill-in-blanks-conjugation",
+          "marks": 5,
+          "instructions": "Complete the sentences with the present simple affirmative form of the verbs in brackets.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "Your grandparents",
+                "verb": "live",
+                "afterBlank": "near me.",
+                "correctAnswers": ["live"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "The teacher",
+                "verb": "have",
+                "afterBlank": "a new car.",
+                "correctAnswers": ["has"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "He",
+                "verb": "study",
+                "afterBlank": "maths.",
+                "correctAnswers": ["studies"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "The class",
+                "verb": "finish",
+                "afterBlank": "at 4 p.m.",
+                "correctAnswers": ["finishes"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "We",
+                "verb": "use",
+                "afterBlank": "this exercise book for English.",
+                "correctAnswers": ["use"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "verb-bank-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the present simple affirmative form of the verbs below.",
+          "content": {
+            "providedVerbs": ["go", "love", "teach", "watch", "work"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "Mr Green",
+                "afterBlank": "English at our school.",
+                "correctAnswers": ["teaches"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "teach"
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "I",
+                "afterBlank": "your new apartment. It's great!",
+                "correctAnswers": ["love"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "love"
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "She",
+                "afterBlank": "to school on her bike.",
+                "correctAnswers": ["goes"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "go"
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "My parents",
+                "afterBlank": "at the university.",
+                "correctAnswers": ["work"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "work"
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "My brother",
+                "afterBlank": "videos on his laptop.",
+                "correctAnswers": ["watches"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "watch"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "definition-matching",
+          "marks": 5,
+          "instructions": "Match the definitions with the family members. There are two extra words.",
+          "content": {
+            "providedWords": ["grandfather", "grandson", "mother-in-law", "nephew", "niece", "stepfather", "stepmother"],
+            "definitions": [
+              {
+                "definitionId": 1,
+                "definition": "my father's father",
+                "correctAnswers": ["grandfather"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 2,
+                "definition": "my sister's daughter",
+                "correctAnswers": ["niece"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 3,
+                "definition": "my wife's mum",
+                "correctAnswers": ["mother-in-law"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 4,
+                "definition": "my mother's husband from a remarriage",
+                "correctAnswers": ["stepfather"],
+                "acceptableVariants": []
+              },
+              {
+                "definitionId": 5,
+                "definition": "my daughter's son",
+                "correctAnswers": ["grandson"],
+                "acceptableVariants": []
+              }
+            ],
+            "extraWords": ["nephew", "stepmother"]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "multiple-choice-vocabulary",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "My brother's wife is my ___ / ___.",
+                "options": ["stepsister", "sister-in-law"],
+                "correctAnswer": "sister-in-law"
+              },
+              {
+                "questionId": 2,
+                "sentence": "My sister's son is my ___ / ___.",
+                "options": ["nephew", "niece"],
+                "correctAnswer": "nephew"
+              },
+              {
+                "questionId": 3,
+                "sentence": "My mother's brother is my ___ / ___.",
+                "options": ["aunt", "uncle"],
+                "correctAnswer": "uncle"
+              },
+              {
+                "questionId": 4,
+                "sentence": "My father's wife's son is my ___ / ___.",
+                "options": ["cousin", "stepbrother"],
+                "correctAnswer": "stepbrother"
+              },
+              {
+                "questionId": 5,
+                "sentence": "My aunt's daughter is my ___ / ___.",
+                "options": ["niece", "cousin"],
+                "correctAnswer": "cousin"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

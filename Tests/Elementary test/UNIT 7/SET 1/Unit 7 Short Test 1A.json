@@ -1,0 +1,215 @@
+{
+  "testId": "elem_u7_short_a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 7,
+    "unitName": "Unit 7",
+    "testType": "short",
+    "variant": "A",
+    "title": "Unit 7 Short Test 1A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "irregular-past-simple-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct past simple form of the verbs in brackets.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "The Wright brothers",
+                "verb": "build",
+                "afterBlank": "the first plane in 1905.",
+                "correctAnswers": ["built"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "I",
+                "verb": "find",
+                "afterBlank": "a wallet on the train.",
+                "correctAnswers": ["found"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "It",
+                "verb": "begin",
+                "afterBlank": "to rain when we left the house.",
+                "correctAnswers": ["began"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "My uncle",
+                "verb": "teach",
+                "afterBlank": "me how to ride a bike.",
+                "correctAnswers": ["taught"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "My mother",
+                "verb": "speak",
+                "afterBlank": "to the teacher on the phone.",
+                "correctAnswers": ["spoke"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "email-past-simple-fill",
+          "marks": 5,
+          "instructions": "Complete the email with the correct past simple form of the verbs below.",
+          "content": {
+            "providedVerbs": ["buy", "come", "do", "see", "take"],
+            "emailContext": {
+              "from": "Julie",
+              "to": "Rachel",
+              "greeting": "Hi Rachel,"
+            },
+            "emailText": "How are you? Last weekend my cousin Lewis 1___ to stay with us. It was his first time in London. We 2___ him on a boat on the River Thames, and we 3___ Buckingham Palace and the usual famous places. We 4___ so much in only two days! He also 5___ a cool T-shirt at Greenwich Market.\n\nI want to visit him in Scotland now. Maybe you can come with me?\n\nSee you at school!\nLove,\nJulie",
+            "blanks": [
+              {
+                "blankId": 1,
+                "correctAnswers": ["came"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "come"
+              },
+              {
+                "blankId": 2,
+                "correctAnswers": ["took"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "take"
+              },
+              {
+                "blankId": 3,
+                "correctAnswers": ["saw"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "see"
+              },
+              {
+                "blankId": 4,
+                "correctAnswers": ["did"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "do"
+              },
+              {
+                "blankId": 5,
+                "correctAnswers": ["bought"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "buy"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "computing-nouns-first-letter",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct computing noun. The first letter of the word has been given.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "Turn on your w______ so that I can see you!",
+                "firstLetter": "w",
+                "correctAnswers": ["webcam"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "I can't find my m_____ s____, and all of my homework is on it!",
+                "firstLetter": "m",
+                "correctAnswers": ["memory stick"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "Use your m____ to right-click on the image.",
+                "firstLetter": "m",
+                "correctAnswers": ["mouse"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "Every student in the school gets a t_____ to work on.",
+                "firstLetter": "t",
+                "correctAnswers": ["tablet"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "Listen to the video with the h_________.",
+                "firstLetter": "h",
+                "correctAnswers": ["headphones"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "computing-verbs-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the words below.",
+          "content": {
+            "providedWords": ["delete", "download", "enter", "post", "print"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "That's a terrible photo of me! Please _____ it!",
+                "correctAnswers": ["delete"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "How can I _____ this image to my computer?",
+                "correctAnswers": ["download"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "Do you want to _____ in colour or black and white?",
+                "correctAnswers": ["print"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "You have to _____ the password to get Wi-Fi here.",
+                "correctAnswers": ["enter"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "Shall I _____ a comment on your Facebook page?",
+                "correctAnswers": ["post"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

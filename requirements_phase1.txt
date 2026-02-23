@@ -1,0 +1,10 @@
+# Phase 1 Additional Dependencies
+# Add these to your existing requirements.txt
+
+# Celery and Redis
+celery[redis]==5.3.4
+redis==5.0.1
+kombu==5.3.4
+
+# Optional: Celery monitoring
+flower==2.0.1

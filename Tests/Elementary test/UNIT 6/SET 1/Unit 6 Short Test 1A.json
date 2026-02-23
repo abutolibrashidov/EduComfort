@@ -1,0 +1,233 @@
+{
+  "testId": "elem_u6_short_a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 6,
+    "unitName": "Unit 6",
+    "testType": "short",
+    "variant": "A",
+    "title": "Unit 6 Short Test 1A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "past-simple-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the past simple form of the verbs below.",
+          "content": {
+            "providedVerbs": ["stop", "study", "travel", "want", "watch"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "I",
+                "afterBlank": "an awful film on TV last night.",
+                "correctAnswers": ["watched"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "watch"
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "I",
+                "afterBlank": "to get closer to the monkeys in the zoo.",
+                "correctAnswers": ["wanted"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "want"
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "She",
+                "afterBlank": "around Asia last summer.",
+                "correctAnswers": ["travelled", "traveled"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "travel"
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "My brother",
+                "afterBlank": "biology at university.",
+                "correctAnswers": ["studied"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "study"
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "The rain",
+                "afterBlank": "after lunch.",
+                "correctAnswers": ["stopped"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "stop"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "past-time-expression-choice",
+          "marks": 5,
+          "instructions": "Choose the correct past time expressions to complete the sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeChoice": "I started my course",
+                "options": ["six months ago", "ago six months"],
+                "afterChoice": ".",
+                "correctAnswer": "six months ago"
+              },
+              {
+                "sentenceId": 2,
+                "beforeChoice": "I worked at the museum",
+                "options": ["month ago", "last month"],
+                "afterChoice": ".",
+                "correctAnswer": "last month"
+              },
+              {
+                "sentenceId": 3,
+                "beforeChoice": "We used our smartphones in class",
+                "options": ["last week", "week before"],
+                "afterChoice": ".",
+                "correctAnswer": "last week"
+              },
+              {
+                "sentenceId": 4,
+                "beforeChoice": "My parents travelled around the world",
+                "options": ["last ten years", "ten years ago"],
+                "afterChoice": ".",
+                "correctAnswer": "ten years ago"
+              },
+              {
+                "sentenceId": 5,
+                "beforeChoice": "He finished the exam",
+                "options": ["few minutes", "a few minutes"],
+                "afterChoice": "ago.",
+                "correctAnswer": "a few minutes"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "multiple-choice",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the gaps.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "question": "___ look most similar to humans.",
+                "options": [
+                  {"id": "a", "text": "Bears"},
+                  {"id": "b", "text": "Whales"},
+                  {"id": "c", "text": "Gorillas"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 2,
+                "question": "___ have the longest necks.",
+                "options": [
+                  {"id": "a", "text": "Wolves"},
+                  {"id": "b", "text": "Giraffes"},
+                  {"id": "c", "text": "Dolphins"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 3,
+                "question": "___ are the only insects that make food humans can eat.",
+                "options": [
+                  {"id": "a", "text": "Bees"},
+                  {"id": "b", "text": "Butterflies"},
+                  {"id": "c", "text": "Spiders"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 4,
+                "question": "It isn't unusual to swim with ___ on holiday.",
+                "options": [
+                  {"id": "a", "text": "sharks"},
+                  {"id": "b", "text": "whales"},
+                  {"id": "c", "text": "dolphins"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 5,
+                "question": "Some ___ are longer than a school bus!",
+                "options": [
+                  {"id": "a", "text": "snakes"},
+                  {"id": "b", "text": "frogs"},
+                  {"id": "c", "text": "spiders"}
+                ],
+                "correctAnswer": "a"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "animal-body-parts-choice",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeChoice": "An eagle's",
+                "options": ["wing", "foot"],
+                "afterChoice": "can be as wide as two metres.",
+                "correctAnswer": "wing"
+              },
+              {
+                "sentenceId": 2,
+                "beforeChoice": "Monkeys use their",
+                "options": ["ears", "tails"],
+                "afterChoice": "to hold onto trees.",
+                "correctAnswer": "tails"
+              },
+              {
+                "sentenceId": 3,
+                "beforeChoice": "My cat hurt its",
+                "options": ["paw", "wing"],
+                "afterChoice": "outside.",
+                "correctAnswer": "paw"
+              },
+              {
+                "sentenceId": 4,
+                "beforeChoice": "Elephants have the biggest",
+                "options": ["eyes", "ears"],
+                "afterChoice": "of all the animals.",
+                "correctAnswer": "ears"
+              },
+              {
+                "sentenceId": 5,
+                "beforeChoice": "Crocodiles have between 60 and 72",
+                "options": ["feet", "teeth"],
+                "afterChoice": ".",
+                "correctAnswer": "teeth"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

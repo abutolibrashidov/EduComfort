@@ -1,0 +1,211 @@
+{
+  "testId": "elem_u3_short_2a",
+  "metadata": {
+    "level": "elementary",
+    "unit": 3,
+    "unitName": "Unit 3",
+    "testType": "short",
+    "variant": "2A",
+    "title": "Unit 3 Short Test 2A",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "multiple-choice-verb-forms",
+          "marks": 5,
+          "instructions": "Choose the correct verb forms to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "I ___ / ___ because I'm not happy right now.",
+                "options": ["don't smile", "am not smiling"],
+                "correctAnswer": "am not smiling"
+              },
+              {
+                "questionId": 2,
+                "sentence": "She ___ / ___ your silly story!",
+                "options": ["believes", "is believing"],
+                "correctAnswer": "believes"
+              },
+              {
+                "questionId": 3,
+                "sentence": "___ / ___ before breakfast?",
+                "options": ["Are you always getting dressed", "Do you always get dressed"],
+                "correctAnswer": "Do you always get dressed"
+              },
+              {
+                "questionId": 4,
+                "sentence": "In general, cats ___ / ___ swimming.",
+                "options": ["are hating", "hate"],
+                "correctAnswer": "hate"
+              },
+              {
+                "questionId": 5,
+                "sentence": "John's over there! He ___ / ___ a red T-shirt.",
+                "options": ["wears", "is wearing"],
+                "correctAnswer": "is wearing"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "dialogue-completion",
+          "marks": 5,
+          "instructions": "Complete the dialogue with the present simple or present continuous form of the verbs in brackets.",
+          "content": {
+            "dialogue": [
+              {
+                "speaker": "Harry",
+                "text": "Hi! What",
+                "blankId": 1,
+                "verb": "do",
+                "afterBlank": "?",
+                "correctAnswers": ["are you doing"],
+                "acceptableVariants": ["'re you doing"]
+              },
+              {
+                "speaker": "Felix",
+                "text": "I",
+                "blankId": 2,
+                "verb": "wait",
+                "afterBlank": "for my brother.",
+                "correctAnswers": ["am waiting"],
+                "acceptableVariants": ["'m waiting"]
+              },
+              {
+                "speaker": "Harry",
+                "text": "Is that him over there?"
+              },
+              {
+                "speaker": "Felix",
+                "text": "I",
+                "blankId": 3,
+                "verb": "not know",
+                "afterBlank": "– I",
+                "correctAnswers": ["don't know"],
+                "acceptableVariants": []
+              },
+              {
+                "speaker": "Felix",
+                "text": "",
+                "blankId": 4,
+                "verb": "not wear",
+                "afterBlank": "my glasses!",
+                "correctAnswers": ["am not wearing"],
+                "acceptableVariants": ["'m not wearing"]
+              },
+              {
+                "speaker": "Harry",
+                "text": "Yes, it is! It's Tom! Don't worry – he",
+                "blankId": 5,
+                "verb": "come",
+                "afterBlank": "now.",
+                "correctAnswers": ["is coming"],
+                "acceptableVariants": ["'s coming"]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "opposite-adjectives",
+          "marks": 10,
+          "instructions": "Write adjectives with the opposite meaning to the words in bold. Add the prefix un- where necessary.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "I'm wearing a similar coat to yesterday.",
+                "boldWord": "similar",
+                "correctAnswers": ["different"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "I've got a high temperature.",
+                "boldWord": "high",
+                "correctAnswers": ["low"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "My teacher is really friendly.",
+                "boldWord": "friendly",
+                "correctAnswers": ["unfriendly"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "She's got a(n) expensive laptop.",
+                "boldWord": "expensive",
+                "correctAnswers": ["cheap", "inexpensive"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "That's the right answer.",
+                "boldWord": "right",
+                "correctAnswers": ["wrong"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "text": "It's a website about male celebrities.",
+                "boldWord": "male",
+                "correctAnswers": ["female"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "text": "Is that a fake beard?",
+                "boldWord": "fake",
+                "correctAnswers": ["real"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 8,
+                "text": "Your words are very kind.",
+                "boldWord": "kind",
+                "correctAnswers": ["unkind"],
+                "acceptableVariants": ["cruel", "mean"]
+              },
+              {
+                "sentenceId": 9,
+                "text": "It's dangerous to cycle along this road.",
+                "boldWord": "dangerous",
+                "correctAnswers": ["safe"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 10,
+                "text": "It's necessary to wear trainers.",
+                "boldWord": "necessary",
+                "correctAnswers": ["unnecessary"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

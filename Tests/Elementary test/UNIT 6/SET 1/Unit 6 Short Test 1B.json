@@ -1,0 +1,233 @@
+{
+  "testId": "elem_u6_short_b",
+  "metadata": {
+    "level": "elementary",
+    "unit": 6,
+    "unitName": "Unit 6",
+    "testType": "short",
+    "variant": "B",
+    "title": "Unit 6 Short Test 1B",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "past-simple-fill",
+          "marks": 5,
+          "instructions": "Complete the sentences with the past simple form of the verbs below.",
+          "content": {
+            "providedVerbs": ["chat", "marry", "return", "share", "visit"],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeBlank": "I",
+                "afterBlank": "the safari park with my school.",
+                "correctAnswers": ["visited"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "visit"
+              },
+              {
+                "sentenceId": 2,
+                "beforeBlank": "We",
+                "afterBlank": "a taxi from the airport with another couple.",
+                "correctAnswers": ["shared"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "share"
+              },
+              {
+                "sentenceId": 3,
+                "beforeBlank": "He",
+                "afterBlank": "home from Africa last month.",
+                "correctAnswers": ["returned"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "return"
+              },
+              {
+                "sentenceId": 4,
+                "beforeBlank": "She",
+                "afterBlank": "an explorer from Egypt.",
+                "correctAnswers": ["married"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "marry"
+              },
+              {
+                "sentenceId": 5,
+                "beforeBlank": "They",
+                "afterBlank": "online last night.",
+                "correctAnswers": ["chatted"],
+                "acceptableVariants": [],
+                "correctVerbUsed": "chat"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "past-time-expression-choice",
+          "marks": 5,
+          "instructions": "Choose the correct past time expressions to complete the sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeChoice": "I phoned you",
+                "options": ["ago two hours", "two hours ago"],
+                "afterChoice": ".",
+                "correctAnswer": "two hours ago"
+              },
+              {
+                "sentenceId": 2,
+                "beforeChoice": "We chatted online",
+                "options": ["the week last", "last week"],
+                "afterChoice": ".",
+                "correctAnswer": "last week"
+              },
+              {
+                "sentenceId": 3,
+                "beforeChoice": "He looked at that website",
+                "options": ["a few", "few"],
+                "afterChoice": "minutes ago.",
+                "correctAnswer": "a few"
+              },
+              {
+                "sentenceId": 4,
+                "beforeChoice": "I walked to school every day",
+                "options": ["last year", "year ago"],
+                "afterChoice": ".",
+                "correctAnswer": "last year"
+              },
+              {
+                "sentenceId": 5,
+                "beforeChoice": "My uncle stayed at a terrible hotel",
+                "options": ["month ago", "a month ago"],
+                "afterChoice": ".",
+                "correctAnswer": "a month ago"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "multiple-choice",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the gaps.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "question": "Many chefs in Europe cook with ___ legs.",
+                "options": [
+                  {"id": "a", "text": "snakes'"},
+                  {"id": "b", "text": "frogs'"},
+                  {"id": "c", "text": "giraffes'"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 2,
+                "question": "The African ___ uses its big ears to communicate.",
+                "options": [
+                  {"id": "a", "text": "elephant"},
+                  {"id": "b", "text": "hippo"},
+                  {"id": "c", "text": "bear"}
+                ],
+                "correctAnswer": "a"
+              },
+              {
+                "questionId": 3,
+                "question": "Look at the beautiful wings on that ___.",
+                "options": [
+                  {"id": "a", "text": "tiger"},
+                  {"id": "b", "text": "bee"},
+                  {"id": "c", "text": "butterfly"}
+                ],
+                "correctAnswer": "c"
+              },
+              {
+                "questionId": 4,
+                "question": "A small orange ___ jumped in front of me.",
+                "options": [
+                  {"id": "a", "text": "gorilla"},
+                  {"id": "b", "text": "monkey"},
+                  {"id": "c", "text": "dolphin"}
+                ],
+                "correctAnswer": "b"
+              },
+              {
+                "questionId": 5,
+                "question": "Help! There's a ___ in the bath! Use that cup to get it out!",
+                "options": [
+                  {"id": "a", "text": "spider"},
+                  {"id": "b", "text": "crocodile"},
+                  {"id": "c", "text": "shark"}
+                ],
+                "correctAnswer": "a"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "v2",
+          "type": "animal-body-parts-choice",
+          "marks": 5,
+          "instructions": "Choose the correct words to complete the sentences.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "beforeChoice": "Bears walk on their four",
+                "options": ["tails", "paws"],
+                "afterChoice": "and only stand sometimes.",
+                "correctAnswer": "paws"
+              },
+              {
+                "sentenceId": 2,
+                "beforeChoice": "Sharks lose some",
+                "options": ["teeth", "feet"],
+                "afterChoice": "every week!",
+                "correctAnswer": "teeth"
+              },
+              {
+                "sentenceId": 3,
+                "beforeChoice": "Butterflies have beautiful patterns and colours on their",
+                "options": ["legs", "wings"],
+                "afterChoice": ".",
+                "correctAnswer": "wings"
+              },
+              {
+                "sentenceId": 4,
+                "beforeChoice": "Spiders have eight",
+                "options": ["legs", "tails"],
+                "afterChoice": ".",
+                "correctAnswer": "legs"
+              },
+              {
+                "sentenceId": 5,
+                "beforeChoice": "Bees have five",
+                "options": ["ears", "eyes"],
+                "afterChoice": "that help them to see colour.",
+                "correctAnswer": "eyes"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "testId": "sol3e_elem_u2_short_1b",
+  "metadata": {
+    "level": "elementary",
+    "unit": 2,
+    "variant": "B",
+    "title": "Unit 2 Short Test 1B",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 20,
+    "sections": 2
+  },
+  "sections": [
+    {
+      "sectionId": "grammar_1",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "q1",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the verbs below and the affirmative or negative form of have to.",
+          "content": {
+            "providedWords": [
+              "listen",
+              "share",
+              "speak",
+              "take",
+              "wear"
+            ],
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "She __________ her P.E. kit to school on Mondays. We only have P.E. on Fridays.",
+                "correctAnswers": [
+                  "doesn't have to take"
+                ],
+                "acceptableVariants": [
+                  "does not have to take"
+                ]
+              },
+              {
+                "sentenceId": 2,
+                "text": "They __________ the exercise book. They have one each.",
+                "correctAnswers": [
+                  "don't have to share"
+                ],
+                "acceptableVariants": [
+                  "do not have to share"
+                ]
+              },
+              {
+                "sentenceId": 3,
+                "text": "I __________ to my mother-in-law in French. She can't speak English.",
+                "correctAnswers": [
+                  "have to speak"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "You __________ to the teacher.",
+                "correctAnswers": [
+                  "have to listen"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "My grandfather can't see very well. He __________ glasses.",
+                "correctAnswers": [
+                  "has to wear"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "q2",
+          "type": "sentence-ordering",
+          "marks": 5,
+          "instructions": "Put the words in the correct order to make questions. Use the interrogative form of have to.",
+          "content": {
+            "items": [
+              {
+                "id": 1,
+                "words": [
+                  "get up",
+                  "you",
+                  "early"
+                ],
+                "correctSentence": "Do you have to get up early?"
+              },
+              {
+                "id": 2,
+                "words": [
+                  "she",
+                  "go home",
+                  "now"
+                ],
+                "correctSentence": "Does she have to go home now?"
+              },
+              {
+                "id": 3,
+                "words": [
+                  "late",
+                  "stay",
+                  "they"
+                ],
+                "correctSentence": "Do they have to stay late?"
+              },
+              {
+                "id": 4,
+                "words": [
+                  "we",
+                  "wait",
+                  "over there"
+                ],
+                "correctSentence": "Do we have to wait over there?"
+              },
+              {
+                "id": 5,
+                "words": [
+                  "pay",
+                  "I",
+                  "for the ticket"
+                ],
+                "correctSentence": "Do I have to pay for the ticket?"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary_3",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "q3",
+          "type": "fill-in-blanks-simple",
+          "marks": 5,
+          "instructions": "Complete the sentences with the correct word.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "Do you get __________ at seven o'clock in the morning?",
+                "correctAnswers": [
+                  "up"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "I arrive __________ school at eight o'clock.",
+                "correctAnswers": [
+                  "at"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 3,
+                "text": "I have to __________ dressed early.",
+                "correctAnswers": [
+                  "get"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "It's one o'clock can we have __________ now? I'm so hungry!",
+                "correctAnswers": [
+                  "lunch"
+                ],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "It's late. I want to __________ to bed.",
+                "correctAnswers": [
+                  "go"
+                ],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "q4",
+          "type": "matching",
+          "marks": 5,
+          "instructions": "Match the descriptions of the people with the school subjects.",
+          "content": {
+            "providedOptions": [
+              "biology",
+              "geography",
+              "history",
+              "I.C.T.",
+              "maths"
+            ],
+            "items": [
+              {
+                "id": 1,
+                "text": "Emin wants to know about the past.",
+                "answer": "history"
+              },
+              {
+                "id": 2,
+                "text": "Natasha wants to be a doctor.",
+                "answer": "biology"
+              },
+              {
+                "id": 3,
+                "text": "Simon loves computers.",
+                "answer": "I.C.T."
+              },
+              {
+                "id": 4,
+                "text": "Nisa wants to learn about other countries.",
+                "answer": "geography"
+              },
+              {
+                "id": 5,
+                "text": "Karen likes numbers.",
+                "answer": "maths"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

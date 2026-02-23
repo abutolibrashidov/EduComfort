@@ -1,0 +1,215 @@
+{
+  "testId": "elem_u3_short_2b",
+  "metadata": {
+    "level": "elementary",
+    "unit": 3,
+    "unitName": "Unit 3",
+    "testType": "short",
+    "variant": "2B",
+    "title": "Unit 3 Short Test 2B",
+    "source": "Solutions Third Edition",
+    "totalMarks": 20,
+    "estimatedTime": 15,
+    "sections": 2
+  },
+  
+  "sections": [
+    {
+      "sectionId": "grammar",
+      "sectionName": "Grammar",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "g1",
+          "type": "multiple-choice-verb-forms",
+          "marks": 5,
+          "instructions": "Choose the correct verb forms to complete the sentences.",
+          "content": {
+            "questions": [
+              {
+                "questionId": 1,
+                "sentence": "I ___ / ___ this concert.",
+                "options": ["enjoy", "am enjoying"],
+                "correctAnswer": "am enjoying"
+              },
+              {
+                "questionId": 2,
+                "sentence": "The teacher ___ / ___ you.",
+                "options": ["isn't believing", "does not believe"],
+                "correctAnswer": "does not believe"
+              },
+              {
+                "questionId": 3,
+                "sentence": "___ / ___ very early?",
+                "options": ["Do you often wake up", "Are you often waking up"],
+                "correctAnswer": "Do you often wake up"
+              },
+              {
+                "questionId": 4,
+                "sentence": "The police ___ / ___ a uniform in most countries.",
+                "options": ["wear", "are wearing"],
+                "correctAnswer": "wear"
+              },
+              {
+                "questionId": 5,
+                "sentence": "He never ___ / ___ his vegetables.",
+                "options": ["is eating", "eats"],
+                "correctAnswer": "eats"
+              }
+            ]
+          }
+        },
+        {
+          "questionId": "g2",
+          "type": "dialogue-completion",
+          "marks": 5,
+          "instructions": "Complete the dialogue with the present simple or present continuous form of the verbs in brackets.",
+          "content": {
+            "dialogue": [
+              {
+                "speaker": "Kate",
+                "text": "Why",
+                "blankId": 1,
+                "verb": "you / stay",
+                "afterBlank": "late today?",
+                "correctAnswers": ["are you staying"],
+                "acceptableVariants": ["'re you staying"]
+              },
+              {
+                "speaker": "Jenny",
+                "text": "I",
+                "blankId": 2,
+                "verb": "need",
+                "afterBlank": "to talk to the teacher about my sister.",
+                "correctAnswers": ["need"],
+                "acceptableVariants": []
+              },
+              {
+                "speaker": "Jenny",
+                "text": "I'm worried about her. She",
+                "blankId": 3,
+                "verb": "work",
+                "afterBlank": "all the time at the moment.",
+                "correctAnswers": ["is working"],
+                "acceptableVariants": ["'s working"]
+              },
+              {
+                "speaker": "Kate",
+                "text": "Is she nervous about the exams?"
+              },
+              {
+                "speaker": "Jenny",
+                "text": "Yes, she is. But she",
+                "blankId": 4,
+                "verb": "not want",
+                "afterBlank": "to talk to anyone about it.",
+                "correctAnswers": ["does not want", "doesn't want"],
+                "acceptableVariants": []
+              },
+              {
+                "speaker": "Kate",
+                "text": "Look! Mrs Morris",
+                "blankId": 5,
+                "verb": "come",
+                "afterBlank": "! You can talk to her now.",
+                "correctAnswers": ["is coming"],
+                "acceptableVariants": ["'s coming"]
+              },
+              {
+                "speaker": "Kate",
+                "text": "See you later! Good luck!"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "sectionId": "vocabulary",
+      "sectionName": "Vocabulary",
+      "totalMarks": 10,
+      "questions": [
+        {
+          "questionId": "v1",
+          "type": "opposite-adjectives",
+          "marks": 10,
+          "instructions": "Write adjectives with the opposite meaning to the words in bold. Add the prefix un- where necessary.",
+          "content": {
+            "sentences": [
+              {
+                "sentenceId": 1,
+                "text": "Your name is difficult to remember.",
+                "boldWord": "difficult",
+                "correctAnswers": ["easy"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 2,
+                "text": "He is very kind.",
+                "boldWord": "kind",
+                "correctAnswers": ["unkind"],
+                "acceptableVariants": ["cruel", "mean"]
+              },
+              {
+                "sentenceId": 3,
+                "text": "My trainers were quite expensive.",
+                "boldWord": "expensive",
+                "correctAnswers": ["cheap", "inexpensive"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 4,
+                "text": "I have a female doctor.",
+                "boldWord": "female",
+                "correctAnswers": ["male"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 5,
+                "text": "You're always right!",
+                "boldWord": "right",
+                "correctAnswers": ["wrong"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 6,
+                "text": "Is it safe to skate here?",
+                "boldWord": "safe",
+                "correctAnswers": ["unsafe", "dangerous"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 7,
+                "text": "My clothes are very old.",
+                "boldWord": "old",
+                "correctAnswers": ["new"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 8,
+                "text": "Is she friendly?",
+                "boldWord": "friendly",
+                "correctAnswers": ["unfriendly"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 9,
+                "text": "You have to use fake names on social media.",
+                "boldWord": "fake",
+                "correctAnswers": ["real"],
+                "acceptableVariants": []
+              },
+              {
+                "sentenceId": 10,
+                "text": "That's a very low price.",
+                "boldWord": "low",
+                "correctAnswers": ["high"],
+                "acceptableVariants": []
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

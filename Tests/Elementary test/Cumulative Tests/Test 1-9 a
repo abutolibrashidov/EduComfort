@@ -1,0 +1,428 @@
+{
+  "test_info": {
+    "title": "Solutions Third Edition Elementary Tests",
+    "test_name": "Cumulative Test 1–9 A",
+    "total_marks": 70
+  },
+  "sections": [
+    {
+      "section_name": "Grammar",
+      "section_number": 1,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 1,
+          "instruction": "Complete the sentences with the correct form of the verbs in brackets.",
+          "marks": 10,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "You _______________________ (just / give) me the wrong password."
+            },
+            {
+              "question_number": 2,
+              "text": "She _______________________ (do) athletics at weekends."
+            },
+            {
+              "question_number": 3,
+              "text": "I don't think it _______________________ (be) safe to travel on your own."
+            },
+            {
+              "question_number": 4,
+              "text": "We _______________________ (not / can) connect to the internet yesterday."
+            },
+            {
+              "question_number": 5,
+              "text": "Nick _______________________ (already / tidy) the living room."
+            },
+            {
+              "question_number": 6,
+              "text": "They _______________________ (eat) at that new restaurant tonight. They've booked a table."
+            },
+            {
+              "question_number": 7,
+              "text": "He _______________________ (have) problems with his mobile phone at the moment."
+            },
+            {
+              "question_number": 8,
+              "text": "Lisa _______________________ (speak) to me ten minutes ago."
+            },
+            {
+              "question_number": 9,
+              "text": "I _______________________ (hate) this music that you're listening to!"
+            },
+            {
+              "question_number": 10,
+              "text": "_______________________ (you / see) the Italian exchange students yet?"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Grammar",
+      "section_number": 2,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 2,
+          "instruction": "Choose the correct answers to complete the sentences.",
+          "marks": 10,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "We ___ wait outside before school starts – it's the rule.",
+              "options": [
+                "a) has to",
+                "b) don't have to",
+                "c) have to"
+              ]
+            },
+            {
+              "question_number": 2,
+              "text": "I ___ early for school.",
+              "options": [
+                "a) hardly ever am",
+                "b) hardly am ever",
+                "c) am hardly ever"
+              ]
+            },
+            {
+              "question_number": 3,
+              "text": "'___ computers are in the library?' 'About twenty.'",
+              "options": [
+                "a) How many",
+                "b) How much",
+                "c) Which"
+              ]
+            },
+            {
+              "question_number": 4,
+              "text": "___ any meat in this?",
+              "options": [
+                "a) There is",
+                "b) Is there",
+                "c) Are there"
+              ]
+            },
+            {
+              "question_number": 5,
+              "text": "There isn't ___ water for the children.",
+              "options": [
+                "a) a",
+                "b) any",
+                "c) some"
+              ]
+            },
+            {
+              "question_number": 6,
+              "text": "Would you like a ___ minutes to think about it?",
+              "options": [
+                "a) few",
+                "b) little",
+                "c) lot"
+              ]
+            },
+            {
+              "question_number": 7,
+              "text": "I am much ___ than I was six months ago.",
+              "options": [
+                "a) fiter",
+                "b) more fit",
+                "c) fitter"
+              ]
+            },
+            {
+              "question_number": 8,
+              "text": "___ time to travel there is between March and July.",
+              "options": [
+                "a) The baddest",
+                "b) The worst",
+                "c) The most bad"
+              ]
+            },
+            {
+              "question_number": 9,
+              "text": "They haven't arrived ___.",
+              "options": [
+                "a) already",
+                "b) yet",
+                "c) just"
+              ]
+            },
+            {
+              "question_number": 10,
+              "text": "Who's the best swimmer ___ the team?",
+              "options": [
+                "a) of",
+                "b) in",
+                "c) at"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Vocabulary",
+      "section_number": 3,
+      "total_marks": 9,
+      "exercises": [
+        {
+          "exercise_number": 3,
+          "instruction": "Match the definitions with the words below. There are two extra words.",
+          "word_bank": "charger hall helmet jumper mushroom nephew niece pole vault sunrise sunset valley",
+          "marks": 9,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "You use this when your battery is low. __________________"
+            },
+            {
+              "question_number": 2,
+              "text": "When the sun goes down at the end of the day. __________________"
+            },
+            {
+              "question_number": 3,
+              "text": "This isn't meat or fruit – but it is good for you. __________________"
+            },
+            {
+              "question_number": 4,
+              "text": "This protects your head. __________________"
+            },
+            {
+              "question_number": 5,
+              "text": "An athletic sport where you have to get over a high bar. __________________"
+            },
+            {
+              "question_number": 6,
+              "text": "Warm top for the winter. __________________"
+            },
+            {
+              "question_number": 7,
+              "text": "Your brother's daughter. __________________"
+            },
+            {
+              "question_number": 8,
+              "text": "The low area between two mountains.__________________"
+            },
+            {
+              "question_number": 9,
+              "text": "The room inside the entrance of a house or apartment. __________________"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Vocabulary",
+      "section_number": 4,
+      "total_marks": 5,
+      "exercises": [
+        {
+          "exercise_number": 4,
+          "instruction": "Complete the sentences with the correct form of the words in brackets.",
+          "marks": 5,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "Your health is connected to your __________________ (fit)."
+            },
+            {
+              "question_number": 2,
+              "text": "Did you make a __________________ (suggest)?"
+            },
+            {
+              "question_number": 3,
+              "text": "I have to write a __________________ (describe) of the jungle."
+            },
+            {
+              "question_number": 4,
+              "text": "When was the last time you gave a __________________ (donate) to charity?"
+            },
+            {
+              "question_number": 5,
+              "text": "I'd like some __________________ (inform) about opening times, please."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Vocabulary",
+      "section_number": 5,
+      "total_marks": 6,
+      "exercises": [
+        {
+          "exercise_number": 5,
+          "instruction": "Complete the adjectives in the sentences. The first letter of each word has been given.",
+          "marks": 6,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "My best friend's got s _ _ _ _ _ _ _ black hair."
+            },
+            {
+              "question_number": 2,
+              "text": "I always go very red in the face and find it difficult to talk when I'm e _ _ _ _ _ _ _ _ _ _ – it's awful!"
+            },
+            {
+              "question_number": 3,
+              "text": "Take a l _ _ _ - s _ _ _ _ _ _ top, because it's not very warm in the evenings."
+            },
+            {
+              "question_number": 4,
+              "text": "My grandfather has f _ _ _ _ teeth."
+            },
+            {
+              "question_number": 5,
+              "text": "The train is so c _ _ _ _ _ _ with people in the evenings that I usually have to stand."
+            },
+            {
+              "question_number": 6,
+              "text": "Tahiti is a beautiful, t _ _ _ _ _ _ _ island with palm trees and blue seas."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Use of English",
+      "section_number": 6,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 6,
+          "instruction": "Read the dialogue and find ten mistakes. Circle the mistakes and write the corrections.",
+          "marks": 10,
+          "dialogue": [
+            {
+              "speaker": "Student",
+              "line": "Can I have a table with two, please?"
+            },
+            {
+              "speaker": "Waiter",
+              "line": "Of course. Here's the menu."
+            },
+            {
+              "speaker": "Student",
+              "line": "Excuse me. What is the cake on the bottom of the photo?"
+            },
+            {
+              "speaker": "Waiter",
+              "line": "I'm not sure. I will say that's coffee cake."
+            },
+            {
+              "speaker": "Student",
+              "line": "Oh, I'm not very keen in coffee. I'll just have a cup of tea, please."
+            },
+            {
+              "speaker": "Waiter",
+              "line": "We offer free pancakes with hot drinks from 7 at 10 in the morning."
+            },
+            {
+              "speaker": "Student",
+              "line": "Great, that's sounding good."
+            },
+            {
+              "speaker": "Waiter",
+              "line": "Would you want anything else?"
+            },
+            {
+              "speaker": "Student",
+              "line": "No, I'll wait after my friend gets here."
+            },
+            {
+              "speaker": "Waiter",
+              "line": "Does your friend have short, black, waving hair?"
+            },
+            {
+              "speaker": "Student",
+              "line": "Yes, that's her!"
+            },
+            {
+              "speaker": "Waiter",
+              "line": "She's sitting upstairs. Go past the kitchen and the stairs are by your right."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Listening",
+      "section_number": 7,
+      "total_marks": 5,
+      "exercises": [
+        {
+          "exercise_number": 7,
+          "instruction": "Listen to the five recordings. Are the sentences true (T) or false (F)?",
+          "audio_track": "12",
+          "marks": 5,
+          "questions": [
+            {
+              "question_number": 1,
+              "text": "Martin can't turn his computer on again. ___"
+            },
+            {
+              "question_number": 2,
+              "text": "Katy found a house 17 km away. ___"
+            },
+            {
+              "question_number": 3,
+              "text": "Alexander climbs buildings that are just under 300 metres tall. ___"
+            },
+            {
+              "question_number": 4,
+              "text": "The speaker's great-grandfather was an engineer. ___"
+            },
+            {
+              "question_number": 5,
+              "text": "He wants to put meat in a soup. ___"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Reading",
+      "section_number": 8,
+      "total_marks": 5,
+      "exercises": [
+        {
+          "exercise_number": 8,
+          "instruction": "Read the text. Match sentences A–F with gaps 1–5. There is one extra sentence.",
+          "marks": 5,
+          "text_title": "Inspiring women in the world of sport",
+          "text_content": "The South American Surfer\n\nRiding the biggest waves on the Atlantic Ocean is one of the most exciting sportspeople in South America. 1____ But she has had to fight to find the money to enter sporting competitions. Why? Because she wasn't 'pretty enough' to get sponsorship from big companies. They were more interested in what she looked like than what she could do on the sea.\n\nSilvana was seven when she started surfing, and has been surfing for 23 years. She always surfed with the boys and wanted to surf like a man, so she has a very special style of surfing for a woman. She has been the best Brazilian female surfer eight times. She has also been the world number two twice. She says that she started to ask companies which sell surfing sports clothes to sponsor her. 2____ She thinks it was because she doesn't look like a beautiful model from a magazine. And she thinks it's unfair, because sportsmen don't have the same problems.\n\nSilvana came from a very poor family. 3____ She built her first surfboard with a plank of wood and from that day surfing changed her life. Eventually, after thirteen years, an important sports company said it would back her and pay for her to take part in surfing competitions. And this meant that at last surfing could give her the chance to help her family too.\n\nThe Egyptian Pentathlete\n\n4____ She is from Egypt and used to be a pentathlete, that is an athlete who competes in the pentathlon. This is made up of five sports: running, swimming, shooting, fencing, and horse-riding. She was the youngest ever pentathlete to compete in the Olympics. She took part in three Games. The first was in Athens when she was only fourteen, then she competed in Beijing, followed by London.\n\nAya is also a mother, a wife and a university teacher. Although she is busy, her sport has taught her how to organise her time. She says that it is a challenge for married women in her country to continue with their sports careers and look after the home and children at the same time. 5____ She hopes that her experience has been an inspiration to those young girls who want to become professional sportswomen.",
+          "sentences_to_match": [
+            "A) They lived in a simple hut on the beach and she used to imagine what it would be like to live in a real house with next-door neighbours.",
+            "B) Her name is Silvana Lima, and she is the best surfer in Brazil.",
+            "C) She wanted to show how girls can continue to follow their sporting dreams after they get married and have families.",
+            "D) But they all said 'no'.",
+            "E) Aya Medany is another woman who has had a difficult time in the world of sport.",
+            "F) She was extremely happy because she received many offers."
+          ]
+        }
+      ]
+    },
+    {
+      "section_name": "Writing",
+      "section_number": 9,
+      "total_marks": 10,
+      "exercises": [
+        {
+          "exercise_number": 9,
+          "instruction": "Write an article about the advantages of doing sport and how sport can change people's lives. Imagine that you have interviewed some people and quote them in your article. Include the following:",
+          "marks": 10,
+          "requirements": [
+            "Write in paragraphs of two or more sentences.",
+            "Introduce the topic in the first sentence.",
+            "Use direct speech (use quotation marks and the correct punctuation).",
+            "Use the comparative and superlative to make comparisons.",
+            "Use linking words (and, but, so, or and because)."
+          ]
+        }
+      ]
+    }
+  ]
+}
