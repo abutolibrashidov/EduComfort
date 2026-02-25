@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Card, Typography, message, Divider } from 'antd';
+import { Form, Input, Button, Card, Typography, message, Divider, Checkbox } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { UserAddOutlined, LockOutlined, PhoneOutlined, UserOutlined, ShopOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axiosClient from '../../api/axiosClient';
 
 const { Title, Text } = Typography;
@@ -93,6 +93,21 @@ const CenterRegistration = () => {
                         rules={[{ required: true, message: 'Please input your password!' }]}
                     >
                         <Input.Password prefix={<LockOutlined />} placeholder={t('password')} />
+                    </Form.Item>
+
+                    <Form.Item
+                        name="agreement"
+                        valuePropName="checked"
+                        rules={[
+                            {
+                                validator: (_, value) =>
+                                    value ? Promise.resolve() : Promise.reject(new Error('You must accept the Terms of Service and Privacy Policy')),
+                            },
+                        ]}
+                    >
+                        <Checkbox>
+                            I have read and agree to the <Link to="/terms" target="_blank">Terms of Service</Link> and <Link to="/privacy" target="_blank">Privacy Policy</Link>
+                        </Checkbox>
                     </Form.Item>
 
                     <Form.Item>

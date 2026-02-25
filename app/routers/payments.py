@@ -12,7 +12,7 @@ from app.models.group import Group
 from app.models.group_students import GroupStudent
 from pydantic import BaseModel
 from datetime import datetime
-from app.schemas.payment import PaymentCreate, PaymentRead, PaymentUpdate
+from app.schemas.payment import PaymentCreate, PaymentRead, PaymentUpdate, TeacherPaymentRead
 
 router = APIRouter()
 
@@ -196,7 +196,7 @@ def delete_payment(
 
 # TEACHER SPECIFIC ENDPOINTS
 
-@router.get("/teacher/salary")
+@router.get("/teacher/salary", response_model=list[TeacherPaymentRead])
 def get_teacher_salary(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -260,7 +260,7 @@ class TeacherPaymentCreate(BaseModel):
     payment_date: datetime
     description: Optional[str] = None
 
-@router.post("/teacher/salary")
+@router.post("/teacher/salary", response_model=TeacherPaymentRead)
 def create_teacher_salary(
     payment: TeacherPaymentCreate,
     db: Session = Depends(get_db),
@@ -278,7 +278,7 @@ def create_teacher_salary(
     
     return db_payment
 
-@router.get("/admin/teachers/{teacher_id}/salaries")
+@router.get("/admin/teachers/{teacher_id}/salaries", response_model=list[TeacherPaymentRead])
 def get_specific_teacher_salaries(
     teacher_id: int,
     db: Session = Depends(get_db),

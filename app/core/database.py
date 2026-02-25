@@ -2,7 +2,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from .config import settings
 
-engine = create_engine(settings.DATABASE_URL)
+engine = create_engine(
+    settings.DATABASE_URL,
+    pool_pre_ping=True,      # Tests connection before using it (fixes "server closed connection" errors)
+    pool_recycle=300         # Recycles connections every 5 minutes so Neon doesn't kill them
+)
 
 SessionLocal = sessionmaker(
     autocommit=False,

@@ -43,6 +43,7 @@ from app.data.seed_subjects import seed_subjects
 
 # Import Scheduler
 from app.services.rating_cycle_scheduler import start_scheduler
+from app.services.billing_scheduler import start_billing_scheduler
 
 # Import all routers
 from app.routers import (
@@ -84,7 +85,8 @@ from app.routers import (
     ai_billing, # AI Billing Router
     leaderboards, # Leaderboards Router
     expenses, # New Expenses Router
-    upload # Avatar Upload Router
+    upload, # Avatar Upload Router
+    gradebook # New Gradebook Router
 )
 
 # Import public router separately to handle if it doesn't exist yet
@@ -132,6 +134,25 @@ async def global_exception_handler(request: Request, exc: Exception):
     # In development, let FastAPI's default error handler show the traceback
     raise exc
 
+from fastapi.exceptions import ResponseValidationError, RequestValidationError
+@app.exception_handler(ResponseValidationError)
+async def validation_exception_handler(request: Request, exc: ResponseValidationError):
+    import traceback
+    with open("error_log.txt", "a") as f:
+        f.write(f"ResponseValidationError on {request.url}:\\n")
+        for err in exc.errors():
+            f.write(str(err) + "\\n")
+    return JSONResponse(status_code=500, content={"message": "Internal Server Error"})
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_exception_handler(request: Request, exc: RequestValidationError):
+    body = await request.body()
+    with open("error_log.txt", "a") as f:
+        f.write(f"RequestValidationError on {request.method} {request.url}:\\n")
+        f.write(f"Body: {body.decode(errors='ignore')}\\n")
+        f.write(f"Errors: {exc.errors()}\\n")
+    return JSONResponse(status_code=422, content={"detail": exc.errors()})
+
 
 # =========================
 # Multi-Tenant Middleware - Add FIRST (Inner execution)
@@ -171,9 +192,12 @@ logger.info("CORS middleware configured")
 # Static files — only mount local /uploads in development
 # In production, all files are served from S3/CDN
 if settings.ENVIRONMENT != "production":
-    os.makedirs("uploads", exist_ok=True)
-    app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
-    logger.info("Serving static files from local /uploads (dev mode)")
+    from pathlib import Path
+    media_path = Path(settings.MEDIA_ROOT)
+    os.makedirs(media_path, exist_ok=True)
+    mount_name = media_path.name
+    app.mount(f"/{mount_name}", StaticFiles(directory=settings.MEDIA_ROOT), name=mount_name)
+    logger.info(f"Serving static files from local /{mount_name} (dev mode)")
 else:
     logger.info("Production mode: static files served from S3")
 
@@ -211,6 +235,13 @@ def on_startup():
         start_scheduler()
     except Exception as e:
         logger.error(f"Failed to start rating scheduler: {e}")
+
+    # Start the billing scheduler (oylik to'lov + SMS eslatmalar + avtomatik bloklash)
+    try:
+        start_billing_scheduler()
+        logger.info("Billing scheduler muvaffaqiyatli ishga tushirildi")
+    except Exception as e:
+        logger.error(f"Billing scheduler ishga tushirishda xato: {e}")
 
     logger.info("Backend initialization completed")
 
@@ -357,6 +388,9 @@ print("[INFO] Interactive Books routes registered")
 app.include_router(ai_billing.router)
 print("[INFO] AI Billing routes registered")
 
+# Gradebook (Offline Manual Exams)
+app.include_router(gradebook.router)
+print("[INFO] Gradebook routes registered")
 
 # =========================
 # Root & Health Endpoints

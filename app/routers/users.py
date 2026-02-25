@@ -9,7 +9,7 @@ from app.models.user import User
 from app.schemas.user import UserCreate, UserRead, UserUpdate, UserListItem
 from app.auth.dependencies import get_current_user
 from app.constants.roles import Role
-from app.security.permissions import require_super_admin, check_institution_access
+from app.security.permissions import require_super_admin, check_institution_access, can_view_user, is_platform_owner
 from app.models.rating import TeacherRating
 from datetime import datetime
 from pydantic import BaseModel
@@ -94,6 +94,9 @@ def get_user(
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    # Tenant isolation: check cross-institution access
+    if not can_view_user(current_user, user):
+        raise HTTPException(status_code=403, detail="Access denied: user belongs to a different institution")
     return user
 
 
@@ -143,6 +146,9 @@ def update_user(
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    # Tenant isolation
+    if not is_platform_owner(current_user) and current_user.institution_id != user.institution_id:
+        raise HTTPException(status_code=403, detail="Access denied: user belongs to a different institution")
     
     update_data = user_data.dict(exclude_unset=True)
     
@@ -190,6 +196,9 @@ def delete_user(
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    # Tenant isolation
+    if not is_platform_owner(current_user) and current_user.institution_id != user.institution_id:
+        raise HTTPException(status_code=403, detail="Access denied: user belongs to a different institution")
     
     if user.is_super_admin:
         raise HTTPException(status_code=400, detail="Cannot delete super admin")
@@ -211,6 +220,9 @@ def toggle_user_status(
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    # Tenant isolation
+    if not is_platform_owner(current_user) and current_user.institution_id != user.institution_id:
+        raise HTTPException(status_code=403, detail="Access denied: user belongs to a different institution")
     
     user.is_active = not user.is_active
     db.commit()

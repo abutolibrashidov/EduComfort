@@ -360,8 +360,8 @@ export default function Dashboard() {
                   <Progress
                     percent={m.value}
                     strokeColor={m.color}
-                    railColor="#e2e8f0"
-                    size={8}
+                    trailColor="#e2e8f0"
+                    strokeWidth={8}
                     showInfo={false}
                   />
                 </div>

@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Dict, Any
 from datetime import datetime
+import os
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
@@ -13,6 +14,30 @@ router = APIRouter(
     prefix="/gamification",
     tags=["Gamification"]
 )
+
+# ---------------------------------------------------------------------------
+# Security helpers
+# ---------------------------------------------------------------------------
+_ADMIN_ROLES = {"admin", "super_admin", "platform_owner"}
+
+
+def _require_admin_for_sensitive_endpoints(current_user: User) -> None:
+    """
+    Restrict award-xp and seed-achievements to admin roles.
+
+    In **development** the check is also enforced, but can be bypassed by
+    setting the env-var ``DISABLE_GAMIFICATION_GUARDS=true``.
+    """
+    if os.getenv("DISABLE_GAMIFICATION_GUARDS", "").lower() in ("true", "1", "yes"):
+        return  # bypass for local dev convenience only
+    if current_user.role not in _ADMIN_ROLES:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail=(
+                "award-xp and seed-achievements are restricted to admin roles. "
+                "XP should be awarded internally by the system."
+            ),
+        )
 
 @router.get("/stats")
 async def get_user_stats(
@@ -102,26 +127,29 @@ async def award_xp(
     db: Session = Depends(get_db)
 ):
     """
-    Award XP to the user. 
-    NOTE: In production, this should be called internally by other services, 
-    not exposed directly to frontend for security reasons involving cheating.
-    For MVP/Demo, it's exposed.
+    Award XP to a user.
+
+    **Security**: Restricted to admin / super_admin / platform_owner roles.
+    In production, XP should only be awarded internally (e.g. after completing
+    an exam or lesson) – never called directly from the client to prevent
+    cheating. Set DISABLE_GAMIFICATION_GUARDS=true in .env for local dev only.
     """
+    _require_admin_for_sensitive_endpoints(current_user)
+
     current_user.xp += amount
     current_user.last_activity_date = datetime.utcnow()
-    
-    # Simple level up logic
+
+    # Level up logic: 1 level per 1000 XP
     new_level = (current_user.xp // 1000) + 1
     if new_level > current_user.level:
         current_user.level = new_level
-        # Logic to notify user of level up could go here
-        
+
     db.commit()
-    
+
     return {
-        "message": f"Awarded {amount} XP",
+        "message": f"Awarded {amount} XP for '{activity_type}'",
         "new_total": current_user.xp,
-        "level": current_user.level
+        "level": current_user.level,
     }
 
 @router.post("/seed-achievements")
@@ -130,9 +158,12 @@ async def seed_achievements(
     db: Session = Depends(get_db)
 ):
     """
-    Helper to seed default achievements if table is empty.
-    Only accessible by super_admin ideally, but open for dev.
+    Seed default achievements if the achievements table is empty.
+
+    **Security**: Restricted to admin / super_admin / platform_owner roles.
+    Set DISABLE_GAMIFICATION_GUARDS=true for convenience in local dev.
     """
+    _require_admin_for_sensitive_endpoints(current_user)
     count = db.query(Achievement).count()
     if count > 0:
         return {"message": "Achievements already seeded"}

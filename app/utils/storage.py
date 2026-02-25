@@ -111,12 +111,15 @@ def _delete_from_s3(file_url: str) -> bool:
 # Local fallback operations (development only)
 # ---------------------------------------------------------------------------
 
-LOCAL_BASE = Path("uploads")
+def _get_local_base() -> Path:
+    """Return the configured local media root path."""
+    return Path(settings.MEDIA_ROOT)
 
 
 def _upload_to_local(file: UploadFile, folder: str, filename: str) -> str:
     """Save to local disk and return a relative URL path."""
-    dest_dir = LOCAL_BASE / folder
+    base_dir = _get_local_base()
+    dest_dir = base_dir / folder
     dest_dir.mkdir(parents=True, exist_ok=True)
     dest_path = dest_dir / filename
 
@@ -125,15 +128,33 @@ def _upload_to_local(file: UploadFile, folder: str, filename: str) -> str:
     with open(dest_path, "wb") as buf:
         shutil.copyfileobj(file.file, buf)
 
-    return f"/uploads/{folder}/{filename}"
+    # Use the same structure for URLs but respect MEDIA_ROOT for the prefix
+    # e.g., if MEDIA_ROOT == "uploads", url is /uploads/folder/filename
+    # if MEDIA_ROOT == "/var/app/media", url could just be /media/folder/filename
+    # For now, we will assume the route prefix matches the folder base name.
+    mount_name = base_dir.name
+    return f"/{mount_name}/{folder}/{filename}"
 
 
 def _delete_from_local(file_url: str) -> bool:
     """Delete a local file given its URL path."""
     try:
-        # e.g. /uploads/avatars/abc.png -> uploads/avatars/abc.png
+        base_dir = _get_local_base()
+        mount_name = base_dir.name
+        
+        # e.g. /uploads/avatars/abc.png -> remove leading /
         rel_path = file_url.lstrip("/")
-        Path(rel_path).unlink(missing_ok=True)
-        return True
+        
+        # if the URL starts with the mount name, strip it to get the safe relative path inside MEDIA_ROOT
+        if rel_path.startswith(f"{mount_name}/"):
+            rel_path = rel_path[len(mount_name) + 1:]
+            
+        dest_path = base_dir / rel_path
+        
+        # Basic path traversal protection: Ensure the resolved path is within MEDIA_ROOT
+        if base_dir.resolve() in dest_path.resolve().parents:
+            dest_path.unlink(missing_ok=True)
+            return True
+        return False
     except OSError:
         return False

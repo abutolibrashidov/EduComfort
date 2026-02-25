@@ -291,6 +291,8 @@ function TeacherLayout() {
           trigger={null}
           collapsible
           collapsed={collapsed}
+          onCollapse={(val) => setCollapsed(val)}
+          breakpoint="lg"
           width={260}
           collapsedWidth={80}
           style={{
@@ -380,7 +382,11 @@ function TeacherLayout() {
                   <Text type="secondary" style={{ fontSize: 12 }}>{t('roles.teacher')}</Text>
                 </div>
               )}
-              <Avatar icon={<UserOutlined />} style={{ backgroundColor: '#1890ff' }} />
+              <Avatar
+                icon={!currentUser?.avatar && <UserOutlined />}
+                src={currentUser?.avatar?.startsWith('http') ? currentUser.avatar : (currentUser?.avatar ? `http://localhost:8000${currentUser.avatar}` : null)}
+                style={{ backgroundColor: '#1890ff' }}
+              />
             </div>
 
             <Button

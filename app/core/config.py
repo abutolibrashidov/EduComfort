@@ -19,11 +19,12 @@ class Settings(BaseSettings):
     # CORS
     CORS_ORIGINS: str = "http://localhost:5173,http://127.0.0.1:5173"
 
-    # AWS S3
+    # AWS S3 and Local Storage
     AWS_ACCESS_KEY_ID: Optional[str] = None
     AWS_SECRET_ACCESS_KEY: Optional[str] = None
     AWS_S3_BUCKET_NAME: Optional[str] = None
     AWS_S3_REGION: str = "us-east-1"
+    MEDIA_ROOT: str = "uploads"
 
     # Environment
     ENVIRONMENT: str = "development"  # "development" | "production"
@@ -34,6 +35,19 @@ class Settings(BaseSettings):
     # Email (SendGrid or Resend)
     EMAIL_API_KEY: Optional[str] = None
     EMAIL_FROM: str = "noreply@educomfort.com"
+
+    # SMS — Eskiz (O'zbekiston)
+    ESKIZ_EMAIL: Optional[str] = None
+    ESKIZ_PASSWORD: Optional[str] = None
+
+    # Click Integration
+    CLICK_MERCHANT_ID: Optional[str] = None
+    CLICK_SERVICE_ID: Optional[str] = None
+    CLICK_SECRET_KEY: Optional[str] = None
+
+    # Uzum Integration
+    UZUM_TERMINAL_ID: Optional[str] = None
+    UZUM_SECRET_KEY: Optional[str] = None
 
     model_config = ConfigDict(
         env_file=".env",

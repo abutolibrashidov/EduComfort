@@ -2,7 +2,6 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, s
 from sqlalchemy.orm import Session
 from typing import Optional, List
 from datetime import datetime
-import os
 from pathlib import Path
 
 from app.core.dependencies import get_db
@@ -25,35 +24,13 @@ from app.schemas.workbook import (
     WorkbookSubmissionStatus,
 )
 from app.security.permissions import require_role
+from app.utils.storage import upload_file, delete_file
 
 router = APIRouter(prefix="/workbooks", tags=["workbooks"])
 
-# File upload configuration
-UPLOAD_DIRECTORY = Path("uploads/workbooks")
-UPLOAD_DIRECTORY.mkdir(parents=True, exist_ok=True)
+# Allowed file extensions for workbook uploads
 ALLOWED_EXTENSIONS = {".pdf", ".docx", ".doc", ".txt", ".pptx"}
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
-
-
-def save_upload_file(file: UploadFile) -> tuple[str, str]:
-    """Save uploaded file and return file_path and file_name"""
-    file_ext = Path(file.filename).suffix.lower()
-    if file_ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"File type {file_ext} not allowed. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
-        )
-    
-    # Create unique filename
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    safe_name = f"{timestamp}_{file.filename}"
-    file_path = UPLOAD_DIRECTORY / safe_name
-    
-    # Save file
-    with open(file_path, "wb") as buffer:
-        buffer.write(file.file.read())
-    
-    return str(file_path), file.filename
 
 
 # ============ WORKBOOK CRUD ENDPOINTS ============
@@ -72,16 +49,25 @@ async def create_workbook(
 ):
     """Create a new workbook and upload file (Teacher only)"""
     require_role(current_user, ["teacher", "admin"])
-    
+
+    # Validate extension before uploading
+    file_ext = Path(file.filename).suffix.lower() if file.filename else ""
+    if file_ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"File type '{file_ext}' not allowed. Allowed: {', '.join(ALLOWED_EXTENSIONS)}"
+        )
+
     # Verify subject exists
     subject = db.query(Subject).filter(Subject.id == subject_id).first()
     if not subject:
         raise HTTPException(status_code=404, detail="Subject not found")
-    
-    # Save uploaded file
-    file_path, file_name = save_upload_file(file)
-    file_type = Path(file_name).suffix.lower()
-    
+
+    # Upload via storage abstraction (S3 in prod, local disk in dev)
+    file_url = upload_file(file, folder="workbooks")
+    file_name = file.filename or "unknown"
+    file_type = file_ext
+
     # Create workbook
     workbook = Workbook(
         title=title,
@@ -91,16 +77,16 @@ async def create_workbook(
         level=level,
         total_tasks=total_tasks,
         max_points=max_points,
-        file_path=file_path,
+        file_path=file_url,   # now stores the URL, not a local path
         file_name=file_name,
         file_type=file_type,
         status="draft"
     )
-    
+
     db.add(workbook)
     db.commit()
     db.refresh(workbook)
-    
+
     return workbook
 
 
@@ -185,19 +171,19 @@ async def delete_workbook(
 ):
     """Delete workbook (Creator/Admin only)"""
     require_role(current_user, ["teacher", "admin"])
-    
+
     workbook = db.query(Workbook).filter(Workbook.id == workbook_id).first()
     if not workbook:
         raise HTTPException(status_code=404, detail="Workbook not found")
-    
+
     # Check ownership
     if current_user.role == "teacher" and workbook.created_by_id != current_user.id:
         raise HTTPException(status_code=403, detail="You can only delete your own workbooks")
-    
-    # Delete file
-    if workbook.file_path and os.path.exists(workbook.file_path):
-        os.remove(workbook.file_path)
-    
+
+    # Delete the backing file via storage abstraction (handles both S3 and local disk)
+    if workbook.file_path:
+        delete_file(workbook.file_path)
+
     db.delete(workbook)
     db.commit()
 

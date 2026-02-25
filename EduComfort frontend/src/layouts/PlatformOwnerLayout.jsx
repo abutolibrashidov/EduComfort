@@ -16,6 +16,7 @@ import {
     DollarOutlined,
     MessageOutlined,
     MenuOutlined,
+    CreditCardOutlined,
 } from "@ant-design/icons";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -65,6 +66,11 @@ export default function PlatformOwnerLayout() {
             key: "/platform/billing",
             icon: <DollarOutlined />,
             label: "Billing & Plans",
+        },
+        {
+            key: "/platform/subscriptions",
+            icon: <CreditCardOutlined />,
+            label: "Obuna & To'lovlar",
         },
         {
             key: "/platform/settings",
@@ -142,8 +148,10 @@ export default function PlatformOwnerLayout() {
                 <Sider
                     collapsible
                     collapsed={collapsed}
-                    onCollapse={setCollapsed}
+                    onCollapse={(val) => setCollapsed(val)}
+                    breakpoint="lg"
                     width={260}
+                    collapsedWidth={80}
                     style={{
                         background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", // Darker, purple-ish theme for Platform Owner
                         boxShadow: theme.shadows.xl,
@@ -190,8 +198,9 @@ export default function PlatformOwnerLayout() {
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                                 <Avatar
                                     style={{ backgroundColor: '#1A1A2E', cursor: 'pointer', flexShrink: 0 }}
+                                    src={user?.avatar?.startsWith('http') ? user.avatar : (user?.avatar ? `http://localhost:8000${user.avatar}` : null)}
                                 >
-                                    {user?.first_name?.[0]?.toUpperCase()}{user?.last_name?.[0]?.toUpperCase()}
+                                    {!user?.avatar && `${user?.first_name?.[0]?.toUpperCase() || ''}${user?.last_name?.[0]?.toUpperCase() || ''}`}
                                 </Avatar>
                                 {!isMobile && (
                                     <span style={{ fontSize: 14, fontWeight: 500, color: '#1A1A2E' }}>

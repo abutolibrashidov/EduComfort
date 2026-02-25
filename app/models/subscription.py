@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Enum as SqlEnum
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, Float, Enum as SqlEnum
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
@@ -25,8 +25,15 @@ class InstitutionSubscription(Base):
     status = Column(SqlEnum(SubscriptionStatus), default=SubscriptionStatus.ACTIVE)
     
     start_date = Column(DateTime, default=datetime.utcnow)
-    end_date = Column(DateTime, nullable=True) # If null, maybe lifetime or indefinite? But user asked for monthly.
+    end_date = Column(DateTime, nullable=True)
     next_billing_date = Column(DateTime, nullable=True)
+    
+    # --- Haqiqiy hisob-kitob maydonlari ---
+    monthly_price = Column(Float, default=0.0)         # Oylik to'lov miqdori (so'm)
+    contact_phone = Column(String(20), nullable=True)  # SMS qaysi raqamga borishini
+    last_notified_at = Column(DateTime, nullable=True) # Oxirgi ogohlantirish SMS vaqti
+    payment_received_at = Column(DateTime, nullable=True) # Oxirgi to'lov qabul qilingan vaqt
+    blocked_at = Column(DateTime, nullable=True)       # Qachon bloklanganligi
     
     auto_renew = Column(Boolean, default=True)
     

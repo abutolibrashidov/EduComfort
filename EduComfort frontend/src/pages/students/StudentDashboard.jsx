@@ -12,7 +12,9 @@ import {
   StarFilled,
   SoundOutlined,
   UserOutlined,
-  SafetyCertificateOutlined
+  SafetyCertificateOutlined,
+  SolutionOutlined,
+  PercentageOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +22,7 @@ import { getStudentDashboard } from "../../services/users.service";
 import axios from '../../api/axiosClient';
 import { getCurrentUser } from '../../api/auth';
 import { motion } from 'framer-motion';
+import dayjs from 'dayjs';
 import MyBooks from '../../components/books/MyBooks';
 
 const { Title, Text } = Typography;
@@ -158,6 +161,7 @@ const StudentDashboard = () => {
     upcoming_lessons = [],
     recent_materials = [],
     upcoming_exams = [],
+    gradebooks = [],
     stats = {}
   } = dashboardData || {};
 
@@ -385,10 +389,10 @@ const StudentDashboard = () => {
                           hoverable
                           style={{ borderRadius: 24, padding: '4px', border: '1px solid rgba(0,0,0,0.04)', boxShadow: '0 10px 20px rgba(0,0,0,0.04)', transition: 'all 0.3s' }}
                           styles={{ body: { padding: '16px' } }}
-                          onClick={() => navigate(`/student/courses/${course.id}`)}
+                          onClick={() => navigate('/student/courses')}
                         >
-                          <Row align="middle" gutter={16}>
-                            <Col>
+                          <Row align="middle" wrap={false} gutter={16}>
+                            <Col flex="none">
                               <div style={{
                                 width: 72,
                                 height: 72,
@@ -402,14 +406,14 @@ const StudentDashboard = () => {
                                 <BookOutlined style={{ fontSize: 32, color: '#fff' }} />
                               </div>
                             </Col>
-                            <Col flex="auto">
-                              <Title level={4} style={{ margin: 0, color: '#1e293b', fontWeight: 800, letterSpacing: '-0.5px' }}>{course.name}</Title>
-                              <Text type="secondary" style={{ fontWeight: 500, color: '#64748b' }}>{course.subject_name} • {course.teacher_name}</Text>
+                            <Col flex="auto" style={{ minWidth: 0 }}>
+                              <Title level={4} style={{ margin: 0, color: '#1e293b', fontWeight: 800, letterSpacing: '-0.5px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.name}</Title>
+                              <Text type="secondary" style={{ fontWeight: 500, color: '#64748b', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.subject_name} • {course.teacher_name}</Text>
                               <div style={{ marginTop: 12 }}>
                                 <Progress percent={35} size="small" strokeColor={{ '0%': '#3b82f6', '100%': '#10b981' }} trailColor="#f1f5f9" />
                               </div>
                             </Col>
-                            <Col>
+                            <Col flex="none">
                               <div style={{ width: 40, height: 40, borderRadius: '50%', background: '#f8fafc', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6' }}>
                                 <RightOutlined />
                               </div>
@@ -481,6 +485,84 @@ const StudentDashboard = () => {
                 <div style={{ marginBottom: 16 }}>
                   <MyBooks />
                 </div>
+
+                {/* GRADEBOOK / OFFLINE JURNAL SECTION */}
+                {gradebooks.length > 0 && (
+                  <div style={{ marginBottom: 32 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                      <Title level={4} style={{ margin: 0 }}><SolutionOutlined /> Mening Jurnallarim (Offline Imtihonlar)</Title>
+                    </div>
+                    <Row gutter={[16, 16]}>
+                      {gradebooks.map(gb => (
+                        <Col xs={24} key={gb.level_id}>
+                          <motion.div whileHover={{ y: -2 }} transition={{ type: 'spring', stiffness: 300 }}>
+                            <Card style={{ borderRadius: 16, border: '1px solid #d9d9d9', overflow: 'hidden' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                                <div>
+                                  <Text type="secondary">{gb.group_name}</Text>
+                                  <Title level={5} style={{ margin: 0, color: '#003a8c' }}>{gb.level_title}</Title>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                  <Text type="secondary" style={{ fontSize: 12 }}>O'tish bali: {gb.passing_percentage}%</Text>
+                                  <div>
+                                    <Text strong style={{ fontSize: 24, color: gb.is_passing ? '#52c41a' : '#f5222d' }}>
+                                      {gb.student_score_percentage}%
+                                    </Text>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <Table
+                                dataSource={gb.exams}
+                                rowKey="exam_title"
+                                pagination={false}
+                                size="small"
+                                bordered
+                                columns={[
+                                  {
+                                    title: "Imtihon",
+                                    dataIndex: "exam_title",
+                                    key: "exam_title",
+                                    render: (text) => <Text strong>{text}</Text>
+                                  },
+                                  {
+                                    title: "Sana",
+                                    dataIndex: "date",
+                                    key: "date"
+                                  },
+                                  {
+                                    title: "Max Ball",
+                                    dataIndex: "max_score",
+                                    key: "max_score",
+                                    width: 100
+                                  },
+                                  {
+                                    title: "Ball",
+                                    dataIndex: "score",
+                                    key: "score",
+                                    width: 100,
+                                    render: (score) => (
+                                      score !== null ? <Text strong style={{ color: '#0050b3' }}>{score}</Text> : <Badge status="warning" text="Kutilmoqda" />
+                                    )
+                                  },
+                                  {
+                                    title: "Izoh",
+                                    dataIndex: "comment",
+                                    key: "comment",
+                                    render: (text) => <Text type="secondary">{text}</Text>
+                                  }
+                                ]}
+                              />
+                            </Card>
+                          </motion.div>
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                )}
+                <div style={{ marginBottom: 16 }}>
+                  <MyBooks />
+                </div>
               </>
             )}
           </motion.div>
@@ -491,18 +573,30 @@ const StudentDashboard = () => {
           <motion.div variants={itemVariants}>
             <Card title="Kelgusi Darslar" style={{ borderRadius: 20, marginBottom: 24, border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.05)' }}>
               {upcoming_lessons.length > 0 ? (
-                upcoming_lessons.map((l, index) => (
-                  <div key={l.id} style={{ display: 'flex', gap: 16, marginBottom: 16, paddingBottom: 16, borderBottom: index < upcoming_lessons.length - 1 ? '1px solid #f0f0f0' : 'none' }}>
-                    <div style={{ textAlign: 'center', minWidth: 48, padding: '8px 0', background: '#fff1f0', borderRadius: 8 }}>
-                      <div style={{ fontSize: 11, fontWeight: 'bold', color: '#cf1322' }}>BUGUN</div>
-                      <div style={{ fontSize: 16, fontWeight: 'bold', color: '#a8071a' }}>14:00</div>
+                upcoming_lessons.map((l, index) => {
+                  // Determine date context
+                  const lessonDate = dayjs(l.lesson_date);
+                  const isToday = lessonDate.isSame(dayjs(), 'day');
+                  const isTomorrow = lessonDate.isSame(dayjs().add(1, 'day'), 'day');
+                  const dateLabel = isToday ? 'BUGUN' : (isTomorrow ? 'ERTAGA' : lessonDate.format('DD.MM'));
+                  const timeLabel = lessonDate.format('HH:mm') !== '00:00' ? lessonDate.format('HH:mm') : 'TBD';
+                  const labelColor = isToday ? '#cf1322' : (isTomorrow ? '#d46b08' : '#0050b3');
+                  const timeColor = isToday ? '#a8071a' : (isTomorrow ? '#ad4e00' : '#003a8c');
+                  const bgColor = isToday ? '#fff1f0' : (isTomorrow ? '#fff7e6' : '#e6f7ff');
+
+                  return (
+                    <div key={l.id} style={{ display: 'flex', gap: 16, marginBottom: 16, paddingBottom: 16, borderBottom: index < upcoming_lessons.length - 1 ? '1px solid #f0f0f0' : 'none' }}>
+                      <div style={{ textAlign: 'center', minWidth: 54, padding: '8px 0', background: bgColor, borderRadius: 8 }}>
+                        <div style={{ fontSize: 10, fontWeight: 'bold', color: labelColor }}>{dateLabel}</div>
+                        <div style={{ fontSize: 15, fontWeight: 'bold', color: timeColor }}>{timeLabel}</div>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                        <div style={{ fontWeight: 600, fontSize: 15, color: '#262626' }}>{l.title}</div>
+                        <Text type="secondary" style={{ fontSize: 13 }}>{l.group_name} • {l.teacher_name}</Text>
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                      <div style={{ fontWeight: 600, fontSize: 15, color: '#262626' }}>{l.title}</div>
-                      <Text type="secondary" style={{ fontSize: 13 }}>{l.duration} daq • Online</Text>
-                    </div>
-                  </div>
-                ))
+                  );
+                })
               ) : (
                 <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Darslar yo'q" />
               )}

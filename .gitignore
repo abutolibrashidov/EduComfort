@@ -27,3 +27,7 @@ yarn-error.log
 # Custom
 _archive/
 uploads/
+
+# Build output
+dist/
+build/

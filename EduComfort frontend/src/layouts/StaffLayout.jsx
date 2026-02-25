@@ -9,7 +9,9 @@ import {
   MenuUnfoldOutlined,
   BellOutlined,
   LogoutOutlined,
+  DollarCircleOutlined,
 } from "@ant-design/icons";
+
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLanguage } from "../contexts/LanguageContext";
@@ -69,6 +71,7 @@ export default function StaffLayout() {
       { key: "/staff/branches", icon: <HomeOutlined />, label: "Filiallar" },
       { key: "/staff/users", icon: <UserOutlined />, label: "Foydalanuvchilar" },
       { key: "/staff/messages", icon: <MessageOutlined />, label: "Habarlar" },
+      { key: "/staff/payments", icon: <DollarCircleOutlined />, label: "To'lovlar" },
     ];
   };
 
@@ -340,8 +343,12 @@ export default function StaffLayout() {
                 borderRadius: theme.borderRadius.full,
                 background: "rgba(0,0,0,0.03)",
               }}>
-                <Avatar style={{ background: theme.gradients.info }} size={isMobile ? "default" : "large"}>
-                  {initials}
+                <Avatar
+                  style={{ background: theme.gradients.info }}
+                  size={isMobile ? "default" : "large"}
+                  src={user?.avatar?.startsWith('http') ? user.avatar : (user?.avatar ? `http://localhost:8000${user.avatar}` : null)}
+                >
+                  {!user?.avatar && initials}
                 </Avatar>
                 {!isMobile && (
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>

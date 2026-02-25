@@ -228,7 +228,10 @@ const TeacherDashboard = () => {
                 {t(getGreeting())}, {user?.first_name || "Teacher"}!
               </Title>
               <Text style={{ color: 'rgba(255,255,255,0.9)', fontSize: 16 }}>
-                {t('teacher.welcome_message', { lessons: todays_lessons.length, exams: kpis.upcoming_exams || 0 })}
+                {t('teacher.welcome_message', {
+                  lessons: todays_lessons.length,
+                  exams: kpis.upcoming_exams || 0
+                })}
               </Text>
             </Col>
             <Col>
@@ -345,18 +348,34 @@ const TeacherDashboard = () => {
             </motion.div>
           )}
 
-          {/* Today's Schedule (Timeline View) */}
+          {/* Upcoming Schedule (Timeline View) */}
           <motion.div variants={itemVariants}>
             <Card
-              title={<Title level={4} style={{ margin: 0 }}>{t('teacher.todays_schedule')}</Title>}
+              title={
+                <Title level={4} style={{ margin: 0 }}>
+                  {todays_lessons.length > 0 && todays_lessons[0].lesson_date && todays_lessons[0].lesson_date !== dayjs().format('YYYY-MM-DD')
+                    ? dayjs(todays_lessons[0].lesson_date).format('YYYY-MM-DD') === dayjs().add(1, 'day').format('YYYY-MM-DD')
+                      ? t('teacher.tomorrows_schedule', "Ertangi Darslar") // Fallback translation
+                      : t('teacher.upcoming_schedule', "Kelgusi Darslar")
+                    : t('teacher.todays_schedule', "Bugungi Darslar")}
+                </Title>
+              }
               bordered={false}
-              extra={<Tag color="blue" style={{ borderRadius: 12, padding: '4px 12px' }}>{dayjs().format('dddd, MMM D')}</Tag>}
+              extra={<Tag color="blue" style={{ borderRadius: 12, padding: '4px 12px' }}>
+                {todays_lessons.length > 0 && todays_lessons[0].lesson_date
+                  ? dayjs(todays_lessons[0].lesson_date).format('dddd, MMM D')
+                  : dayjs().format('dddd, MMM D')}
+              </Tag>}
               style={{ borderRadius: 20, boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}
             >
               {todays_lessons.length > 0 ? (
                 <Timeline mode="left" style={{ marginTop: 24 }}>
                   {todays_lessons.map((lesson, index) => {
-                    const isTimePassed = dayjs(lesson.time, 'HH:mm').isBefore(dayjs());
+                    const lessonDate = lesson.lesson_date || dayjs().format('YYYY-MM-DD');
+                    const isToday = lessonDate === dayjs().format('YYYY-MM-DD');
+                    // Only check if time passed if the lesson is today
+                    const isTimePassed = isToday && lesson.time !== "TBD" && dayjs(lesson.time, 'HH:mm').isBefore(dayjs());
+
                     return (
                       <Timeline.Item
                         key={index}
@@ -396,7 +415,7 @@ const TeacherDashboard = () => {
                                 type={isTimePassed ? "default" : "primary"}
                                 ghost={!isTimePassed}
                                 shape="round"
-                                onClick={() => navigate(`/teacher/groups/${lesson.group_id}`)}
+                                onClick={() => navigate(`/teacher/groups`)}
                               >
                                 {isTimePassed ? t('teacher.review') : t('teacher.start')}
                               </Button>
@@ -410,7 +429,7 @@ const TeacherDashboard = () => {
               ) : (
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description={t('teacher.no_lessons_today')}
+                  description={t('teacher.no_lessons_today', "Yaqin kunlarda darslar yo'q")}
                   style={{ padding: 40 }}
                 >
                   <Button type="primary" onClick={() => navigate("/teacher/planner")}>{t('teacher.plan_lesson')}</Button>

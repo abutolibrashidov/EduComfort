@@ -27,13 +27,27 @@ const RequireAuth = ({ allowedRoles = [] }) => {
     return <Outlet />;
   }
 
-  // ✅ Check if user's role is allowed (OR if user is super_admin bypass)
-  if (allowedRoles.includes(role) || role === "super_admin") {
+  // ✅ If route specifically requires platform_owner, STRICTLY enforce it
+  if (allowedRoles.includes("platform_owner") && allowedRoles.length === 1) {
+    if (role === "platform_owner" || user.is_platform_admin === true) {
+      return <Outlet />;
+    }
+    console.warn(`[RequireAuth] Access denied: User role "${role}" is not platform_owner`);
+    return <Navigate to="/unauthorized" replace />;
+  }
+
+  // ✅ Check if user's role is allowed
+  if (allowedRoles.includes(role)) {
+    return <Outlet />;
+  }
+
+  // ✅ Institution Super Admin bypass (ONLY for non-platform routes)
+  if (role === "super_admin" && !allowedRoles.includes("platform_owner")) {
     return <Outlet />;
   }
 
   // ✅ Role not allowed - redirect to unauthorized
-  console.warn(`Access denied: User role "${role}" not in allowed roles:`, allowedRoles);
+  console.warn(`[RequireAuth] Access denied: User role "${role}" not in allowed roles:`, allowedRoles);
   return <Navigate to="/unauthorized" replace />;
 };
 

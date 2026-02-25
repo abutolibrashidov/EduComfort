@@ -338,7 +338,7 @@ const StudentLayout = () => {
 
             <Avatar
               size={screens.xs ? 36 : 40}
-              src={currentUser?.avatar ? `http://localhost:8000${currentUser.avatar}` : null}
+              src={currentUser?.avatar?.startsWith('http') ? currentUser.avatar : (currentUser?.avatar ? `http://localhost:8000${currentUser.avatar}` : null)}
               style={{
                 background: 'linear-gradient(135deg, #0061f2 0%, #00c6f9 100%)',
                 color: '#fff',

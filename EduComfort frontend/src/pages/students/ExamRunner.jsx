@@ -96,6 +96,13 @@ const ExamRunner = () => {
         };
     }, [examId, isPreview]);
 
+    useEffect(() => {
+        if (timeLeft === 0 && !isSubmitting) {
+            message.warning("Time's up! Submitting exam automatically...");
+            handleSubmitExam(true);
+        }
+    }, [timeLeft]);
+
     const handleAnswerChange = async (questionId, value) => {
         setAnswers(prev => ({ ...prev, [questionId]: value }));
 
@@ -439,7 +446,6 @@ const ExamRunner = () => {
                     setTimeLeft(prev => {
                         if (prev <= 1) {
                             clearInterval(timerRef.current);
-                            handleSubmitExam(true); // Auto-submit
                             return 0;
                         }
                         return prev - 1;

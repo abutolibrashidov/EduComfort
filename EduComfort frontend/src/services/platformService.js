@@ -160,3 +160,34 @@ export const impersonateUser = async (userId) => {
         throw error;
     }
 };
+
+export const createInstitution = async (data) => {
+    try {
+        const response = await api.post('/platform/institutions', data);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to create institution:", error);
+        throw error;
+    }
+};
+
+export const updateInstitutionCredits = async (id, credits) => {
+    try {
+        const response = await api.put(`/platform/institutions/${id}/credits`, { credits });
+        return response.data;
+    } catch (error) {
+        console.error("Failed to update institution credits:", error);
+        throw error;
+    }
+};
+
+export const getPlatformGrowth = async () => {
+    try {
+        const response = await api.get('/platform/stats/growth');
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch growth stats:", error);
+        throw error;
+    }
+};
+

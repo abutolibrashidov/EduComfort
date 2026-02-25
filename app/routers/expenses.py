@@ -52,15 +52,29 @@ def create_expense(
         institution_id=current_user.institution_id
     )
     db.add(db_expense)
-    db.commit()
-    db.refresh(db_expense)
-
-    # Attach recipient name for response if it's a salary
+    
+    # Attach recipient name for response if it's a salary AND sync TeacherPayment if applicable
     db_expense.recipient_name = None
     if db_expense.recipient_id:
         recipient = db.query(User).filter(User.id == db_expense.recipient_id).first()
         if recipient:
             db_expense.recipient_name = f"{recipient.first_name} {recipient.last_name}"
+            
+            # If this is a teacher salary, sync it to the teacher_payments table automatically
+            if expense_data.get("category") == "salary" and recipient.role == "teacher":
+                from app.models.teacher_payment import TeacherPayment
+                teacher_payment = TeacherPayment(
+                    teacher_id=recipient.id,
+                    amount=expense_data["amount"],
+                    payment_date=expense_data["date"],
+                    description=expense_data.get("description", "Maosh (Admin tomonidan to'langan)"),
+                    status="completed",
+                    created_by_id=current_user.id
+                )
+                db.add(teacher_payment)
+
+    db.commit()
+    db.refresh(db_expense)
 
     return db_expense
 
@@ -89,9 +103,28 @@ def read_expenses(
     
     # Initialize recipient_name for schema compatibility
     for e in expenses:
-        e.recipient_name = None
+        if e.recipient:
+            e.recipient_name = f"{e.recipient.first_name} {e.recipient.last_name}"
+        else:
+            e.recipient_name = None
 
     print(f"[DEBUG] read_expenses: returning {len(expenses)} expenses")
+    return expenses
+
+@router.get("/my-salary", response_model=List[ExpenseRead])
+def read_my_salary(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Get the current user's salary history (accessible by any role)"""
+    expenses = db.query(Expense).filter(
+        Expense.category == "salary",
+        Expense.recipient_id == current_user.id
+    ).order_by(Expense.date.desc()).all()
+    
+    for e in expenses:
+        e.recipient_name = f"{current_user.first_name} {current_user.last_name}"
+        
     return expenses
 
 @router.delete("/{expense_id}")

@@ -17,6 +17,7 @@ import {
   LogoutOutlined,
   GlobalOutlined,
   ShopOutlined,
+  WalletOutlined,
 } from "@ant-design/icons";
 import { NotificationOutlined } from "@ant-design/icons";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
@@ -97,6 +98,15 @@ export default function AdminLayout() {
       if (platformUser) {
         localStorage.setItem('sp_user', platformUser);
         localStorage.removeItem('sp_platform_user');
+
+        // Parse the user to decide where to go
+        try {
+          const userObj = JSON.parse(platformUser);
+          if (userObj.role === "platform_owner" || userObj.is_platform_admin) {
+            window.location.href = '/platform/institutions';
+            return;
+          }
+        } catch (e) { }
       }
       window.location.href = '/admin';
     }
@@ -120,6 +130,7 @@ export default function AdminLayout() {
       { key: "/admin/payments", icon: <DollarOutlined />, label: t('payments', "To'lovlar") },
       { key: "/admin/messages", icon: <MessageOutlined />, label: t('messages', 'Xabarlar') },
       { key: "/admin/announcements", icon: <FileTextOutlined />, label: t('announcements', "E'lonlar") },
+      ...(isSuperAdmin ? [] : [{ key: "/admin/my-salary", icon: <WalletOutlined />, label: t('finance.my_salary', "Mening maoshim") }]),
       { key: "/admin/finance", icon: <DollarOutlined />, label: t('finance.title', "Moliya") },
     ];
 
@@ -330,7 +341,7 @@ export default function AdminLayout() {
         <Sider
           collapsible
           collapsed={collapsed}
-          onCollapse={setCollapsed}
+          onCollapse={(val) => setCollapsed(val)}
           width={260}
           breakpoint="lg"
           collapsedWidth={80}
@@ -486,8 +497,9 @@ export default function AdminLayout() {
                     flexShrink: 0,
                   }}
                   size={36}
+                  src={user?.avatar?.startsWith('http') ? user.avatar : (user?.avatar ? `http://localhost:8000${user.avatar}` : null)}
                 >
-                  {initials}
+                  {!user?.avatar && initials}
                 </Avatar>
                 {!isMobile && (
                   <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", paddingRight: 4 }}>

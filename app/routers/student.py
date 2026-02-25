@@ -14,6 +14,7 @@ from app.models.group_students import GroupStudent
 from app.models.payment import Payment
 from app.models.conversation import Conversation, ConversationType
 from app.models.material import Material
+from app.models.gradebook import GradebookLevel, GradebookExam, GradebookScore
 from app.models.lesson import Lesson
 from app.models.exam import Exam, ExamStatus
 from app.models.rating import TeacherRating
@@ -141,6 +142,23 @@ class ExamDashboardInfo(BaseModel):
     class Config:
         from_attributes = True
 
+class GradebookScoreDashboardInfo(BaseModel):
+    exam_title: str
+    max_score: float
+    score: Optional[float]
+    comment: Optional[str]
+    date: str
+
+class GradebookLevelDashboardInfo(BaseModel):
+    level_id: int
+    level_title: str
+    group_name: str
+    passing_percentage: float
+    total_exams: int
+    student_score_percentage: float
+    is_passing: bool
+    exams: List[GradebookScoreDashboardInfo]
+
 class StudentDashboardResponse(BaseModel):
     stats: DashboardStats
     enrolled_groups: List[GroupInfo]
@@ -148,6 +166,7 @@ class StudentDashboardResponse(BaseModel):
     upcoming_lessons: List[LessonInfo]
     recent_materials: List[MaterialInfo]
     upcoming_exams: List[ExamDashboardInfo]
+    gradebooks: List[GradebookLevelDashboardInfo] = []
     group_chats_available: int
 
 
@@ -355,6 +374,60 @@ def get_student_dashboard(
         for e in upcoming_exams_query
     ]
     
+    # Get Gradebook data for the student
+    gradebook_data = []
+    if group_ids:
+        # Fetch all levels for student's groups
+        levels = db.query(GradebookLevel).filter(
+            GradebookLevel.group_id.in_(group_ids),
+            GradebookLevel.is_active == True
+        ).all()
+        
+        for lvl in levels:
+            exams_in_level = db.query(GradebookExam).filter(GradebookExam.level_id == lvl.id).all()
+            
+            level_exams = []
+            total_earned = 0.0
+            total_possible = 0.0
+            
+            for ex in exams_in_level:
+                # Find student score
+                score = db.query(GradebookScore).filter(
+                    GradebookScore.exam_id == ex.id,
+                    GradebookScore.student_id == target_student_id
+                ).first()
+                
+                if score:
+                    total_earned += score.score
+                    total_possible += ex.max_score
+                    
+                level_exams.append(GradebookScoreDashboardInfo(
+                    exam_title=ex.title,
+                    max_score=ex.max_score,
+                    score=score.score if score else None,
+                    comment=score.comment if score else None,
+                    date=ex.exam_date.strftime("%Y-%m-%d") if ex.exam_date else ""
+                ))
+            
+            # Use max(1) to avoid division by zero if total_possible is 0
+            student_percentage = (total_earned / max(total_possible, 1.0)) * 100 if total_possible > 0 else 0
+            is_passing = student_percentage >= lvl.passing_percentage
+            
+            # If no exams graded yet, we don't strictly say failing, but by default it is what it is.
+            if total_possible == 0:
+                is_passing = True # Or None
+                
+            gradebook_data.append(GradebookLevelDashboardInfo(
+                level_id=lvl.id,
+                level_title=lvl.title,
+                group_name=lvl.group.name if lvl.group else "Unknown Group",
+                passing_percentage=lvl.passing_percentage,
+                total_exams=len(exams_in_level),
+                student_score_percentage=round(student_percentage, 1),
+                is_passing=is_passing,
+                exams=level_exams
+            ))
+    
     # Calculate completion rate (dummy for now)
     completion_rate = calculate_course_completion_rate(db, student_id=target_student_id)
     attendance_rate = calculate_attendance_rate(db, student_id=target_student_id)
@@ -375,6 +448,7 @@ def get_student_dashboard(
         upcoming_lessons=upcoming_lessons,
         recent_materials=recent_materials,
         upcoming_exams=upcoming_exams,
+        gradebooks=gradebook_data,
         group_chats_available=group_chats
     )
 

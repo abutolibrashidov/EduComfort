@@ -49,6 +49,7 @@ class TodayLesson(BaseModel):
     subject: str
     time: str
     topic: Optional[str] = None
+    lesson_date: str = ""
 
 
 class UpcomingExam(BaseModel):
@@ -263,33 +264,42 @@ def get_teacher_dashboard(
         average_rating=average_rating
     )
     
-    # Today's lessons
-    today = date.today()
-    day_name = today.strftime("%A")[:3]  # Mon, Tue, etc.
-    
+    # Today's lessons or next upcoming
     todays_lessons = []
-    # Real lessons for today from Lesson model
-    today_lessons_db = [l for l in upcoming_lessons_query if l.lesson_date == today]
-    for l in today_lessons_db:
-        todays_lessons.append(TodayLesson(
-            group_id=l.group_id,
-            group_name=l.group.name,
-            subject=l.group.subject.name,
-            time=str(l.group.start_time) if l.group.start_time else "TBD",
-            topic=l.title
-        ))
     
-    # Also include scheduled groups if no specific lesson planned
-    planned_group_ids = [l.group_id for l in today_lessons_db]
-    for group in groups:
-        if group.id not in planned_group_ids and group.days_of_week and day_name in group.days_of_week:
+    for i in range(8): # Check today + next 7 days
+        target_date = date.today() + timedelta(days=i)
+        day_name = target_date.strftime("%A")[:3]  # Mon, Tue, etc.
+        
+        # Real lessons for target date from Lesson model
+        target_lessons_db = [l for l in upcoming_lessons_query if l.lesson_date == target_date]
+        for l in target_lessons_db:
             todays_lessons.append(TodayLesson(
-                group_id=group.id,
-                group_name=group.name,
-                subject=group.subject.name,
-                time=str(group.start_time) if group.start_time else "TBD",
-                topic=None
+                group_id=l.group_id,
+                group_name=l.group.name,
+                subject=l.group.subject.name,
+                time=str(l.group.start_time) if l.group.start_time else "TBD",
+                topic=l.title,
+                lesson_date=target_date.strftime("%Y-%m-%d")
             ))
+        
+        # Also include scheduled groups if no specific lesson planned
+        planned_group_ids = [l.group_id for l in target_lessons_db]
+        for group in groups:
+            if group.id not in planned_group_ids and group.days_of_week and day_name in group.days_of_week:
+                todays_lessons.append(TodayLesson(
+                    group_id=group.id,
+                    group_name=group.name,
+                    subject=group.subject.name,
+                    time=str(group.start_time) if group.start_time else "TBD",
+                    topic=None,
+                    lesson_date=target_date.strftime("%Y-%m-%d")
+                ))
+                
+        if todays_lessons:
+            # Sort by time
+            todays_lessons.sort(key=lambda x: x.time)
+            break # Found lessons for this day, stop searching further days
     
     # Upcoming exams (REAL)
     upcoming_exams = []

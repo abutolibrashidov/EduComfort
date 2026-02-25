@@ -8,6 +8,7 @@ from app.models.user import User
 from app.security.permissions import is_platform_owner, is_super_admin, is_admin_or_higher
 from app.models.group import Group
 from app.schemas.group import GroupCreate, GroupUpdate, GroupRead, GroupListItem
+from app.models.group_students import GroupStudent
 
 router = APIRouter(prefix="/admin/groups", tags=["Groups"])
 
@@ -244,21 +245,48 @@ def delete_group(
 
 # Get group statistics
 @router.get("/stats/summary")
-def get_group_stats(db: Session = Depends(get_db)):
+def get_group_stats(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
     """
-    Get group statistics
+    Get group statistics — scoped to the caller's institution.
+    Platform owners see global counts.
     """
     from sqlalchemy import func
     
-    total = db.query(func.count(Group.id)).scalar()
-    active = db.query(func.count(Group.id)).filter(Group.status == "active").scalar()
-    upcoming = db.query(func.count(Group.id)).filter(Group.status == "upcoming").scalar()
+    base_q = db.query(func.count(Group.id))
+    
+    # Tenant isolation: non-platform-owners only see their institution
+    if not is_platform_owner(current_user) and current_user.institution_id:
+        base_q = base_q.filter(Group.institution_id == current_user.institution_id)
+    
+    total = base_q.scalar() or 0
+    
+    active_q = base_q.filter(Group.status == "active")
+    if not is_platform_owner(current_user) and current_user.institution_id:
+        active_q = db.query(func.count(Group.id)).filter(
+            Group.status == "active",
+            Group.institution_id == current_user.institution_id
+        )
+    else:
+        active_q = db.query(func.count(Group.id)).filter(Group.status == "active")
+    active = active_q.scalar() or 0
+    
+    if not is_platform_owner(current_user) and current_user.institution_id:
+        upcoming_q = db.query(func.count(Group.id)).filter(
+            Group.status == "upcoming",
+            Group.institution_id == current_user.institution_id
+        )
+    else:
+        upcoming_q = db.query(func.count(Group.id)).filter(Group.status == "upcoming")
+    upcoming = upcoming_q.scalar() or 0
     
     return {
         "total": total,
         "active": active,
         "upcoming": upcoming,
-        "completed": total - active - upcoming
+        "completed": max(0, total - active - upcoming)
     }
 
 
@@ -281,17 +309,26 @@ def add_student_to_group(
     """
     Add a student to a group
     """
-    if not is_admin_or_higher(current_user):
+    if not is_admin_or_higher(current_user) and not is_platform_owner(current_user):
         raise HTTPException(status_code=403, detail="Not enough permissions")
         
     group = db.query(Group).filter(Group.id == group_id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Group not found")
+    
+    # Tenant isolation: non-platform-owners can only add students from their own institution
+    if not is_platform_owner(current_user) and current_user.institution_id:
+        if group.institution_id != current_user.institution_id:
+            raise HTTPException(status_code=403, detail="Access denied: group belongs to a different institution")
         
     # Verify student exists
     student = db.query(User).filter(User.id == data.student_id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
+    
+    # Tenant isolation: student must belong to same institution as the group
+    if not is_platform_owner(current_user) and student.institution_id != group.institution_id:
+        raise HTTPException(status_code=403, detail="Cannot add student from a different institution to this group")
     
     # Check if student is already in the group
     if student in group.students:
@@ -319,12 +356,17 @@ def remove_student_from_group(
     """
     Remove a student from a group
     """
-    if not is_admin_or_higher(current_user):
+    if not is_admin_or_higher(current_user) and not is_platform_owner(current_user):
         raise HTTPException(status_code=403, detail="Not enough permissions")
         
     group = db.query(Group).filter(Group.id == group_id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Group not found")
+    
+    # Tenant isolation: non-platform-owners can only manage groups from their own institution
+    if not is_platform_owner(current_user) and current_user.institution_id:
+        if group.institution_id != current_user.institution_id:
+            raise HTTPException(status_code=403, detail="Access denied: group belongs to a different institution")
         
     # Verify student exists
     student = db.query(User).filter(User.id == student_id).first()

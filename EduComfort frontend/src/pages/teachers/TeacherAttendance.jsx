@@ -14,7 +14,6 @@ import {
   Col,
   message,
   Typography,
-  Typography,
   Avatar,
   Tooltip,
   Tabs

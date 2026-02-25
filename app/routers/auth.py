@@ -379,3 +379,91 @@ def read_users_me(current_user: User = Depends(get_current_user)):
         "is_active": current_user.is_active
     }
 
+
+# ---------------------------------------------------------------------------
+# Password Reset — Forgot Password
+# ---------------------------------------------------------------------------
+
+@router.post("/forgot-password")
+@limiter.limit("3/minute")
+def forgot_password(
+    request: Request,
+    data: ForgotPasswordRequest,
+    db: Session = Depends(get_db),
+):
+    """
+    Send a password-reset link to the user's email.
+    Always returns 200 to prevent user-enumeration attacks.
+    """
+    from app.utils.email import send_email, password_reset_email
+    from app.core.config import settings as app_settings
+
+    login_val = data.login.strip()
+    user = (
+        db.query(User)
+        .filter((User.email == login_val) | (User.phone_number == login_val))
+        .first()
+    )
+
+    if user and user.email:
+        reset_token = create_access_token(
+            data={"sub": str(user.id), "purpose": "password_reset"},
+            expires_delta=timedelta(hours=1),
+        )
+        frontend_url = app_settings.CORS_ORIGINS.split(",")[0].strip()
+        reset_url = f"{frontend_url}/reset-password?token={reset_token}"
+
+        send_email(
+            to=user.email,
+            subject="EduComfort \u2014 Password Reset",
+            html=password_reset_email(reset_url, user.first_name or "User"),
+        )
+        logger.info(f"Password reset email sent to user_id={user.id}")
+    else:
+        logger.warning(f"Password reset requested for unknown login: '{login_val}'")
+
+    return {"message": "If an account with that email exists, a reset link has been sent."}
+
+
+# ---------------------------------------------------------------------------
+# Password Reset — Confirm New Password
+# ---------------------------------------------------------------------------
+
+@router.post("/reset-password")
+def reset_password(
+    data: ResetPasswordRequest,
+    db: Session = Depends(get_db),
+):
+    """Validate the reset token and set a new password."""
+    from jose import JWTError
+    from app.core.security import SECRET_KEY, ALGORITHM, get_password_hash
+    from jose import jwt as jose_jwt
+
+    bad_token = HTTPException(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        detail="Invalid or expired reset token",
+    )
+
+    try:
+        payload = jose_jwt.decode(data.token, SECRET_KEY, algorithms=[ALGORITHM])
+        user_id = payload.get("sub")
+        purpose = payload.get("purpose")
+        if purpose != "password_reset" or not user_id:
+            raise bad_token
+    except JWTError:
+        raise bad_token
+
+    user = db.query(User).filter(User.id == int(user_id)).first()
+    if not user:
+        raise bad_token
+
+    if len(data.new_password) < 8:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 8 characters",
+        )
+
+    user.password_hash = get_password_hash(data.new_password)
+    db.commit()
+    logger.info(f"Password reset successful for user_id={user.id}")
+    return {"message": "Password updated successfully. You can now log in."}

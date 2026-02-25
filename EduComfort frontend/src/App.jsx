@@ -41,6 +41,7 @@ const PlatformAnalytics = React.lazy(() => import('./pages/platform/PlatformAnal
 const PlatformSettings = React.lazy(() => import('./pages/platform/PlatformSettings'));
 const PlatformProfile = React.lazy(() => import('./pages/platform/PlatformProfile'));
 const BillingManagement = React.lazy(() => import('./pages/platform/BillingManagement'));
+const PlatformSubscriptions = React.lazy(() => import('./pages/platform/PlatformSubscriptions'));
 const PlatformMessaging = React.lazy(() => import('./pages/platform/PlatformMessaging'));
 
 // ADMIN PAGES
@@ -98,6 +99,7 @@ const TeacherExams = React.lazy(() => import("./pages/teachers/TeacherExams"));
 const TeacherExamCreator = React.lazy(() => import("./pages/teachers/TeacherExamCreator"));
 const TeacherExamDetails = React.lazy(() => import("./pages/teachers/TeacherExamDetails"));
 const TeacherExamResults = React.lazy(() => import("./pages/teachers/TeacherExamResults"));
+const TeacherGradebookExam = React.lazy(() => import("./pages/teachers/TeacherGradebookExam"));
 const TeacherReviewPage = React.lazy(() => import("./pages/teacher/TeacherReviewPage"));
 const TeacherLeaderboards = React.lazy(() => import("./pages/teachers/TeacherLeaderboards"));
 
@@ -107,10 +109,13 @@ const StaffBranches = React.lazy(() => import("./pages/staff/StaffBranches"));
 const StaffUsers = React.lazy(() => import("./pages/staff/StaffUsers"));
 const StaffMessaging = React.lazy(() => import("./pages/staff/StaffMessaging"));
 const StaffProfile = React.lazy(() => import("./pages/staff/StaffProfile"));
+const StaffPayments = React.lazy(() => import("./pages/staff/StaffPayments"));
 
 // SHARED / PLACEHOLDERS
 const ComingSoon = React.lazy(() => import("./pages/ComingSoon"));
 
+
+import CookieConsent from "./components/common/CookieConsent";
 
 function App() {
   return (
@@ -123,6 +128,7 @@ function App() {
             </Spin>
           </div>
         }>
+          <CookieConsent />
           <Routes>
             {/* STANDALONE PUBLIC ROUTES - own layout/navbar */}
             <Route path="/" element={
@@ -158,6 +164,7 @@ function App() {
                 <Route path="settings" element={<PlatformSettings />} />
                 <Route path="profile" element={<PlatformProfile />} />
                 <Route path="billing" element={<BillingManagement />} />
+                <Route path="subscriptions" element={<PlatformSubscriptions />} />
                 <Route path="messaging" element={<PlatformMessaging />} />
               </Route>
             </Route>
@@ -176,6 +183,7 @@ function App() {
                 <Route path="announcements" element={<AdminAnnouncements />} />
                 <Route path="teacher-payments" element={<AdminTeacherPayments />} />
                 <Route path="finance" element={<FinanceManagement />} />
+                <Route path="my-salary" element={<StaffPayments />} />
 
                 {/* SUPER ADMIN ONLY ROUTES */}
                 <Route element={<RequireAuth allowedRoles={["super_admin"]} />}>
@@ -225,6 +233,7 @@ function App() {
                 <Route path="exams/:id" element={<TeacherExamDetails />} />
                 <Route path="exams/:id/preview" element={<ExamRunner />} />
                 <Route path="exams/:id/results" element={<TeacherExamResults />} />
+                <Route path="gradebook/exams/:examId" element={<TeacherGradebookExam />} />
                 <Route path="workbooks" element={<TeacherWorkbooks />} />
                 <Route path="books" element={<TeacherBooks />} />
                 <Route path="books/:bookId/review" element={<TeacherReviewPage />} />
@@ -249,6 +258,7 @@ function App() {
                 <Route path="users" element={<StaffUsers />} />
                 <Route path="messages" element={<StaffMessaging />} />
                 <Route path="profile" element={<StaffProfile />} />
+                <Route path="payments" element={<StaffPayments />} />
               </Route>
             </Route>
 

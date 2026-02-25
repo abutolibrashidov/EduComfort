@@ -23,6 +23,13 @@ class ExamStatus(str, Enum):
     archived = "archived"
 
 
+class SubmissionStatus(str, Enum):
+    in_progress = "in_progress"
+    submitted = "submitted"
+    graded = "graded"
+    reviewed = "reviewed"
+
+
 # ============ EXAM QUESTION SCHEMAS ============
 
 class ExamQuestionCreate(BaseModel):
@@ -105,11 +112,18 @@ class ExamUpdate(BaseModel):
 
 class ExamResponse(ExamCreate):
     id: int
-    status: ExamStatus
+    status: Optional[ExamStatus] = ExamStatus.draft
     created_by_id: int
-    created_at: datetime
-    updated_at: datetime
+    created_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
     published_at: Optional[datetime] = None
+    
+    # Override fields from ExamCreate to be Optional for database responses
+    total_points: Optional[float] = 100.0
+    passing_score: Optional[float] = 50.0
+    auto_grade: Optional[bool] = True
+    show_answers: Optional[bool] = False
+    is_file_based: Optional[bool] = False
 
     class Config:
         from_attributes = True
@@ -179,22 +193,23 @@ class ExamSubmissionResponse(BaseModel):
     id: int
     exam_id: int
     student_id: int
-    started_at: datetime
+    started_at: Optional[datetime] = None
     submitted_at: Optional[datetime] = None
     graded_at: Optional[datetime] = None
     total_score: Optional[float] = None
     score_obtained: Optional[float] = None
     percentage: Optional[float] = None
     is_passed: Optional[bool] = None
-    status: str
+    status: Optional[SubmissionStatus] = SubmissionStatus.in_progress
     answers: List[ExamAnswerResponse] = []
     response_text: Optional[str] = None
-    warning_count: int = 0
-    tab_switch_count: int = 0
+    warning_count: Optional[int] = 0
+    tab_switch_count: Optional[int] = 0
     admin_feedback: Optional[str] = None
 
     class Config:
         from_attributes = True
+        use_enum_values = True
 
 
 class ExamGradingResponse(BaseModel):

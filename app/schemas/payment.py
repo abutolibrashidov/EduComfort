@@ -36,3 +36,17 @@ class PaymentRead(PaymentBase):
 
     class Config:
         from_attributes = True  # Allows SQLAlchemy model conversion
+
+
+class TeacherPaymentRead(BaseModel):
+    """Schema for reading teacher payment data"""
+    id: int
+    teacher_id: int
+    amount: float
+    payment_date: date
+    status: str
+    description: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+    class Config:
+        from_attributes = True

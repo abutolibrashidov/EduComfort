@@ -19,7 +19,8 @@ from app.models.announcement import Announcement
 from app.models.teacher_payment import TeacherPayment
 from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner
 from app.models.expense import Expense
-
+from app.models.payment import Payment
+from app.models.attendance import Attendance
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

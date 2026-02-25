@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, extract
 from typing import List, Optional
+from datetime import datetime, timedelta
+from pydantic import BaseModel
+from passlib.context import CryptContext
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
@@ -9,6 +12,22 @@ from app.models.institution import Institution
 from app.models.subscription import InstitutionSubscription, SubscriptionPlan
 from app.models.user import User
 from app.constants.roles import Role
+
+_pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Pydantic schemas for new endpoints
+class CreateInstitutionRequest(BaseModel):
+    name: str
+    subdomain: str
+    admin_first_name: str
+    admin_last_name: str
+    admin_phone: str
+    admin_password: str
+    subscription_plan: Optional[str] = "basic"
+    ai_credits: Optional[float] = 0.0
+
+class UpdateCreditsRequest(BaseModel):
+    credits: float
 
 # Create router
 router = APIRouter(prefix="/platform", tags=["Platform Owner"])
@@ -399,3 +418,121 @@ def get_system_health(
             "payments": "active" 
         }
     }
+
+
+# ============================
+# CREATE INSTITUTION
+# ============================
+@router.post("/institutions", status_code=201)
+def create_institution(
+    data: CreateInstitutionRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(verify_platform_owner)
+):
+    """
+    Create a new institution and seed its first super_admin user.
+    """
+    # Check subdomain uniqueness
+    existing = db.query(Institution).filter(Institution.subdomain == data.subdomain).first()
+    if existing:
+        raise HTTPException(status_code=400, detail="Subdomain already taken")
+
+    # Check phone uniqueness for the new admin
+    existing_user = db.query(User).filter(User.phone_number == data.admin_phone).first()
+    if existing_user:
+        raise HTTPException(status_code=400, detail="Phone number already registered")
+
+    # Create institution
+    institution = Institution(
+        name=data.name,
+        subdomain=data.subdomain,
+        subscription_tier=data.subscription_plan or "basic",
+        ai_credits_balance=data.ai_credits or 0.0,
+        is_active=True,
+    )
+    db.add(institution)
+    db.flush()  # get institution.id without full commit
+
+    # Seed first admin (super_admin role)
+    hashed = _pwd_context.hash(data.admin_password)
+    admin_user = User(
+        first_name=data.admin_first_name,
+        last_name=data.admin_last_name,
+        phone_number=data.admin_phone,
+        password_hash=hashed,
+        role="super_admin",
+        is_super_admin=True,
+        institution_id=institution.id,
+        is_active=True,
+    )
+    db.add(admin_user)
+    db.commit()
+    db.refresh(institution)
+
+    return {
+        "message": f"Institution '{institution.name}' created successfully",
+        "institution_id": institution.id,
+        "admin_phone": data.admin_phone,
+    }
+
+
+# ============================
+# GROWTH STATS (for charts)
+# ============================
+@router.get("/stats/growth")
+def get_growth_stats(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(verify_platform_owner)
+):
+    """
+    Return monthly user & institution registration counts for the last 6 months.
+    Used to populate the platform dashboard growth chart.
+    """
+    now = datetime.utcnow()
+    result = []
+    for i in range(5, -1, -1):
+        # Calculate first day of target month
+        target = now - timedelta(days=i * 30)
+        m, y = target.month, target.year
+
+        user_count = db.query(func.count(User.id)).filter(
+            extract('month', User.created_at) == m,
+            extract('year', User.created_at) == y,
+            User.role != "platform_owner"
+        ).scalar() or 0
+
+        inst_count = db.query(func.count(Institution.id)).filter(
+            extract('month', Institution.created_at) == m,
+            extract('year', Institution.created_at) == y,
+        ).scalar() or 0
+
+        result.append({
+            "month": target.strftime("%b %Y"),
+            "users": user_count,
+            "institutions": inst_count,
+        })
+
+    return {"growth": result}
+
+
+# ============================
+# AI CREDITS MANAGEMENT
+# ============================
+@router.put("/institutions/{institution_id}/credits")
+def update_institution_credits(
+    institution_id: int,
+    body: UpdateCreditsRequest,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(verify_platform_owner)
+):
+    """
+    Set the AI credits balance for an institution.
+    """
+    inst = db.query(Institution).filter(Institution.id == institution_id).first()
+    if not inst:
+        raise HTTPException(status_code=404, detail="Institution not found")
+    if body.credits < 0:
+        raise HTTPException(status_code=400, detail="Credits cannot be negative")
+    inst.ai_credits_balance = body.credits
+    db.commit()
+    return {"message": f"Credits updated for {inst.name}", "ai_credits_balance": inst.ai_credits_balance}

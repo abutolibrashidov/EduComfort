@@ -37,6 +37,7 @@ import { message } from "antd";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
+import TeacherGradebook from "./TeacherGradebook";
 
 const { Title, Text } = Typography;
 
@@ -77,12 +78,28 @@ const TeacherExams = () => {
   const fetchExams = async () => {
     try {
       const resp = await axiosClient.get("/exams");
-      // Split into categories for the mock UI
-      setExamsData({
-        upcoming: resp.data.filter(e => e.status === 'published' || e.status === 'in_progress'),
-        past: resp.data.filter(e => e.status === 'completed' || e.status === 'archived'),
-        drafts: resp.data.filter(e => e.status === 'draft'),
+      const now = new Date();
+
+      // Filter exams based on date for active/past logic
+      const upcoming = [];
+      const past = [];
+      const drafts = [];
+
+      resp.data.forEach(e => {
+        if (e.status === 'draft') {
+          drafts.push(e);
+        } else if (e.status === 'completed' || e.status === 'archived') {
+          past.push(e);
+        } else if (e.status === 'published' || e.status === 'in_progress') {
+          if (e.end_date && new Date(e.end_date) < now) {
+            past.push(e);
+          } else {
+            upcoming.push(e);
+          }
+        }
       });
+
+      setExamsData({ upcoming, past, drafts });
     } catch (error) {
       console.error("Error fetching exams:", error);
     } finally {
@@ -331,20 +348,47 @@ const TeacherExams = () => {
             </Tabs.TabPane>
 
             <Tabs.TabPane
+              tab={<span><FileTextOutlined /> Jurnal (OFFLINE)</span>}
+              key="gradebook"
+            >
+              <TeacherGradebook />
+            </Tabs.TabPane>
+
+            <Tabs.TabPane
               tab={<span><EditOutlined /> {t('exams.drafts')}</span>}
               key="drafts"
             >
-              <Empty
-                description={
-                  <div style={{ textAlign: "center" }}>
-                    <p>{t('exams.drafts_locked')}</p>
-                    <Button type="primary" onClick={() => navigate("/teacher/exams/create")}>
-                      {t('exams.create_exam')}
-                    </Button>
-                  </div>
-                }
-                image={<LockOutlined style={{ fontSize: 60, color: '#d9d9d9' }} />}
-              />
+              {examsData?.drafts?.length === 0 ? (
+                <Empty description={t('exams.no_drafts', 'No drafts found')} image={Empty.PRESENTED_IMAGE_SIMPLE} />
+              ) : (
+                <List
+                  dataSource={examsData?.drafts || []}
+                  grid={{ gutter: 16, xs: 1, sm: 2, lg: 3 }}
+                  renderItem={(exam) => (
+                    <List.Item>
+                      <Card
+                        hoverable
+                        style={{ borderRadius: 16, overflow: 'hidden', border: '1px dashed #d9d9d9' }}
+                        actions={[
+                          <Button type="link" onClick={() => navigate(`/teacher/exams/${exam.id}`)}>
+                            <EditOutlined /> {t('exams.edit', 'Edit')}
+                          </Button>
+                        ]}
+                      >
+                        <Space style={{ marginBottom: 12 }}>
+                          {exam.is_file_based && <Tag color="cyan">{t('exams.file_based')}</Tag>}
+                          <Tag color="cyan">{t('exams.draft', 'Draft')}</Tag>
+                        </Space>
+                        <Title level={5} style={{ marginBottom: 8, height: 48, overflow: 'hidden' }}>{exam.title || "Untitled Draft"}</Title>
+                        <Space wrap size={[0, 8]} style={{ width: '100%', justifyContent: 'space-between' }}>
+                          <Text type="secondary"><TrophyOutlined /> {t('exams.points')}: {exam.total_points}</Text>
+                          <Text type="secondary"><CalendarOutlined /> {dayjs(exam.created_at).format('DD.MM.YYYY')}</Text>
+                        </Space>
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+              )}
             </Tabs.TabPane>
           </Tabs>
         </Card>

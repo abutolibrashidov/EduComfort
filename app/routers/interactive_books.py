@@ -90,12 +90,30 @@ async def upload_book(
     # Create upload directory
     upload_dir = f"uploads/interactive_books/{current_user.institution_id}"
     os.makedirs(upload_dir, exist_ok=True)
-    
+
     # Save file
     timestamp = datetime.utcnow().strftime("%Y%m%d_%H%M%S")
     safe_filename = f"{timestamp}_{file.filename}"
     file_path = os.path.join(upload_dir, safe_filename)
-    
+
+    # ---------------------------------------------------------------------------
+    # TODO (Production): Hybrid storage approach needed here.
+    #
+    # BookContentExtractor (used in background AI processing) requires LOCAL
+    # file access to read/parse the book content (PDF pages, DOCX text, etc.).
+    # It cannot operate directly on S3 URLs.
+    #
+    # Recommended production flow:
+    #   1. Save file to a local TEMP path  (as done below).
+    #   2. Pass temp path to BookContentExtractor / AI processing.
+    #   3. After processing completes, call upload_file(temp_path, folder=…)
+    #      from app.utils.storage to push to S3 and get back the public URL.
+    #   4. Update book.file_path to the S3 URL.
+    #   5. Delete the temp file.
+    #
+    # The background task (process_book_with_ai_background) should be updated
+    # to accept an optional temp_path argument and perform step 3-5.
+    # ---------------------------------------------------------------------------
     with open(file_path, "wb") as buffer:
         print(f"💾 Saving file to {file_path}...")
         shutil.copyfileobj(file.file, buffer)
@@ -278,6 +296,11 @@ def delete_book(
         raise HTTPException(status_code=403, detail="IB_ROUTER: Permission denied to delete this book")
     
     # Delete file
+    # TODO (Production): Replace with:
+    #   from app.utils.storage import delete_file
+    #   delete_file(book.file_path)
+    # This will handle both local dev paths and S3 URLs correctly.
+    # The current `os.path.exists / os.remove` only works for local files.
     if os.path.exists(book.file_path):
         os.remove(book.file_path)
     

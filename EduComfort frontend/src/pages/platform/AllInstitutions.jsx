@@ -1,27 +1,50 @@
-import React from 'react';
-import { Table, Tag, Button, Space, message, Popconfirm } from 'antd';
-import { PlusOutlined, DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import { getAllInstitutions, suspendInstitution, activateInstitution, deleteInstitution } from '../../services/platformService';
+import React, { useState, useEffect } from 'react';
+import {
+    Table, Tag, Button, Space, message, Popconfirm,
+    Modal, Form, Input, Select, InputNumber, Tooltip, Typography
+} from 'antd';
+import {
+    PlusOutlined, DeleteOutlined, EyeOutlined,
+    EditOutlined, CheckOutlined, CloseOutlined
+} from '@ant-design/icons';
+import {
+    getAllInstitutions, suspendInstitution, activateInstitution,
+    deleteInstitution, createInstitution, updateInstitutionCredits
+} from '../../services/platformService';
 import axiosClient from '../../api/axiosClient';
 
+const { Text } = Typography;
+const { Option } = Select;
+
 const AllInstitutions = () => {
-    const [institutions, setInstitutions] = React.useState([]);
-    const [loading, setLoading] = React.useState(true);
+    const [institutions, setInstitutions] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Create institution modal
+    const [createOpen, setCreateOpen] = useState(false);
+    const [createLoading, setCreateLoading] = useState(false);
+    const [form] = Form.useForm();
+
+    // Inline credits editing
+    const [editingCreditsId, setEditingCreditsId] = useState(null);
+    const [creditsDraft, setCreditsDraft] = useState(0);
+    const [creditsLoading, setCreditsLoading] = useState(false);
 
     const fetchInstitutions = async () => {
+        setLoading(true);
         try {
             const data = await getAllInstitutions();
             setInstitutions(data);
-        } catch (err) {
-            message.error("Failed to load institutions");
+        } catch {
+            message.error('Failed to load institutions');
         } finally {
             setLoading(false);
         }
     };
 
-    React.useEffect(() => {
-        fetchInstitutions();
-    }, []);
+    useEffect(() => { fetchInstitutions(); }, []);
+
+    // ---------- Handlers ----------
 
     const handleStatusChange = async (record) => {
         try {
@@ -32,75 +55,162 @@ const AllInstitutions = () => {
                 await activateInstitution(record.id);
                 message.success(`Activated ${record.name}`);
             }
-            fetchInstitutions(); // Refresh list
-        } catch (err) {
-            message.error("Action failed");
+            fetchInstitutions();
+        } catch {
+            message.error('Action failed');
         }
     };
 
     const handleDelete = async (id) => {
         try {
             await deleteInstitution(id);
-            message.success("Institution deleted successfully");
+            message.success('Institution deleted successfully');
             fetchInstitutions();
-        } catch (err) {
-            message.error("Failed to delete institution");
+        } catch {
+            message.error('Failed to delete institution');
         }
     };
 
     const handleImpersonate = async (adminId) => {
         if (!adminId) {
-            message.warning("No admin user found for this institution");
+            message.warning('No admin user found for this institution');
             return;
         }
-
         try {
             const { data } = await axiosClient.post(`/auth/impersonate/${adminId}`);
-
-            // Only save the original platform token if we're NOT already impersonating
             if (!localStorage.getItem('sp_platform_token')) {
                 localStorage.setItem('sp_platform_token', localStorage.getItem('sp_token'));
                 localStorage.setItem('sp_platform_user', localStorage.getItem('sp_user'));
             }
-
             localStorage.setItem('sp_token', data.access_token);
-            if (data.user) {
-                localStorage.setItem('sp_user', JSON.stringify(data.user));
-            }
-
-            message.success("Entering View Mode...");
+            if (data.user) localStorage.setItem('sp_user', JSON.stringify(data.user));
+            message.success('Entering View Mode...');
             window.location.href = '/admin';
-        } catch (err) {
-            console.error(err);
-            message.error("Failed to enter view mode");
+        } catch {
+            message.error('Failed to enter view mode');
         }
     };
+
+    const handleCreate = async (values) => {
+        setCreateLoading(true);
+        try {
+            await createInstitution(values);
+            message.success(`Institution "${values.name}" created successfully!`);
+            form.resetFields();
+            setCreateOpen(false);
+            fetchInstitutions();
+        } catch (err) {
+            const detail = err?.response?.data?.detail || 'Failed to create institution';
+            message.error(detail);
+        } finally {
+            setCreateLoading(false);
+        }
+    };
+
+    const startEditCredits = (record) => {
+        setEditingCreditsId(record.id);
+        setCreditsDraft(record.ai_credits_balance || 0);
+    };
+
+    const confirmCredits = async (record) => {
+        setCreditsLoading(true);
+        try {
+            await updateInstitutionCredits(record.id, creditsDraft);
+            message.success(`Credits updated for ${record.name}`);
+            setEditingCreditsId(null);
+            fetchInstitutions();
+        } catch {
+            message.error('Failed to update credits');
+        } finally {
+            setCreditsLoading(false);
+        }
+    };
+
+    // ---------- Table columns ----------
 
     const columns = [
         {
             title: 'Institution Name',
             dataIndex: 'name',
             key: 'name',
+            render: name => <Text strong>{name}</Text>,
         },
         {
             title: 'Subdomain',
             dataIndex: 'subdomain',
             key: 'subdomain',
+            render: v => <Text type="secondary">{v}</Text>,
+        },
+        {
+            title: 'Plan',
+            dataIndex: 'subscription_tier',
+            key: 'subscription_tier',
+            render: plan => {
+                const color = plan === 'enterprise' ? 'purple'
+                    : plan === 'gold' ? 'gold'
+                        : plan === 'silver' ? 'blue'
+                            : plan === 'bronze' ? 'orange'
+                                : 'default';
+                return <Tag color={color}>{plan ? plan.toUpperCase() : 'BASIC'}</Tag>;
+            },
         },
         {
             title: 'Users',
             dataIndex: 'user_count',
             key: 'user_count',
+            render: v => v ?? '—',
         },
         {
             title: 'AI Credits',
-            dataIndex: 'ai_credits_balance',
             key: 'ai_credits_balance',
-            render: (balance) => (
-                <Tag color={balance > 5 ? 'green' : balance > 0 ? 'orange' : 'red'}>
-                    ${parseFloat(balance || 0).toFixed(2)}
-                </Tag>
-            )
+            render: (_, record) => {
+                if (editingCreditsId === record.id) {
+                    return (
+                        <Space size={4}>
+                            <InputNumber
+                                size="small"
+                                min={0}
+                                step={1}
+                                value={creditsDraft}
+                                onChange={v => setCreditsDraft(v)}
+                                style={{ width: 80 }}
+                            />
+                            <Tooltip title="Save">
+                                <Button
+                                    size="small"
+                                    type="primary"
+                                    icon={<CheckOutlined />}
+                                    loading={creditsLoading}
+                                    onClick={() => confirmCredits(record)}
+                                />
+                            </Tooltip>
+                            <Tooltip title="Cancel">
+                                <Button
+                                    size="small"
+                                    icon={<CloseOutlined />}
+                                    onClick={() => setEditingCreditsId(null)}
+                                />
+                            </Tooltip>
+                        </Space>
+                    );
+                }
+                const balance = record.ai_credits_balance || 0;
+                return (
+                    <Space size={4}>
+                        <Tag color={balance > 5 ? 'green' : balance > 0 ? 'orange' : 'red'}>
+                            ${parseFloat(balance).toFixed(2)}
+                        </Tag>
+                        <Tooltip title="Edit credits">
+                            <Button
+                                size="small"
+                                icon={<EditOutlined />}
+                                type="text"
+                                onClick={() => startEditCredits(record)}
+                            />
+                        </Tooltip>
+                    </Space>
+                );
+            },
         },
         {
             title: 'Status',
@@ -113,32 +223,34 @@ const AllInstitutions = () => {
             ),
         },
         {
-            title: 'Action',
+            title: 'Actions',
             key: 'action',
             render: (_, record) => (
-                <Space size="middle">
+                <Space size="small" wrap>
                     <Button
+                        size="small"
                         icon={<EyeOutlined />}
                         onClick={() => handleImpersonate(record.admin_id)}
                         disabled={!record.is_active}
                     >
-                        View Dashboard
+                        View
                     </Button>
                     <Button
-                        type={record.is_active ? "default" : "primary"}
+                        size="small"
+                        type={record.is_active ? 'default' : 'primary'}
                         danger={record.is_active}
                         onClick={() => handleStatusChange(record)}
-                        size="small"
                     >
-                        {record.is_active ? "Suspend" : "Activate"}
+                        {record.is_active ? 'Suspend' : 'Activate'}
                     </Button>
                     <Popconfirm
-                        title="Are you sure delete this institution?"
+                        title="Delete this institution permanently?"
                         onConfirm={() => handleDelete(record.id)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="Yes, Delete"
+                        cancelText="Cancel"
+                        okButtonProps={{ danger: true }}
                     >
-                        <Button type="primary" danger icon={<DeleteOutlined />} size="small" />
+                        <Button size="small" type="primary" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
                 </Space>
             ),
@@ -147,16 +259,114 @@ const AllInstitutions = () => {
 
     return (
         <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 24 }}>
-                <h2>All Institutions</h2>
-                <Button type="primary" icon={<PlusOutlined />}>New Institution</Button>
+            {/* Header */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+                <h2 style={{ margin: 0 }}>All Institutions</h2>
+                <Button
+                    type="primary"
+                    icon={<PlusOutlined />}
+                    onClick={() => setCreateOpen(true)}
+                >
+                    New Institution
+                </Button>
             </div>
+
+            {/* Table */}
             <Table
                 columns={columns}
                 dataSource={institutions}
                 rowKey="id"
                 loading={loading}
+                pagination={{ pageSize: 10 }}
             />
+
+            {/* Create Institution Modal */}
+            <Modal
+                title="Create New Institution"
+                open={createOpen}
+                onCancel={() => { setCreateOpen(false); form.resetFields(); }}
+                onOk={() => form.submit()}
+                okText="Create Institution"
+                confirmLoading={createLoading}
+                width={560}
+            >
+                <Form
+                    form={form}
+                    layout="vertical"
+                    onFinish={handleCreate}
+                    initialValues={{ subscription_plan: 'basic', ai_credits: 0 }}
+                >
+                    <Form.Item
+                        label="Institution Name"
+                        name="name"
+                        rules={[{ required: true, message: 'Please enter institution name' }]}
+                    >
+                        <Input placeholder="e.g. Seven Plus Academy" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Subdomain"
+                        name="subdomain"
+                        rules={[
+                            { required: true, message: 'Please enter subdomain' },
+                            { pattern: /^[a-z0-9-]+$/, message: 'Only lowercase letters, digits, and hyphens' }
+                        ]}
+                    >
+                        <Input placeholder="e.g. sevenplus" addonBefore="app/" />
+                    </Form.Item>
+
+                    <Form.Item label="Subscription Plan" name="subscription_plan">
+                        <Select>
+                            <Option value="basic">Basic (Free)</Option>
+                            <Option value="bronze">Bronze</Option>
+                            <Option value="silver">Silver</Option>
+                            <Option value="gold">Gold</Option>
+                            <Option value="enterprise">Enterprise</Option>
+                        </Select>
+                    </Form.Item>
+
+                    <Form.Item label="Initial AI Credits" name="ai_credits">
+                        <InputNumber min={0} style={{ width: '100%' }} />
+                    </Form.Item>
+
+                    <div style={{ borderTop: '1px solid #f0f0f0', paddingTop: 16, marginBottom: 0 }}>
+                        <Text type="secondary" style={{ display: 'block', marginBottom: 12 }}>
+                            First Admin (Super Admin)
+                        </Text>
+                    </div>
+
+                    <Form.Item
+                        label="Admin First Name"
+                        name="admin_first_name"
+                        rules={[{ required: true, message: 'Required' }]}
+                    >
+                        <Input placeholder="First name" />
+                    </Form.Item>
+
+                    <Form.Item label="Admin Last Name" name="admin_last_name">
+                        <Input placeholder="Last name (optional)" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Admin Phone"
+                        name="admin_phone"
+                        rules={[{ required: true, message: 'Phone number is required for login' }]}
+                    >
+                        <Input placeholder="+998901234567" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Admin Password"
+                        name="admin_password"
+                        rules={[
+                            { required: true, message: 'Please set a password' },
+                            { min: 6, message: 'At least 6 characters' }
+                        ]}
+                    >
+                        <Input.Password placeholder="Minimum 6 characters" />
+                    </Form.Item>
+                </Form>
+            </Modal>
         </div>
     );
 };

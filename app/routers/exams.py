@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -22,6 +22,7 @@ from app.schemas.exam import (
 
 from app.security.permissions import (
     is_super_admin,
+    is_admin_or_higher,
     is_teacher,
     is_student,
     is_platform_owner
@@ -1064,6 +1065,29 @@ def add_question(
     return {"message": "Question added", "id": new_question.id}
 
 
+@router.delete("/questions/{question_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_question(
+    question_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Delete a specific question from an exam"""
+    question = db.query(ExamQuestion).filter(ExamQuestion.id == question_id).first()
+    if not question:
+        raise HTTPException(status_code=404, detail="Question not found")
+    
+    exam = question.exam
+    if not exam:
+        raise HTTPException(status_code=404, detail="Associated exam not found")
+    
+    # Only the exam creator or an admin can delete the question
+    if exam.created_by_id != current_user.id and not is_admin_or_higher(current_user):
+        raise HTTPException(status_code=403, detail="Not authorized to delete this question")
+    
+    db.delete(question)
+    db.commit()
+
+
 # ============ EXAM SUBMISSION ENDPOINTS ============
 
 @router.post("/{exam_id}/start-submission", response_model=ExamSubmissionResponse, status_code=status.HTTP_201_CREATED)
@@ -1135,6 +1159,17 @@ def submit_answer(
     if submission.status != SubmissionStatus.in_progress:
         raise HTTPException(status_code=400, detail="Cannot update submitted exam")
     
+    # Check if exam time has expired (with 2 min grace period)
+    if submission.exam.duration_minutes:
+        elapsed_minutes = (datetime.utcnow() - submission.started_at).total_seconds() / 60
+        if elapsed_minutes > submission.exam.duration_minutes + 2:
+            submission.submitted_at = datetime.utcnow()
+            submission.status = SubmissionStatus.submitted
+            if submission.exam.auto_grade and not submission.exam.is_file_based:
+                submission = auto_grade_submission(submission, db)
+            db.commit()
+            raise HTTPException(status_code=400, detail="Exam time has expired. Submissions are closed.")
+    
     # Find or create answer record
     exam_answer = db.query(ExamAnswer).filter(
         ExamAnswer.submission_id == submission_id,
@@ -1172,6 +1207,17 @@ def update_consolidated_response(
     
     if submission.status != SubmissionStatus.in_progress:
         raise HTTPException(status_code=400, detail="Cannot update submitted exam")
+    
+    # Check if exam time has expired (with 2 min grace period)
+    if submission.exam.duration_minutes:
+        elapsed_minutes = (datetime.utcnow() - submission.started_at).total_seconds() / 60
+        if elapsed_minutes > submission.exam.duration_minutes + 2:
+            submission.submitted_at = datetime.utcnow()
+            submission.status = SubmissionStatus.submitted
+            if submission.exam.auto_grade and not submission.exam.is_file_based:
+                submission = auto_grade_submission(submission, db)
+            db.commit()
+            raise HTTPException(status_code=400, detail="Exam time has expired. Submissions are closed.")
     
     if update_data.response_text is not None:
         submission.response_text = update_data.response_text
@@ -1300,8 +1346,32 @@ def get_exam_submissions(
     if not (is_admin_or_higher(current_user) or is_teacher(current_user)):
         raise HTTPException(status_code=403, detail="Not authorized")
     
-    submissions = db.query(ExamSubmission).filter(ExamSubmission.exam_id == exam_id).all()
-    return submissions
+    try:
+        submissions = db.query(ExamSubmission).filter(ExamSubmission.exam_id == exam_id).all()
+        
+        # Auto-submit expired submissions that the student abandoned
+        changed = False
+        for s in submissions:
+            if s.status == SubmissionStatus.in_progress and s.exam.duration_minutes:
+                elapsed_minutes = (datetime.utcnow() - s.started_at).total_seconds() / 60
+                if elapsed_minutes > s.exam.duration_minutes + 2:
+                    s.submitted_at = datetime.utcnow()
+                    s.status = SubmissionStatus.submitted
+                    if s.exam.auto_grade and not s.exam.is_file_based:
+                        s = auto_grade_submission(s, db)
+                    changed = True
+        
+        if changed:
+            db.commit()
+
+        # force evaluation to trigger any pydantic or relationship errors
+        [s.answers for s in submissions]
+        return submissions
+    except Exception as e:
+        import traceback
+        with open("error_log.txt", "a") as f:
+            f.write(traceback.format_exc() + "\\n")
+        raise
 
 
 @router.put("/submissions/{submission_id}/grade")
