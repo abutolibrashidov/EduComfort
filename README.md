@@ -409,7 +409,7 @@ See **SETUP_GUIDE.md** for detailed troubleshooting.
 
 ## 📄 License
 
-This project is part of 7Plus Learning Center Academy.
+This project is part of EduComfort.
 
 ---
 
