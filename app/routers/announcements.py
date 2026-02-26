@@ -63,12 +63,16 @@ def read_announcements(
     """Get announcements relevant to current user"""
     query = db.query(Announcement)
 
-    # Filter based on role? For now, show all to admins, filter for others
-    if current_user.role not in ["super_admin", "admin"]:
-        # Logic to filter by target_audience could go here
-        # For simplicity, we return all or broad categories
-        pass
-        
+    # Filter based on role
+    if current_user.role not in ["super_admin", "admin", "platform_owner", "staff"]:
+        if current_user.role == "student":
+            query = query.filter(Announcement.target_audience.in_(["all", "students"]))
+        elif current_user.role == "teacher":
+            query = query.filter(Announcement.target_audience.in_(["all", "teachers"]))
+        else:
+            # Fallback for unexpected roles
+            query = query.filter(Announcement.target_audience == "all")
+
     announcements = query.order_by(Announcement.created_at.desc()).all()
 
     # Attach author names

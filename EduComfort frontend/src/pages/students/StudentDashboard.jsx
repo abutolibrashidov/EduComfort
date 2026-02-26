@@ -24,6 +24,7 @@ import { getCurrentUser } from '../../api/auth';
 import { motion } from 'framer-motion';
 import dayjs from 'dayjs';
 import MyBooks from '../../components/books/MyBooks';
+import FeedbackWidget from '../../components/FeedbackWidget';
 
 const { Title, Text } = Typography;
 const { useBreakpoint } = Grid;
@@ -664,6 +665,7 @@ const StudentDashboard = () => {
           </motion.div>
         </Col>
       </Row>
+      <FeedbackWidget />
     </motion.div >
   );
 };

@@ -39,3 +39,4 @@ from .interactive_book import (
 from .book_processing_job import BookProcessingJob
 
 from .gradebook import GradebookLevel, GradebookExam, GradebookScore
+from .feedback import Feedback

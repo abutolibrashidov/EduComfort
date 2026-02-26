@@ -94,7 +94,6 @@ class Book(Base):
         Index('idx_books_status', 'processing_status'),
         Index('idx_books_published', 'is_published'),
         Index('idx_books_subject', 'subject'),
-        Index('idx_books_metadata', 'book_metadata'),
     )
     
     def __repr__(self):
@@ -271,7 +270,6 @@ class Exercise(Base):
         Index('idx_exercises_type', 'exercise_type'),
         Index('idx_exercises_needs_review', 'needs_review'),
         Index('idx_exercises_sequence', 'unit_id', 'sequence_order'),
-        Index('idx_exercises_options', 'options'),
     )
     
     def __repr__(self):

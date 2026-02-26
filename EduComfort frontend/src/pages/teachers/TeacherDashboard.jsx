@@ -39,6 +39,7 @@ import axiosClient from "../../api/axiosClient";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 import { getCurrentUser } from "../../api/auth";
+import FeedbackWidget from "../../components/FeedbackWidget";
 
 const { Title, Text } = Typography;
 
@@ -510,6 +511,7 @@ const TeacherDashboard = () => {
 
         </Col>
       </Row>
+      <FeedbackWidget />
     </motion.div>
   );
 };

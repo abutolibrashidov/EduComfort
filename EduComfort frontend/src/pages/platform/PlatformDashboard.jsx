@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
     Card, Row, Col, Statistic, Typography, Table, Tag,
-    Skeleton, Tooltip, Button
+    Skeleton, Tooltip, Button, Popconfirm, message
 } from 'antd';
 import {
     BankOutlined, UserOutlined, RiseOutlined,
-    SafetyCertificateOutlined, SoundOutlined, ReloadOutlined
+    SafetyCertificateOutlined, SoundOutlined, ReloadOutlined, DeleteOutlined
 } from '@ant-design/icons';
 import { Line, Column } from '@ant-design/charts';
 import { theme } from '../../theme';
@@ -26,16 +26,18 @@ const PlatformDashboard = () => {
     const [growthData, setGrowthData] = useState([]);
     const [recentInstitutions, setRecentInstitutions] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
+    const [feedbacks, setFeedbacks] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const fetchAll = async () => {
         setLoading(true);
         try {
-            const [statsData, growthRes, instRes, annRes] = await Promise.allSettled([
+            const [statsData, growthRes, instRes, annRes, feedRes] = await Promise.allSettled([
                 getPlatformStats(),
                 getPlatformGrowth(),
                 axiosClient.get('/platform/institutions'),
                 axiosClient.get('/announcements/'),
+                axiosClient.get('/feedbacks/'),
             ]);
 
             if (statsData.status === 'fulfilled' && statsData.value?.stats) {
@@ -58,6 +60,9 @@ const PlatformDashboard = () => {
             }
             if (annRes.status === 'fulfilled') {
                 setAnnouncements(annRes.value.data || []);
+            }
+            if (feedRes.status === 'fulfilled') {
+                setFeedbacks(feedRes.value.data || []);
             }
         } catch (err) {
             console.error('Dashboard fetch error:', err);
@@ -114,6 +119,17 @@ const PlatformDashboard = () => {
             color: '#13c2c2',
         },
     ];
+
+    const handleDeleteFeedback = async (id) => {
+        try {
+            await axiosClient.delete(`/feedbacks/${id}`);
+            message.success('Feedback deleted');
+            setFeedbacks(prev => prev.filter(f => f.id !== id));
+        } catch (error) {
+            console.error('Delete feedback error:', error);
+            message.error('Failed to delete feedback');
+        }
+    };
 
     const instColumns = [
         { title: 'Name', dataIndex: 'name', key: 'name', render: v => <Text strong>{v}</Text> },
@@ -226,6 +242,59 @@ const PlatformDashboard = () => {
                     </Card>
                 </Col>
             </Row>
+
+            {/* Feedback Submissions */}
+            <Card
+                title="Recent User Feedback"
+                style={{ borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
+            >
+                <Table
+                    dataSource={feedbacks}
+                    columns={[
+                        {
+                            title: 'User',
+                            dataIndex: 'user_name',
+                            key: 'user_name',
+                            render: (text, record) => <><Text strong>{text || 'Unknown'}</Text><br /><Text type="secondary" style={{ fontSize: 12 }}>{record.user_role}</Text></>
+                        },
+                        {
+                            title: 'Type',
+                            dataIndex: 'type',
+                            key: 'type',
+                            render: type => {
+                                const color = type === 'bug' ? 'red' : type === 'enhancement' ? 'blue' : 'green';
+                                return <Tag color={color}>{type?.toUpperCase()}</Tag>;
+                            }
+                        },
+                        {
+                            title: 'Content',
+                            dataIndex: 'content',
+                            key: 'content',
+                        },
+                        {
+                            title: 'Date',
+                            dataIndex: 'created_at',
+                            key: 'created_at',
+                            render: date => new Date(date).toLocaleDateString()
+                        },
+                        {
+                            title: 'Action',
+                            key: 'action',
+                            render: (_, record) => (
+                                <Popconfirm
+                                    title="Delete feedback?"
+                                    onConfirm={() => handleDeleteFeedback(record.id)}
+                                >
+                                    <Button type="text" danger icon={<DeleteOutlined />} />
+                                </Popconfirm>
+                            )
+                        }
+                    ]}
+                    rowKey="id"
+                    pagination={{ pageSize: 5 }}
+                    loading={loading}
+                />
+            </Card>
         </div>
     );
 };

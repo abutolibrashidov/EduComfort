@@ -86,7 +86,8 @@ from app.routers import (
     leaderboards, # Leaderboards Router
     expenses, # New Expenses Router
     upload, # Avatar Upload Router
-    gradebook # New Gradebook Router
+    gradebook, # New Gradebook Router
+    feedbacks # Added Feedback Router
 )
 
 # Import public router separately to handle if it doesn't exist yet
@@ -391,6 +392,10 @@ print("[INFO] AI Billing routes registered")
 # Gradebook (Offline Manual Exams)
 app.include_router(gradebook.router)
 print("[INFO] Gradebook routes registered")
+
+# Feedback
+app.include_router(feedbacks.router, prefix="/feedbacks", tags=["Feedback"])
+print("[INFO] Feedback routes registered")
 
 # =========================
 # Root & Health Endpoints
