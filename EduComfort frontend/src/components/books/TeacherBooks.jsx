@@ -16,9 +16,7 @@ const { Dragger } = Upload;
 const { Option } = Select;
 
 const TeacherBooks = () => {
-    const { t } = useTranslation();
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('library');
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(false);
     const [subjects, setSubjects] = useState([]);
@@ -86,7 +84,6 @@ const TeacherBooks = () => {
             });
             message.success('Book uploaded successfully! AI processing started.');
             uploadForm.resetFields();
-            setActiveTab('library');
             fetchBooks();
         } catch (error) {
             message.error(error.response?.data?.detail || 'Failed to upload book');

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Modal, Form, Input, Select, message } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
-import axiosClient from '../../api/axiosClient';
+import axiosClient from '../api/axiosClient';
 
 const { TextArea } = Input;
 const { Option } = Select;
