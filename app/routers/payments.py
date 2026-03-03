@@ -18,37 +18,51 @@ router = APIRouter()
 
 
 @router.post("/", response_model=PaymentRead)
-def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)):
-    """Record a new payment"""
-    
+def create_payment(
+    payment: PaymentCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Record a new payment (Admin / Staff only)"""
+
+    # ✅ FIX Bug #3: Only admins/staff can create payments
+    allowed_roles = ["super_admin", "admin", "staff"]
+    user_role = current_user.role if isinstance(current_user.role, str) else current_user.role.value
+    if user_role not in allowed_roles and not current_user.is_platform_admin:
+        raise HTTPException(status_code=403, detail="Access denied")
+
     # Verify student exists
     student = db.query(User).filter(User.id == payment.student_id).first()
     if not student:
         raise HTTPException(status_code=404, detail="Talaba topilmadi")
-    
+
+    # ✅ Institution isolation: staff can only record payments for students in their institution
+    if not current_user.is_platform_admin and current_user.institution_id:
+        if student.institution_id != current_user.institution_id:
+            raise HTTPException(status_code=403, detail="Bu talaba sizning markazingizga tegishli emas")
+
     # Create payment
     payment_data = payment.dict()
-    
+
     # Calculate Commission based on Institution
     commission_amount = 0.0
     if student.institution_id:
         from app.models.institution import Institution
         institution = db.query(Institution).filter(Institution.id == student.institution_id).first()
         if institution:
-            # Default to 10% if not set, though model has default
             rate = institution.commission_rate if institution.commission_rate is not None else 0.10
             commission_amount = payment.amount * rate
-    
+
     payment_data["commission_amount"] = commission_amount
-    
+
     db_payment = Payment(**payment_data)
     db.add(db_payment)
     db.commit()
     db.refresh(db_payment)
-    
+
     # Attach student name for response
     db_payment.student_name = f"{student.first_name} {student.last_name}"
-    
+
     return db_payment
 
 
@@ -273,9 +287,25 @@ def create_teacher_salary(
     db_payment = TeacherPayment(**payment.dict())
     db_payment.created_by_id = current_user.id
     db.add(db_payment)
+
+    # ✅ FIX Bug #2: Also write to Expenses so Finance panel totals stay accurate.
+    # Without this, salary paid here was invisible to the Finance Management stats.
+    from app.models.expense import Expense
+    teacher = db.query(User).filter(User.id == payment.teacher_id).first()
+    expense = Expense(
+        category="salary",
+        amount=payment.amount,
+        date=payment.payment_date,
+        description=payment.description or "Maosh (O'qituvchi to'lovlari sahifasidan)",
+        recipient_id=payment.teacher_id,
+        created_by_id=current_user.id,
+        institution_id=teacher.institution_id if teacher else current_user.institution_id,
+    )
+    db.add(expense)
+
     db.commit()
     db.refresh(db_payment)
-    
+
     return db_payment
 
 @router.get("/admin/teachers/{teacher_id}/salaries", response_model=list[TeacherPaymentRead])
@@ -287,7 +317,13 @@ def get_specific_teacher_salaries(
     """Get salary history for a specific teacher (Admin only)"""
     if current_user.role not in ["super_admin", "admin"]:
         raise HTTPException(status_code=403, detail="Access denied")
-         
+
+    # ✅ FIX Bug #4: Institution isolation — prevent cross-institution data access
+    if not current_user.is_platform_admin and current_user.institution_id:
+        teacher = db.query(User).filter(User.id == teacher_id).first()
+        if not teacher or teacher.institution_id != current_user.institution_id:
+            raise HTTPException(status_code=403, detail="Bu o'qituvchi sizning markazingizga tegishli emas")
+
     payments = db.query(TeacherPayment).filter(TeacherPayment.teacher_id == teacher_id).order_by(TeacherPayment.payment_date.desc()).all()
     return payments
 
@@ -300,6 +336,12 @@ def get_specific_teacher_student_payments(
     """Get payments of students who are in groups taught by specific teacher (Admin only)"""
     if current_user.role not in ["super_admin", "admin"]:
         raise HTTPException(status_code=403, detail="Access denied")
+
+    # ✅ FIX Bug #4: Institution isolation
+    if not current_user.is_platform_admin and current_user.institution_id:
+        teacher = db.query(User).filter(User.id == teacher_id).first()
+        if not teacher or teacher.institution_id != current_user.institution_id:
+            raise HTTPException(status_code=403, detail="Bu o'qituvchi sizning markazingizga tegishli emas")
 
     groups = db.query(Group).filter(Group.teacher_id == teacher_id).all()
     group_ids = [g.id for g in groups]

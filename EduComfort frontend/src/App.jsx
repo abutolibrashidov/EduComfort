@@ -1,5 +1,6 @@
-import React, { Suspense } from 'react';
-import { Routes, Route, Navigate } from "react-router-dom";
+import React, { Suspense, useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { trackPageView } from './analytics';
 import { BrandingProvider } from "./contexts/BrandingContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { Spin } from 'antd';
@@ -117,6 +118,15 @@ const ComingSoon = React.lazy(() => import("./pages/ComingSoon"));
 
 import CookieConsent from "./components/common/CookieConsent";
 
+// Fires a GA4 page_view event on every route change
+function RouteTracker() {
+  const location = useLocation();
+  useEffect(() => {
+    trackPageView(location.pathname);
+  }, [location.pathname]);
+  return null;
+}
+
 function App() {
   return (
     <LanguageProvider>
@@ -129,6 +139,7 @@ function App() {
           </div>
         }>
           <CookieConsent />
+          <RouteTracker />
           <Routes>
             {/* STANDALONE PUBLIC ROUTES - own layout/navbar */}
             <Route path="/" element={
