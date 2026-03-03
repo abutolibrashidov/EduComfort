@@ -1,29 +1,19 @@
 /* AdminLayout.css */
-.sidebar-logo {
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px;
-  background: rgba(255, 255, 255, 0.05);
+.ant-layout-sider {
+  height: 100vh !important; /* Force full screen height */
+  position: fixed !important;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow-y: auto; /* This enables the scrollbar */
+  scrollbar-width: thin; /* For Firefox */
 }
 
-.sidebar-logo-img {
-  height: 32px;
-  width: auto;
+/* Make the scrollbar look clean in Chrome/Safari */
+.ant-layout-sider::-webkit-scrollbar {
+  width: 4px;
 }
-
-.sidebar-logo-text {
-  color: #fff;
-  font-size: 18px;
-  font-weight: 600;
-  margin-left: 12px;
-}
-
-.trigger {
-  transition: color 0.3s;
-}
-
-.trigger:hover {
-  color: #1890ff;
+.ant-layout-sider::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
 }

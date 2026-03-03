@@ -52,7 +52,7 @@ def send_sms(phone: str, message: str) -> bool:
     Eskiz orqali SMS yuborish.
     
     Args:
-        phone:   Telefon raqami, masalan "+998901234567" yoki "998901234567"
+        phone:   Telefon raqami, masalan "+998993093430" yoki "+998993093430"
         message: SMS matni (Uzbek tilida)
     
     Returns:

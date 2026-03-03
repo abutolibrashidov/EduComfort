@@ -11,24 +11,20 @@ from app.auth.dependencies import get_current_user
 from app.constants.roles import Role
 from jose import jwt, JWTError
 
-# Rate limiter — the Limiter instance is set on app.state in main.py
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 limiter = Limiter(key_func=get_remote_address)
 
-# ✅ Router definition
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/login")
 @limiter.limit("5/minute")
 def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
-    """
-    Login with email OR phone number (5 attempts per minute per IP)
-    """
+    """Login with email OR phone number (5 attempts per minute per IP)"""
     login_val = data.login.strip()
     logger.info(f"Login attempt: '{login_val}'")
-    
+
     try:
         user = (
             db.query(User)
@@ -38,32 +34,20 @@ def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
 
         if not user:
             logger.warning(f"Login failed: user not found for '{login_val}'")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid credentials"
-            )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
 
         if not verify_password(data.password, user.password_hash):
             logger.warning(f"Login failed: password mismatch for '{login_val}'")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Invalid credentials"
-            )
-        
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid credentials")
+
         if not user.is_active:
             logger.warning(f"Login failed: inactive user '{login_val}'")
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Account is inactive"
-            )
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Account is inactive")
 
-        # ✅ FIXED: Include "sub" field for get_current_user dependency
-        # ✅ MULTI-TENANT: Include institution_id and is_platform_admin
-        # ✅ Handle role as string (after lowercase fix) or enum
         role_value = user.role if isinstance(user.role, str) else user.role.value
-        
+
         access_token = create_access_token({
-            "sub": str(user.id),  # ✅ CRITICAL: This is what get_current_user expects
+            "sub": str(user.id),
             "user_id": user.id,
             "role": role_value,
             "email": user.email,
@@ -71,11 +55,11 @@ def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "branch_id": user.branch_id,
-            "institution_id": user.institution_id,  # Multi-tenant support
+            "institution_id": user.institution_id,
             "institution_name": user.institution.name if user.institution else None,
             "institution_logo": user.institution.logo_url if user.institution else None,
             "is_super_admin": user.is_super_admin,
-            "is_platform_admin": user.is_platform_admin,  # Platform admin flag
+            "is_platform_admin": user.is_platform_admin,
             "is_active": user.is_active
         })
 
@@ -114,46 +98,26 @@ def impersonate_user(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """
-    Super Admin can impersonate any user
-    """
-    # 1. Permission Check
+    """Super Admin or Platform Owner can impersonate any user"""
     from app.security.permissions import is_super_admin, is_platform_owner
     is_platform_owner_check = is_platform_owner(current_user)
     is_inst_admin = is_super_admin(current_user)
 
     if not is_platform_owner_check and not is_inst_admin:
-         raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Insufficient permissions to impersonate"
-        )
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Insufficient permissions to impersonate")
 
-    # 2. Find target user
     target_user = db.query(User).filter(User.id == user_id).first()
     if not target_user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-    # 3. Security Checks for Institution Admins
     if not is_platform_owner_check:
-        # Must be in same institution
         if target_user.institution_id != current_user.institution_id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Cannot impersonate user from another institution"
-            )
-        # Cannot impersonate Platform Owner
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot impersonate user from another institution")
         if target_user.role == Role.PLATFORM_OWNER:
-             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="Cannot impersonate Platform Owner"
-            )
-            
-    # 4. Generate Token for Target User (with multi-tenant support)
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Cannot impersonate Platform Owner")
+
     role_value = target_user.role if isinstance(target_user.role, str) else target_user.role.value
-    
+
     access_token = create_access_token({
         "sub": str(target_user.id),
         "user_id": target_user.id,
@@ -163,11 +127,11 @@ def impersonate_user(
         "first_name": target_user.first_name,
         "last_name": target_user.last_name,
         "branch_id": target_user.branch_id,
-        "institution_id": target_user.institution_id,  # Multi-tenant support
+        "institution_id": target_user.institution_id,
         "institution_name": target_user.institution.name if target_user.institution else None,
         "institution_logo": target_user.institution.logo_url if target_user.institution else None,
         "is_super_admin": target_user.is_super_admin,
-        "is_platform_admin": target_user.is_platform_admin,  # Platform admin flag
+        "is_platform_admin": target_user.is_platform_admin,
         "is_active": target_user.is_active
     })
 
@@ -187,94 +151,75 @@ def impersonate_user(
 
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 @limiter.limit("3/minute")
-def register(
-    request: Request,
-    data: dict,
-    db: Session = Depends(get_db)
-):
+def register(request: Request, data: dict, db: Session = Depends(get_db)):
     """
-    Register a new user. 
+    Register a new user.
     - If role is 'super_admin', creates a new Institution (Center).
-    - If role is 'student', registers as Individual Learner (if no institution_id provided).
+    - If role is 'student', registers as Individual Learner.
     """
     from app.core.security import get_password_hash
     from app.models.institution import Institution
-    
+
     role = data.get("role", "student")
     email = data.get("email")
     phone = data.get("phone_number")
     password = data.get("password")
     full_name = data.get("full_name", "")
-    
-    # Validation
+
     if not phone and not email:
         raise HTTPException(status_code=400, detail="Phone or Email required")
     if not password:
         raise HTTPException(status_code=400, detail="Password required")
-        
-    # Check existing - only check fields that are provided
+
     filters = []
     if phone:
         filters.append(User.phone_number == phone)
     if email:
         filters.append(User.email == email)
-    
+
     if filters:
         from sqlalchemy import or_
         existing = db.query(User).filter(or_(*filters)).first()
         if existing:
             raise HTTPException(status_code=400, detail="User already exists")
-        
-    # Split name
+
     parts = full_name.split(" ", 1)
     first_name = parts[0]
     last_name = parts[1] if len(parts) > 1 else ""
-    
-    # Handle Institution Creation for Center Owners
+
     institution_id = data.get("institution_id")
-    
-    if role == "admin": # Center Owner (formerly super_admin check)
+
+    if role == "super_admin":
         inst_name = data.get("institution_name")
         if not inst_name:
             raise HTTPException(status_code=400, detail="Institution Name required for Center Owners")
-            
+
         try:
-            # Generate subdomain from name (simple slugify)
             import re
             base_subdomain = re.sub(r'[^a-z0-9]', '', inst_name.lower())
             if not base_subdomain:
                 base_subdomain = "inst" + str(int(datetime.utcnow().timestamp()))
-            
-            # Ensure subdomain uniqueness
+
             subdomain = base_subdomain
             counter = 1
-            # Check for existing subdomain (loop to find unique)
             while db.query(Institution).filter(Institution.subdomain == subdomain).first():
                 subdomain = f"{base_subdomain}{counter}"
                 counter += 1
-            
-            new_inst = Institution(
-                name=inst_name,
-                brand_name=inst_name,
-                subdomain=subdomain
-            )
+
+            new_inst = Institution(name=inst_name, brand_name=inst_name, subdomain=subdomain)
             db.add(new_inst)
             db.commit()
             db.refresh(new_inst)
             institution_id = new_inst.id
         except Exception as e:
             db.rollback()
-            import traceback
-            traceback.print_exc()
-            print(f"❌ Error creating institution: {e}")
+            logger.exception(f"Error creating institution: {e}")
             raise HTTPException(status_code=500, detail=f"Failed to register center: {str(e)}")
-    
-    # Handle Individual Learner (if role is admin but no institution name, assume student or error?)
-    # Actually, role 'admin' must come with institution name in this flow for now.
-    if role == "admin" and not institution_id:
-         raise HTTPException(status_code=400, detail="Admins must allow creation of an institution")
-    
-    # Create User
+
+    if role in ["admin", "super_admin"] and not institution_id:
+        logger.error(f"Registration Attempt Failed: Role={role} but institution_id={institution_id}")
+        raise HTTPException(status_code=400, detail="Admins must have an institution. Please provide institution_name.")
+
     try:
         new_user = User(
             email=email,
@@ -282,41 +227,37 @@ def register(
             password_hash=get_password_hash(password),
             first_name=first_name,
             last_name=last_name,
-            role=role, # 'student', 'teacher', 'admin' (Center Owner)
+            role=role,
             institution_id=institution_id,
             is_active=True,
-            is_super_admin=False, # Only Platform Admins are super_admin
+            is_super_admin=(role == "super_admin"),
             is_platform_admin=False
         )
-        
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
-        print(f"✅ User created: {new_user.id} ({role})")
+        logger.info(f"User created: {new_user.id} ({role})")
     except Exception as e:
         db.rollback()
-        print(f"❌ Error creating user: {e}")
-        # Cleanup institution if it was just created
-        if role == "admin" and institution_id and data.get("institution_name"):
-             try:
-                 db.delete(new_inst)
-                 db.commit()
-             except:
-                 pass
-        
-        # Check for specific integrity errors if possible, otherwise generic
+        logger.error(f"Error creating user: {e}")
+        if role in ["admin", "super_admin"] and institution_id and data.get("institution_name"):
+            try:
+                db.delete(new_inst)
+                db.commit()
+            except:
+                pass
+
         error_msg = str(e).lower()
         if "unique" in error_msg or "integrity" in error_msg:
-             if "email" in error_msg:
-                 raise HTTPException(status_code=400, detail="Email already registered")
-             if "phone" in error_msg:
-                 raise HTTPException(status_code=400, detail="Phone number already registered")
-        
+            if "email" in error_msg:
+                raise HTTPException(status_code=400, detail="Email already registered")
+            if "phone" in error_msg:
+                raise HTTPException(status_code=400, detail="Phone number already registered")
+
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
-    
-    # ✅ AUTO-LOGIN: Generate token immediately after registration
+
     role_value = new_user.role if isinstance(new_user.role, str) else new_user.role.value
-    
+
     access_token = create_access_token({
         "sub": str(new_user.id),
         "user_id": new_user.id,
@@ -333,7 +274,7 @@ def register(
         "is_platform_admin": new_user.is_platform_admin,
         "is_active": new_user.is_active
     })
-    
+
     return {
         "message": "User registered successfully",
         "access_token": access_token,
@@ -357,12 +298,9 @@ def register(
 
 @router.get("/me")
 def read_users_me(current_user: User = Depends(get_current_user)):
-    """
-    Get current user details
-    """
-    # Handle role as string or enum
+    """Get current user details"""
     role_value = current_user.role if isinstance(current_user.role, str) else current_user.role.value
-    
+
     return {
         "id": current_user.id,
         "email": current_user.email,
@@ -410,12 +348,15 @@ def forgot_password(
             data={"sub": str(user.id), "purpose": "password_reset"},
             expires_delta=timedelta(hours=1),
         )
-        frontend_url = app_settings.CORS_ORIGINS.split(",")[0].strip()
-        reset_url = f"{frontend_url}/reset-password?token={reset_token}"
+
+        # ✅ FIX: Use FRONTEND_URL from settings — not CORS_ORIGINS
+        # Development:  FRONTEND_URL=http://localhost:5173  (in .env)
+        # Production:   FRONTEND_URL=https://educomfort.uz  (in VPS .env)
+        reset_url = app_settings.FRONTEND_URL + "/reset-password?token=" + reset_token
 
         send_email(
             to=user.email,
-            subject="EduComfort \u2014 Password Reset",
+            subject="EduComfort — Password Reset",
             html=password_reset_email(reset_url, user.first_name or "User"),
         )
         logger.info(f"Password reset email sent to user_id={user.id}")
@@ -435,8 +376,6 @@ def reset_password(
     db: Session = Depends(get_db),
 ):
     """Validate the reset token and set a new password."""
-    from jose import JWTError
-    from app.core.security import SECRET_KEY, ALGORITHM, get_password_hash
     from jose import jwt as jose_jwt
 
     bad_token = HTTPException(

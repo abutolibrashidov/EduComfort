@@ -8,7 +8,7 @@ import axiosClient from '../../api/axiosClient';
 const { Title, Text } = Typography;
 
 const CenterRegistration = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
@@ -30,16 +30,27 @@ const CenterRegistration = () => {
             localStorage.setItem('sp_token', access_token);
             localStorage.setItem('sp_user', JSON.stringify(user));
 
-            message.success('Center registered successfully! Redirecting...');
+            message.success(t('reg.success'));
             window.location.href = '/admin';
 
         } catch (err) {
             console.error(err);
-            message.error(err.response?.data?.detail || 'Registration failed. Please try again.');
+            message.error(err.response?.data?.detail || t('reg.failed'));
         } finally {
             setLoading(false);
         }
     };
+
+    const changeLanguage = (lang) => {
+        i18n.changeLanguage(lang);
+        localStorage.setItem('language', lang);
+    };
+
+    const languages = [
+        { code: 'uz', label: "O'zbek", flag: "🇺🇿" },
+        { code: 'ru', label: "Рус", flag: "🇷🇺" },
+        { code: 'en', label: "EN", flag: "🇬🇧" },
+    ];
 
     return (
         <div style={{
@@ -51,10 +62,23 @@ const CenterRegistration = () => {
             padding: '24px'
         }}>
             <Card style={{ width: '100%', maxWidth: '500px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '16px', gap: '8px' }}>
+                    {languages.map(l => (
+                        <Button
+                            key={l.code}
+                            type={i18n.language === l.code ? 'primary' : 'text'}
+                            size="small"
+                            onClick={() => changeLanguage(l.code)}
+                            style={{ fontSize: '12px', padding: '0 4px' }}
+                        >
+                            {l.flag} {l.label}
+                        </Button>
+                    ))}
+                </div>
                 <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                     <Title level={2} style={{ color: '#1890ff', marginBottom: '8px' }}>EduComfort</Title>
-                    <Title level={4}>Register Your Learning Center</Title>
-                    <Text type="secondary">Create your own white-label platform</Text>
+                    <Title level={4}>{t('reg.center_title')}</Title>
+                    <Text type="secondary">{t('reg.center_sub')}</Text>
                 </div>
 
                 <Form
@@ -65,10 +89,10 @@ const CenterRegistration = () => {
                 >
                     <Form.Item
                         name="institution_name"
-                        label="Center / Academy Name"
-                        rules={[{ required: true, message: 'Please input your center name!' }]}
+                        label={t('reg.inst_name')}
+                        rules={[{ required: true, message: t('reg.inst_name') }]}
                     >
-                        <Input prefix={<ShopOutlined />} placeholder="e.g. Seven Plus Academy" />
+                        <Input prefix={<ShopOutlined />} placeholder={t('reg.inst_placeholder')} />
                     </Form.Item>
 
                     <Form.Item
@@ -101,18 +125,18 @@ const CenterRegistration = () => {
                         rules={[
                             {
                                 validator: (_, value) =>
-                                    value ? Promise.resolve() : Promise.reject(new Error('You must accept the Terms of Service and Privacy Policy')),
+                                    value ? Promise.resolve() : Promise.reject(new Error(t('reg.agreement'))),
                             },
                         ]}
                     >
                         <Checkbox>
-                            I have read and agree to the <Link to="/terms" target="_blank">Terms of Service</Link> and <Link to="/privacy" target="_blank">Privacy Policy</Link>
+                            {t('reg.i_agree')} <Link to="/terms-of-service" target="_blank">{t('terms_of_service')}</Link> {t('reg.and')} <Link to="/privacy-policy" target="_blank">{t('privacy_policy')}</Link> {t('reg.read_agree')}
                         </Checkbox>
                     </Form.Item>
 
                     <Form.Item>
                         <Button type="primary" htmlType="submit" loading={loading} block icon={<UserAddOutlined />}>
-                            Register Center
+                            {t('reg.btn')}
                         </Button>
                     </Form.Item>
                 </Form>

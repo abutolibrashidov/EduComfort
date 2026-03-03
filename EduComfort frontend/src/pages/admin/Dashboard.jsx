@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Card, Row, Col, Statistic, Typography, Space,
-  Button, Tag, Progress, Avatar, List, Spin, Table
+  Button, Tag, Progress, Avatar, Spin, Table
 } from 'antd';
 import {
   UserOutlined, TeamOutlined, DollarOutlined, BookOutlined,
@@ -41,7 +41,7 @@ const AnnouncementsSection = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    axiosClient.get('/announcements/')
+    axiosClient.get('/announcements')
       .then(r => setAnnouncements(r.data))
       .catch(() => { });
   }, []);
@@ -242,10 +242,11 @@ export default function Dashboard() {
           style={{ marginBottom: 28, borderRadius: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}
         >
           <Table
-            dataSource={stats.monthlyStats}
-            rowKey={(r) => `${r.year}-${r.month}`}
+            dataSource={stats.monthlyStats?.map((s, idx) => ({ ...s, id: `rev-${idx}` }))}
+            rowKey="id"
             pagination={false}
             size="small"
+            scroll={{ x: 'max-content' }}
             columns={[
               { title: t('month', 'Oy'), dataIndex: 'month', key: 'month' },
               { title: t('year', 'Yil'), dataIndex: 'year', key: 'year' },
@@ -309,35 +310,30 @@ export default function Dashboard() {
             extra={<Button type="link" onClick={() => navigate('/admin/users')}>{t('view_all', "Barchasini ko'rish")}</Button>}
             style={{ borderRadius: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.06)', height: '100%' }}
           >
-            <List
-              dataSource={recentUsers}
-              renderItem={(user) => {
+            <div style={{ maxHeight: 400, overflowY: 'auto' }}>
+              {recentUsers.map((user) => {
                 const rc = roleTagColor(user.role);
                 return (
-                  <List.Item style={{ padding: '10px 0' }}>
-                    <List.Item.Meta
-                      avatar={
-                        <Avatar style={{ background: B.card1, color: '#fff', fontWeight: 700 }}>
-                          {user.name?.charAt(0)?.toUpperCase()}
-                        </Avatar>
-                      }
-                      title={<span style={{ fontSize: 14, fontWeight: 600 }}>{user.name}</span>}
-                      description={
-                        <Space size={6}>
-                          <Tag style={{ background: rc.bg, color: rc.color, border: 'none', borderRadius: 20, fontSize: 11 }}>
-                            {roleName(user.role)}
-                          </Tag>
-                          <Text type="secondary" style={{ fontSize: 12 }}>{user.email}</Text>
-                        </Space>
-                      }
-                    />
-                    <div style={{ fontSize: 12, color: '#94a3b8' }}>
+                  <div key={user.id} style={{ padding: '10px 0', borderBottom: '1px solid #f1f5f9', display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <Avatar style={{ background: B.card1, color: '#fff', fontWeight: 700, flexShrink: 0 }}>
+                      {user.name?.charAt(0)?.toUpperCase()}
+                    </Avatar>
+                    <div style={{ flexGrow: 1 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600 }}>{user.name}</div>
+                      <Space size={6}>
+                        <Tag style={{ background: rc.bg, color: rc.color, border: 'none', borderRadius: 20, fontSize: 11 }}>
+                          {roleName(user.role)}
+                        </Tag>
+                        <Text type="secondary" style={{ fontSize: 12 }}>{user.email}</Text>
+                      </Space>
+                    </div>
+                    <div style={{ fontSize: 12, color: '#94a3b8', flexShrink: 0 }}>
                       {new Date(user.created_at).toLocaleDateString()}
                     </div>
-                  </List.Item>
+                  </div>
                 );
-              }}
-            />
+              })}
+            </div>
           </Card>
         </Col>
 
@@ -360,8 +356,8 @@ export default function Dashboard() {
                   <Progress
                     percent={m.value}
                     strokeColor={m.color}
-                    trailColor="#e2e8f0"
-                    strokeWidth={8}
+                    railColor="#e2e8f0"
+                    size={[null, 8]}
                     showInfo={false}
                   />
                 </div>

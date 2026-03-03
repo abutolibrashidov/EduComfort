@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Row, Col, Tag, Empty, Spin, Button, Descriptions } from "antd";
+import { Card, Row, Col, Tag, Empty, Spin, Button, Descriptions, Grid } from "antd";
 import {
   BookOutlined,
   UserOutlined,
@@ -16,6 +16,8 @@ const StudentCourses = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const screens = Grid.useBreakpoint();
+  const isMobile = !screens.md;
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -52,7 +54,7 @@ const StudentCourses = () => {
   };
 
   return (
-    <div style={{ padding: 24, background: "#f0f2f5" }}>
+    <div style={{ padding: isMobile ? 8 : 24, background: "#f0f2f5" }}>
       <PageHeader
         title="My Courses"
         subTitle={`You are enrolled in ${courses.length} course(s)`}
@@ -101,68 +103,52 @@ const StudentCourses = () => {
                   </Button>,
                 ]}
               >
-                <Descriptions column={1} size="small">
-                  <Descriptions.Item
-                    label={
-                      <span>
-                        <BookOutlined /> Subject
-                      </span>
-                    }
-                  >
-                    {course.subject_name}
-                  </Descriptions.Item>
-
-                  <Descriptions.Item
-                    label={
-                      <span>
-                        <UserOutlined /> Teacher
-                      </span>
-                    }
-                  >
-                    {course.teacher_name}
-                  </Descriptions.Item>
-
-                  {course.days_of_week && (
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <CalendarOutlined /> Schedule
-                        </span>
-                      }
-                    >
-                      {course.days_of_week}
+                {/* Mobile: stacked info rows. Desktop: Descriptions */}
+                {isMobile ? (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                    {[
+                      { icon: <BookOutlined />, label: 'Fan', value: course.subject_name },
+                      { icon: <UserOutlined />, label: "O'qituvchi", value: course.teacher_name },
+                      course.days_of_week && { icon: <CalendarOutlined />, label: 'Jadval', value: course.days_of_week },
+                      course.start_time && { icon: <ClockCircleOutlined />, label: 'Vaqt', value: `${course.start_time} - ${course.end_time}` },
+                      { icon: <TeamOutlined />, label: "O'quvchilar", value: `${course.current_students} / ${course.max_students}` },
+                    ].filter(Boolean).map((item, i) => (
+                      <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13 }}>
+                        <span style={{ color: '#1890ff', flexShrink: 0, marginTop: 2 }}>{item.icon}</span>
+                        <span style={{ color: '#8c8c8c', flexShrink: 0, minWidth: 80 }}>{item.label}:</span>
+                        <span style={{ color: '#1f2937', wordBreak: 'normal', overflowWrap: 'break-word', flex: 1 }}>{item.value}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <Descriptions column={1} size="small">
+                    <Descriptions.Item label={<span><BookOutlined /> Subject</span>}>
+                      {course.subject_name}
                     </Descriptions.Item>
-                  )}
-
-                  {course.start_time && (
-                    <Descriptions.Item
-                      label={
-                        <span>
-                          <ClockCircleOutlined /> Time
-                        </span>
-                      }
-                    >
-                      {course.start_time} - {course.end_time}
+                    <Descriptions.Item label={<span><UserOutlined /> Teacher</span>}>
+                      {course.teacher_name}
                     </Descriptions.Item>
-                  )}
-
-                  <Descriptions.Item
-                    label={
-                      <span>
-                        <TeamOutlined /> Students
-                      </span>
-                    }
-                  >
-                    {course.current_students} / {course.max_students}
-                  </Descriptions.Item>
-
-                  {course.start_date && (
-                    <Descriptions.Item label="Duration">
-                      {new Date(course.start_date).toLocaleDateString()} -{" "}
-                      {new Date(course.end_date).toLocaleDateString()}
+                    {course.days_of_week && (
+                      <Descriptions.Item label={<span><CalendarOutlined /> Schedule</span>}>
+                        {course.days_of_week}
+                      </Descriptions.Item>
+                    )}
+                    {course.start_time && (
+                      <Descriptions.Item label={<span><ClockCircleOutlined /> Time</span>}>
+                        {course.start_time} - {course.end_time}
+                      </Descriptions.Item>
+                    )}
+                    <Descriptions.Item label={<span><TeamOutlined /> Students</span>}>
+                      {course.current_students} / {course.max_students}
                     </Descriptions.Item>
-                  )}
-                </Descriptions>
+                    {course.start_date && (
+                      <Descriptions.Item label="Duration">
+                        {new Date(course.start_date).toLocaleDateString()} -{" "}
+                        {new Date(course.end_date).toLocaleDateString()}
+                      </Descriptions.Item>
+                    )}
+                  </Descriptions>
+                )}
               </Card>
             </Col>
           ))}

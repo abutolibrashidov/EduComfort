@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Statistic, Button, Typography, Progress, Badge, Avatar, Grid, Spin, Empty, Alert, Space, Table } from 'antd';
 import {
   BookOutlined,
@@ -25,6 +25,8 @@ import { motion } from 'framer-motion';
 import dayjs from 'dayjs';
 import MyBooks from '../../components/books/MyBooks';
 import FeedbackWidget from '../../components/FeedbackWidget';
+import CertificateModal from '../../components/CertificateModal';
+import { ASSET_BASE_URL } from '../../api/config';
 
 const { Title, Text } = Typography;
 const { useBreakpoint } = Grid;
@@ -51,6 +53,7 @@ const StudentDashboard = () => {
   const [attendanceHistory, setAttendanceHistory] = useState({ dates: [], groups: [] });
   const [loading, setLoading] = useState(true);
   const [showRatingPrompt, setShowRatingPrompt] = useState(false);
+  const [selectedCert, setSelectedCert] = useState(null); // for certificate modal
 
   // Time-based greeting
   const getGreeting = () => {
@@ -70,7 +73,7 @@ const StudentDashboard = () => {
 
         // Fetch announcements
         try {
-          const announcementsRes = await axios.get('/announcements/');
+          const announcementsRes = await axios.get('/announcements');
           setAnnouncements(announcementsRes.data);
         } catch (err) {
           console.warn('Failed to fetch announcements', err);
@@ -256,7 +259,7 @@ const StudentDashboard = () => {
           <Card
             title={<><SoundOutlined /> E'lonlar</>}
             style={{ borderRadius: 16, border: '1px solid #1890ff', background: '#e6f7ff' }}
-            headStyle={{ borderBottom: '1px solid #bae7ff', color: '#0050b3' }}
+            styles={{ header: { borderBottom: '1px solid #bae7ff', color: '#0050b3' } }}
           >
             {announcements.slice(0, 3).map((announcement) => (
               <div key={announcement.id} style={{ marginBottom: 16, last: { marginBottom: 0 } }}>
@@ -411,7 +414,7 @@ const StudentDashboard = () => {
                               <Title level={4} style={{ margin: 0, color: '#1e293b', fontWeight: 800, letterSpacing: '-0.5px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.name}</Title>
                               <Text type="secondary" style={{ fontWeight: 500, color: '#64748b', display: 'block', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{course.subject_name} • {course.teacher_name}</Text>
                               <div style={{ marginTop: 12 }}>
-                                <Progress percent={35} size="small" strokeColor={{ '0%': '#3b82f6', '100%': '#10b981' }} trailColor="#f1f5f9" />
+                                <Progress percent={35} size="small" strokeColor={{ '0%': '#3b82f6', '100%': '#10b981' }} railColor="#f1f5f9" />
                               </div>
                             </Col>
                             <Col flex="none">
@@ -467,7 +470,7 @@ const StudentDashboard = () => {
                           <Button
                             type="primary"
                             ghost
-                            href={material.file_path ? `http://localhost:8000/${material.file_path.split('/').map(encodeURIComponent).join('/')}` : '#'}
+                            href={material.file_path ? `${ASSET_BASE_URL}/${material.file_path.split('/').map(encodeURIComponent).join('/')}` : '#'}
                             target="_blank"
                             disabled={!material.file_path}
                             style={{ borderRadius: 8 }}
@@ -561,9 +564,7 @@ const StudentDashboard = () => {
                     </Row>
                   </div>
                 )}
-                <div style={{ marginBottom: 16 }}>
-                  <MyBooks />
-                </div>
+
               </>
             )}
           </motion.div>
@@ -647,25 +648,87 @@ const StudentDashboard = () => {
               )}
             </Card>
 
-            {/* MY CERTIFICATES */}
-            {certificates.length > 0 && (
-              <Card title={<Space><SafetyCertificateOutlined style={{ color: '#52c41a' }} /> Mening Yutuqlarim</Space>} style={{ borderRadius: 16 }}>
-                {certificates.map(cert => (
-                  <div key={cert.event_id} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                    <Avatar shape="square" size={48} style={{ background: '#f6ffed' }} icon={<SafetyCertificateOutlined style={{ color: '#52c41a' }} />} />
-                    <div style={{ flex: 1 }}>
-                      <Text strong>O'rin: {cert.rank}</Text><br />
-                      <Text type="secondary" style={{ fontSize: 12 }}>{cert.total_points} ball natija bilan</Text>
+            {/* MENING YUTUQLARIM — Leaderboard competition certificates */}
+            <Card
+              title={<span style={{ display: 'flex', alignItems: 'center', gap: 8 }}><SafetyCertificateOutlined style={{ color: '#52c41a' }} /> Mening Yutuqlarim</span>}
+              style={{ borderRadius: 16 }}
+            >
+              {certificates.length > 0 ? (
+                certificates.slice(0, 3).map(cert => {
+                  const rank = cert.rank;
+                  const medalColors = [
+                    { bg: 'linear-gradient(135deg,#FFD700,#FFA500)', text: '#7d4e00' },
+                    { bg: 'linear-gradient(135deg,#E0E0E0,#B0B0B0)', text: '#3a3a3a' },
+                    { bg: 'linear-gradient(135deg,#CD7F32,#8B4513)', text: '#fff' },
+                  ];
+                  const mc = medalColors[rank - 1] || { bg: 'linear-gradient(135deg,#a8b4c8,#6b7a90)', text: '#fff' };
+                  return (
+                    <div
+                      key={cert.event_id}
+                      onClick={() => setSelectedCert(cert)}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 14,
+                        marginBottom: 14, cursor: 'pointer', borderRadius: 12,
+                        padding: '10px 12px',
+                        background: 'linear-gradient(135deg, #0a1628 0%, #0d2550 100%)',
+                        border: '1px solid rgba(212,160,23,0.3)',
+                        transition: 'all 0.2s',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.boxShadow = '0 4px 20px rgba(212,160,23,0.2)'}
+                      onMouseLeave={e => e.currentTarget.style.boxShadow = 'none'}
+                    >
+                      {/* Medal circle */}
+                      <div style={{
+                        width: 44, height: 44, borderRadius: '50%',
+                        background: mc.bg, display: 'flex', alignItems: 'center',
+                        justifyContent: 'center', flexShrink: 0,
+                        boxShadow: '0 0 0 2px rgba(212,160,23,0.4)',
+                        fontWeight: 900, fontSize: 18, color: mc.text,
+                      }}>
+                        {rank}
+                      </div>
+                      {/* Info */}
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 700, fontSize: 13, color: '#f5d26b', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                          {rank}-o'rinchi
+                          {cert.group_name && <span style={{ fontWeight: 400, color: 'rgba(245,210,107,0.6)', marginLeft: 6, fontSize: 12 }}>| {cert.group_name}</span>}
+                        </div>
+                        <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>
+                          {cert.total_points} ball
+                        </div>
+                      </div>
+                      {/* Open button */}
+                      <Button
+                        type="text"
+                        size="small"
+                        icon={<SafetyCertificateOutlined />}
+                        style={{ color: '#d4a017', fontWeight: 600, fontSize: 12 }}
+                        onClick={(e) => { e.stopPropagation(); setSelectedCert(cert); }}
+                      >
+                        Ko'rish
+                      </Button>
                     </div>
-                    <Button type="link" size="small" href={cert.certificate_url} target="_blank">Ko'rish</Button>
-                  </div>
-                ))}
-              </Card>
-            )}
+                  );
+                })
+              ) : (
+                <div style={{ textAlign: 'center', padding: '24px 0' }}>
+                  <TrophyOutlined style={{ fontSize: 36, color: '#faad14', display: 'block', marginBottom: 8 }} />
+                  <Text type="secondary" style={{ display: 'block', marginBottom: 4 }}>Hali yutuqlar yo'q</Text>
+                  <Text type="secondary" style={{ fontSize: 12 }}>O'qituvchi musobaqalari yakun topganda sertifikatingiz shu yerda paydo bo'ladi</Text>
+                </div>
+              )}
+            </Card>
           </motion.div>
         </Col>
       </Row>
       <FeedbackWidget />
+      {/* Premium Certificate Modal */}
+      <CertificateModal
+        open={!!selectedCert}
+        onClose={() => setSelectedCert(null)}
+        cert={selectedCert}
+        studentName={`${currentUser?.first_name || ''} ${currentUser?.last_name || ''}`}
+      />
     </motion.div >
   );
 };

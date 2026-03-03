@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import {
     Card, Table, Tag, Button, Modal, Form, Input, InputNumber,
-    Select, Space, Tooltip, message, Popconfirm, Typography, Badge,
+    Select, Space, Flex, Tooltip, message, Popconfirm, Typography, Badge,
     Statistic, Row, Col, Divider, Alert
 } from 'antd';
 import {
@@ -15,9 +15,10 @@ const { Title, Text } = Typography;
 const { Option } = Select;
 
 const planColors = {
-    bronze: { color: '#cd7f32', label: '🥉 Bronza' },
-    silver: { color: '#a0a0a0', label: '🥈 Kumush' },
-    gold: { color: '#ffd700', label: '🥇 Oltin' },
+    small: { color: '#52c41a', label: '🌱 Kichik Markaz' },
+    medium: { color: '#1890ff', label: '🌿 O\'rta Markaz' },
+    large: { color: '#722ed1', label: '🌳 Yirik Markaz' },
+    enterprise: { color: '#fa8c16', label: '🏢 Korporativ' },
 };
 
 const statusColors = {
@@ -156,14 +157,14 @@ const PlatformSubscriptions = () => {
             dataIndex: 'institution_name',
             key: 'institution_name',
             render: (name, row) => (
-                <Space direction="vertical" size={0}>
+                <Flex vertical gap={0}>
                     <Text strong>{name}</Text>
                     {!row.is_active && (
                         <Tag color="red" icon={<LockOutlined />} style={{ fontSize: 11 }}>
                             TIZIM BLOKLANGAN
                         </Tag>
                     )}
-                </Space>
+                </Flex>
             ),
         },
         {
@@ -203,7 +204,7 @@ const PlatformSubscriptions = () => {
                 const isOverdue = daysLeft < 0;
                 const isSoon = daysLeft >= 0 && daysLeft <= 3;
                 return (
-                    <Space direction="vertical" size={0}>
+                    <Flex vertical gap={0}>
                         <Text style={{ color: isOverdue ? '#ff4d4f' : isSoon ? '#faad14' : undefined }}>
                             {date.toLocaleDateString('uz-UZ')}
                         </Text>
@@ -214,7 +215,7 @@ const PlatformSubscriptions = () => {
                         ) : (
                             <Text type="secondary" style={{ fontSize: 11 }}>{daysLeft} kun</Text>
                         )}
-                    </Space>
+                    </Flex>
                 );
             },
         },
@@ -344,7 +345,7 @@ const PlatformSubscriptions = () => {
                         <Statistic
                             title="Faol obunalar"
                             value={activeCount}
-                            valueStyle={{ color: '#52c41a', fontWeight: 700 }}
+                            styles={{ content: { color: '#52c41a', fontWeight: 700 } }}
                             prefix={<CheckCircleOutlined />}
                         />
                     </Card>
@@ -354,7 +355,7 @@ const PlatformSubscriptions = () => {
                         <Statistic
                             title="Bloklangan"
                             value={blockedCount}
-                            valueStyle={{ color: blockedCount > 0 ? '#ff4d4f' : '#52c41a', fontWeight: 700 }}
+                            styles={{ content: { color: blockedCount > 0 ? '#ff4d4f' : '#52c41a', fontWeight: 700 } }}
                             prefix={<StopOutlined />}
                         />
                     </Card>
@@ -365,7 +366,7 @@ const PlatformSubscriptions = () => {
                             title="Oylik daromad"
                             value={parseInt(monthlyIncome).toLocaleString('uz')}
                             suffix="so'm"
-                            valueStyle={{ color: '#1890ff', fontWeight: 700 }}
+                            styles={{ content: { color: '#1890ff', fontWeight: 700 } }}
                             prefix={<DollarOutlined />}
                         />
                     </Card>
@@ -374,7 +375,7 @@ const PlatformSubscriptions = () => {
 
             {/* Info box */}
             <Alert
-                message="Avtomatik ishlash tartibi"
+                title="Avtomatik ishlash tartibi"
                 description={
                     <ul style={{ margin: 0, paddingLeft: 20 }}>
                         <li>Har kuni <strong>09:00</strong> da scheduler ishlaydi</li>
@@ -465,9 +466,10 @@ const PlatformSubscriptions = () => {
                         rules={[{ required: true, message: 'Rejani tanlang' }]}
                     >
                         <Select placeholder="Rejani tanlang">
-                            <Option value="bronze">🥉 Bronza</Option>
-                            <Option value="silver">🥈 Kumush</Option>
-                            <Option value="gold">🥇 Oltin</Option>
+                            <Option value="small">🌱 Kichik Markaz (200,000 UZS)</Option>
+                            <Option value="medium">🌿 O'rta Markaz (400,000 UZS)</Option>
+                            <Option value="large">🌳 Yirik Markaz (700,000 UZS)</Option>
+                            <Option value="enterprise">🏢 Korporativ (1,000,000 UZS)</Option>
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -490,7 +492,14 @@ const PlatformSubscriptions = () => {
                         rules={[{ required: true, message: 'Telefon raqamni kiriting' }]}
                         extra="SMS eslatmalar ushbu raqamga yuboriladi (masalan: +998901234567)"
                     >
-                        <Input placeholder="+998901234567" addonBefore={<PhoneOutlined />} />
+                        <Space.Compact style={{ width: '100%' }}>
+                            <Input
+                                disabled
+                                style={{ width: 44, textAlign: 'center', background: '#f5f5f5', color: '#888' }}
+                                value={<><PhoneOutlined /></>}
+                            />
+                            <Input placeholder="+998901234567" style={{ flex: 1 }} />
+                        </Space.Compact>
                     </Form.Item>
                 </Form>
             </Modal>

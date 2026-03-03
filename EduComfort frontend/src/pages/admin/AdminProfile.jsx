@@ -91,7 +91,7 @@ const AdminProfile = () => {
                 <p style={{ color: theme.colors.text.secondary }}>Manage your account settings and preferences</p>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 24 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24 }}>
                 {/* Left Column: ID Card */}
                 <Card
                     variant="borderless"
@@ -192,7 +192,7 @@ const AdminProfile = () => {
                         <Form.Item
                             label="Email"
                             name="email"
-                            rules={[{ type: 'email', message: 'Please enter a valid email' }, { required: true, message: 'Required' }]}
+                            rules={[{ type: 'email', message: 'Please enter a valid email' }]}
                         >
                             <Input prefix={<MailOutlined />} disabled placeholder="Email Address" />
                         </Form.Item>

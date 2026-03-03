@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   Row,
@@ -80,7 +80,7 @@ const TeacherDashboard = () => {
         setLoading(true);
         const [dashboardRes, announcementsRes] = await Promise.all([
           axiosClient.get("/teacher/dashboard"),
-          axiosClient.get("/announcements/")
+          axiosClient.get("/announcements")
         ]);
 
         setDashboardData(dashboardRes.data);

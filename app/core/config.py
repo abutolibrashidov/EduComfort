@@ -27,14 +27,20 @@ class Settings(BaseSettings):
     MEDIA_ROOT: str = "uploads"
 
     # Environment
-    ENVIRONMENT: str = "development"  # "development" | "production"
+    ENVIRONMENT: str = "development"
 
     # Sentry
     SENTRY_DSN: Optional[str] = None
 
-    # Email (SendGrid or Resend)
-    EMAIL_API_KEY: Optional[str] = None
-    EMAIL_FROM: str = "noreply@educomfort.com"
+    # ✅ SMTP Email (Gmail App Password)
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: Optional[str] = None
+    SMTP_PASSWORD: Optional[str] = None
+    EMAIL_FROM: str = "EduComfort <noreply@educomfort.uz>"
+
+    # Frontend URL (used in password reset links)
+    FRONTEND_URL: str = "https://educomfort.uz"
 
     # SMS — Eskiz (O'zbekiston)
     ESKIZ_EMAIL: Optional[str] = None

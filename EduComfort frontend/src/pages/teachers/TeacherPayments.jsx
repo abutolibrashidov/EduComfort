@@ -216,7 +216,7 @@ const TeacherPayments = () => {
                   </div>
                 ),
                 children: (
-                  <Table
+                  <Table scroll={{ x: 'max-content' }}
                     columns={salaryColumns}
                     dataSource={salaryData}
                     rowKey="id"
@@ -235,7 +235,7 @@ const TeacherPayments = () => {
                   </div>
                 ),
                 children: (
-                  <Table
+                  <Table scroll={{ x: 'max-content' }}
                     columns={studentPaymentColumns}
                     dataSource={studentPaymentsData}
                     rowKey="id"

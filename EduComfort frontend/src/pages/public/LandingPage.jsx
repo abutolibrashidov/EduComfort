@@ -346,8 +346,8 @@ const LandingPage = () => {
                         <EduLogo size={32} animate={false} />
                         <p className="lp-footer-copy">© 2026 EduComfort. {t('landing_rights') || "Barcha huquqlar himoyalangan."}</p>
                         <div style={{ marginTop: '8px', display: 'flex', gap: '16px', fontSize: '13px' }}>
-                            <Link to="/privacy" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>Privacy Policy</Link>
-                            <Link to="/terms" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>Terms of Service</Link>
+                            <Link to="/privacy-policy" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>Privacy Policy</Link>
+                            <Link to="/terms-of-service" style={{ color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}>Terms of Service</Link>
                         </div>
                     </div>
                     <div className="lp-footer-langs">

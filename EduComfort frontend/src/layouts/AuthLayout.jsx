@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Layout, Typography } from "antd";
 import { useBranding } from "../contexts/BrandingContext";
+import { ASSET_BASE_URL } from "../api/config";
 
 const { Content } = Layout;
 const { Title, Text } = Typography;
@@ -33,7 +34,7 @@ const AuthLayout = () => {
           <div style={{ textAlign: "center", marginBottom: 24 }}>
             {branding.logo_url && (
               <img
-                src={`http://localhost:8000${branding.logo_url}`}
+                src={`${ASSET_BASE_URL}${branding.logo_url}`}
                 alt={branding.brand_name}
                 style={{
                   maxHeight: 60,

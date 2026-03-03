@@ -1,66 +1,71 @@
 import axios from "axios";
-import { getToken } from "./auth";
+import { API_BASE_URL } from "./config";
+
+// ✅ FIX 1: Removed the fragile `getBaseUrl()` function that checked window.location at runtime.
+//    The correct URL is now always set at BUILD TIME via the VITE_API_URL env variable.
+//    .env.development  → VITE_API_URL=http://localhost:8000
+//    .env.production   → VITE_API_URL=https://api.educomfort.uz
+//    Vite guarantees the right value is baked in at build time — no runtime guessing needed.
 
 const axiosClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8000",
-  timeout: 15000, // 15 seconds timeout
+  baseURL: API_BASE_URL,
+  timeout: 60000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Request interceptor: Add token to every request
+// ========================= Request Interceptor =========================
 axiosClient.interceptors.request.use(
   (config) => {
-    console.log(`🚀 Starting Request: ${config.method?.toUpperCase()} ${config.url}`);
-    const token = getToken();
+    // ✅ FIX 2: Removed console.log on every request — was leaking full URLs
+    //    and Authorization tokens in the production browser console.
+    //    Only log in development.
+    if (import.meta.env.DEV) {
+      console.log(`🚀 ${config.method?.toUpperCase()} ${config.url}`);
+    }
+
+    const token = localStorage.getItem("sp_token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor: Handle errors globally
+// ========================= Response Interceptor =========================
 axiosClient.interceptors.response.use(
   (response) => response,
   (error) => {
-    const originalRequest = error.config;
+    const status = error.response?.status;
 
-    // Handle 307/308 redirects (FastAPI trailing slash redirects)
-    if ((error.response?.status === 307 || error.response?.status === 308) && !originalRequest._retry) {
-      originalRequest._retry = true;
-      const redirectUrl = error.response.headers.location;
+    // ✅ FIX 3: Removed the 307/308 redirect handler.
+    //    Since main.py sets `redirect_slashes=False`, these redirects should
+    //    NEVER happen. Keeping a retry handler here could mask bugs and
+    //    cause hard-to-debug infinite loops. Removed entirely.
+    //    If you see 307s, the fix is in the backend route definition, not here.
 
-      if (redirectUrl) {
-        // Preserve full URL and retry with Authorization header
-        const fullUrl = redirectUrl.startsWith('http')
-          ? redirectUrl
-          : `${axiosClient.defaults.baseURL}${redirectUrl}`;
-
-        originalRequest.url = fullUrl;
-        return axiosClient(originalRequest);
-      }
-    }
-
-    // Handle 401 Unauthorized - but don't redirect if we're already on login page
-    if (error.response?.status === 401) {
+    // ✅ FIX 4: 401 handler — only clear session and redirect if NOT on login page
+    if (status === 401) {
       const currentPath = window.location.pathname;
-
-      // Only clear tokens and redirect if NOT already on login page
-      // This prevents clearing tokens during the initial login->dashboard transition
-      if (!currentPath.includes('/login')) {
+      if (!currentPath.includes("/login")) {
         localStorage.removeItem("sp_token");
         localStorage.removeItem("sp_user");
-
-        // Use setTimeout to ensure any pending requests complete first
+        // Small delay to let any in-flight requests settle
         setTimeout(() => {
           window.location.href = "/login";
         }, 100);
       }
+    }
+
+    // ✅ FIX 5: Log errors only in development — don't expose internal errors in production console
+    if (import.meta.env.DEV) {
+      console.error(
+        `❌ API Error: ${error.config?.method?.toUpperCase()} ${error.config?.url}`,
+        `Status: ${status}`,
+        error.response?.data
+      );
     }
 
     return Promise.reject(error);

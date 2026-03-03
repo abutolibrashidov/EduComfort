@@ -1,5 +1,13 @@
 export const en = {
     // General
+    "full_name": "Full Name",
+    "phone": "Phone Number",
+    "password": "Password",
+    "already_have_account": "Already have an account?",
+    "copyright": "© 2025 EduComfort. All rights reserved.",
+    "powered_by": "Powered by EduComfort",
+    "privacy_policy": "Privacy Policy",
+    "terms_of_service": "Terms of Service",
     "common.save": "Save",
     "common.cancel": "Cancel",
     "common.delete": "Delete",
@@ -119,6 +127,19 @@ export const en = {
     "lp_feat_finance_d": "Payments, salaries and reports",
     "lp_cta_title": "Start today – for free!",
     "lp_cta_sub": "Bring your education center to the digital world. Create an account and try free for 14 days.",
+
+    // Registration
+    "reg.center_title": "Register Your Learning Center",
+    "reg.center_sub": "Create your own white-label platform",
+    "reg.inst_name": "Center / Academy Name",
+    "reg.inst_placeholder": "e.g. Seven Plus Academy",
+    "reg.agreement": "You must accept the Terms of Service and Privacy Policy",
+    "reg.i_agree": "I have read and agree to the",
+    "reg.and": "and",
+    "reg.read_agree": "",
+    "reg.btn": "Register Center",
+    "reg.success": "Center registered successfully! Redirecting...",
+    "reg.failed": "Registration failed. Please try again.",
 
     "nav.dashboard": "Dashboard",
     "nav.institutions": "Institutions",

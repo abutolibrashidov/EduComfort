@@ -3,6 +3,7 @@ import { Card, Row, Col, Typography, Button, Tag, Empty, Spin, message } from 'a
 import { BookOutlined, DownloadOutlined, FileTextOutlined, FilePdfOutlined } from '@ant-design/icons';
 import axiosClient from '../../api/axiosClient';
 import { useTranslation } from 'react-i18next';
+import { ASSET_BASE_URL } from '../../api/config';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -126,7 +127,7 @@ const MyBooks = () => {
                                     >
                                         {book.cover_image ? (
                                             <img
-                                                src={`http://localhost:8000/${book.cover_image}`}
+                                                src={`${ASSET_BASE_URL}/${book.cover_image}`}
                                                 alt={book.title}
                                                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                             />

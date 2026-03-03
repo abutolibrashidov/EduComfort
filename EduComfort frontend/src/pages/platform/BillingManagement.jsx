@@ -107,11 +107,15 @@ const BillingManagement = () => {
             dataIndex: 'plan',
             key: 'plan',
             render: plan => {
+                if (!plan) return <Tag>N/A</Tag>;
                 let color = 'default';
-                if (plan === 'gold') color = 'gold';
-                if (plan === 'silver') color = 'cyan';
-                if (plan === 'bronze') color = 'orange';
-                return <Tag color={color} icon={<GoldOutlined />}>{plan.toUpperCase()}</Tag>;
+                let icon = '';
+                const p = plan.toLowerCase();
+                if (p === 'enterprise') { color = '#fa8c16'; icon = '🏢'; }
+                if (p === 'large') { color = '#722ed1'; icon = '🌳'; }
+                if (p === 'medium') { color = '#1890ff'; icon = '🌿'; }
+                if (p === 'small') { color = '#52c41a'; icon = '🌱'; }
+                return <Tag color={color}>{icon} {plan.toUpperCase()}</Tag>;
             }
         },
         {
@@ -191,7 +195,7 @@ const BillingManagement = () => {
                                 key: '1',
                                 label: 'Active Subscriptions',
                                 children: (
-                                    <Table
+                                    <Table scroll={{ x: 'max-content' }}
                                         columns={columns}
                                         dataSource={tableData}
                                         rowKey="institution_id"
@@ -203,7 +207,7 @@ const BillingManagement = () => {
                                 key: '2',
                                 label: 'AI Credits & Usage',
                                 children: (
-                                    <Table
+                                    <Table scroll={{ x: 'max-content' }}
                                         columns={aiCreditColumns}
                                         dataSource={aiUsageStats}
                                         rowKey="institution_id"
@@ -215,7 +219,7 @@ const BillingManagement = () => {
                                 key: '3',
                                 label: 'Pricing Plans',
                                 children: (
-                                    <Table
+                                    <Table scroll={{ x: 'max-content' }}
                                         columns={plansColumns}
                                         dataSource={plans}
                                         rowKey="id"

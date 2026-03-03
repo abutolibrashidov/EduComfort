@@ -1,7 +1,9 @@
+from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
+from fastapi.exceptions import ResponseValidationError, RequestValidationError
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -28,190 +30,91 @@ if settings.SENTRY_DSN:
 # ========================= Rate Limiter =========================
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 
-# Import new models for database creation
+# ========================= Model Imports =========================
 from app.models.group_students import GroupStudent
 from app.models.conversation import Conversation, ConversationParticipant, Message
-from app.models.achievement import Achievement, UserAchievement # New Gamification Models
-from app.models.subscription import InstitutionSubscription # Billing Models
+from app.models.achievement import Achievement, UserAchievement
+from app.models.subscription import InstitutionSubscription
 from app.models.announcement import Announcement
 from app.models.teacher_payment import TeacherPayment
-from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner # New Leaderboard Models
+from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner
 from app.models.expense import Expense
 
 from app.data.seed_super_admin import seed_super_admin
 from app.data.seed_subjects import seed_subjects
 
-# Import Scheduler
+# ========================= Schedulers =========================
 from app.services.rating_cycle_scheduler import start_scheduler
 from app.services.billing_scheduler import start_billing_scheduler
 
-# Import all routers
+# ========================= Router Imports =========================
+# ✅ FIX 1: Removed duplicate imports of `public` and `messaging_v2`.
+#    They were imported BOTH in the bulk `from app.routers import (...)` block
+#    AND again individually with try/except below — causing double registration.
+#    Now ALL optional routers use try/except only. Guaranteed-present routers use direct import.
+
 from app.routers import (
-    admin, # New Admin Dashboard Router
-    platform, # New Platform Owner Router
-    billing, # New Billing Router
-    announcements, # New Announcements Router
-    attendance, # New Attendance Router
-
-    messaging_v2, # New Messaging V2 Router
-
-    progress, # New Progress Router
-    public, # New Public Router
-    distractors, # New Distractors Router
-    books, # New Books Router
-    book_reader, # New Book Reader Router
-    book_jobs, # New Book Processing Jobs Router
-    book_review, # New Book Review Router (Phase 3)
-    auth, # Auth Router
-    institutions, # Institutions Router
-    learners, # Learners Router
-    teacher, # Teacher Router
-    student, # Student Router
-    staff, # Staff Router
-    exams, # Exams Router
-    subject, # Subjects Router (note: file is subject.py not subjects.py)
-    groups, # Groups Router
-    branches, # Branches Router
-    onlinecourse, # Online Course Router
-    ielts, # IELTS Router
-    workbooks, # Workbooks Router
-    courses, # Courses Router
-    users, # Users Router
-    payments, # Payments Router
-    interactive_workbook, # Interactive Workbook Router
-    interactive_books, # Interactive Books Router (AI-powered)
-    gamification, # Gamification Router
-    feed, # Feed Router
-    ai_billing, # AI Billing Router
-    leaderboards, # Leaderboards Router
-    expenses, # New Expenses Router
-    upload, # Avatar Upload Router
-    gradebook, # New Gradebook Router
-    feedbacks # Added Feedback Router
+    admin,
+    platform,
+    billing,
+    announcements,
+    attendance,
+    distractors,
+    books,
+    book_reader,
+    book_jobs,
+    book_review,
+    auth,
+    institutions,
+    learners,
+    teacher,
+    student,
+    staff,
+    exams,
+    subject,
+    groups,
+    branches,
+    onlinecourse,
+    ielts,
+    workbooks,
+    courses,
+    users,
+    payments,
+    interactive_workbook,
+    interactive_books,
+    gamification,
+    feed,
+    ai_billing,
+    leaderboards,
+    expenses,
+    upload,
+    gradebook,
+    feedbacks,
 )
 
-# Import public router separately to handle if it doesn't exist yet
+# Optional routers — loaded with fallback
 try:
     from app.routers import public
-    print("[INFO] Public router loaded")
+    logger.info("Public router loaded")
 except ImportError:
-    print("⚠️ Warning: public.py not found - public routes not available")
+    logger.warning("public.py not found — public routes not available")
     public = None
 
-# Import messaging_v2 separately to avoid circular imports
 try:
     from app.routers import messaging_v2
-    print("[INFO] Messaging router loaded")
+    logger.info("Messaging router loaded")
 except Exception as e:
-    print(f"⚠️ Warning: Could not load messaging_v2: {e}")
+    logger.warning(f"Could not load messaging_v2: {e}")
     messaging_v2 = None
 
-# =========================
-# FastAPI app
-# =========================
-app = FastAPI(
-    title="EduComfort API",
-    version="1.0.0",
-    description="Learning Management System API",
-    # Hide docs in production
-    docs_url=None if settings.ENVIRONMENT == "production" else "/docs",
-    redoc_url=None if settings.ENVIRONMENT == "production" else "/redoc",
-)
 
-# ========================= Rate Limiting =========================
-app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
-
-# ========================= Global Exception Handler =========================
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    """Hide stack traces in production. Log the real error server-side."""
-    logger.exception(f"Unhandled exception on {request.method} {request.url}: {exc}")
-    if settings.ENVIRONMENT == "production":
-        return JSONResponse(
-            status_code=500,
-            content={"detail": "Internal server error"},
-        )
-    # In development, let FastAPI's default error handler show the traceback
-    raise exc
-
-from fastapi.exceptions import ResponseValidationError, RequestValidationError
-@app.exception_handler(ResponseValidationError)
-async def validation_exception_handler(request: Request, exc: ResponseValidationError):
-    import traceback
-    with open("error_log.txt", "a") as f:
-        f.write(f"ResponseValidationError on {request.url}:\\n")
-        for err in exc.errors():
-            f.write(str(err) + "\\n")
-    return JSONResponse(status_code=500, content={"message": "Internal Server Error"})
-
-@app.exception_handler(RequestValidationError)
-async def request_validation_exception_handler(request: Request, exc: RequestValidationError):
-    body = await request.body()
-    with open("error_log.txt", "a") as f:
-        f.write(f"RequestValidationError on {request.method} {request.url}:\\n")
-        f.write(f"Body: {body.decode(errors='ignore')}\\n")
-        f.write(f"Errors: {exc.errors()}\\n")
-    return JSONResponse(status_code=422, content={"detail": exc.errors()})
-
-
-# =========================
-# Multi-Tenant Middleware - Add FIRST (Inner execution)
-# =========================
-# from app.middleware.tenant_context import TenantContextMiddleware
-# app.add_middleware(TenantContextMiddleware)
-# print("[INFO] Tenant context middleware registered (Inner)")
-
-
-# =========================
-# CORS Configuration
-# =========================
-origins = [origin.strip() for origin in settings.CORS_ORIGINS.split(",")]
-
-# In production only allow explicit origins; in dev also allow localhost wildcard
-if settings.ENVIRONMENT == "production":
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-        expose_headers=["*"],
-    )
-else:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=origins,
-        allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:[0-9]+)?",
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-        expose_headers=["*"],
-    )
-logger.info("CORS middleware configured")
-
-# Static files — only mount local /uploads in development
-# In production, all files are served from S3/CDN
-if settings.ENVIRONMENT != "production":
-    from pathlib import Path
-    media_path = Path(settings.MEDIA_ROOT)
-    os.makedirs(media_path, exist_ok=True)
-    mount_name = media_path.name
-    app.mount(f"/{mount_name}", StaticFiles(directory=settings.MEDIA_ROOT), name=mount_name)
-    logger.info(f"Serving static files from local /{mount_name} (dev mode)")
-else:
-    logger.info("Production mode: static files served from S3")
-
-# =========================
-# Database Initialization
-# =========================
-@app.on_event("startup")
-def on_startup():
+# ========================= Lifespan (replaces deprecated @app.on_event) =========================
+# ✅ FIX 2: Replaced deprecated @app.on_event("startup"/"shutdown") with lifespan context manager
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # ── STARTUP ──
     logger.info("Starting backend initialization...")
-    # NOTE: In production, schema is managed by Alembic migrations.
-    # Do NOT call Base.metadata.create_all() here in production.
 
-    # Seed initial data
     db = SessionLocal()
     try:
         try:
@@ -231,55 +134,180 @@ def on_startup():
     finally:
         db.close()
 
-    # Start the rating cycle scheduler
     try:
         start_scheduler()
+        logger.info("Rating scheduler started")
     except Exception as e:
         logger.error(f"Failed to start rating scheduler: {e}")
 
-    # Start the billing scheduler (oylik to'lov + SMS eslatmalar + avtomatik bloklash)
     try:
         start_billing_scheduler()
-        logger.info("Billing scheduler muvaffaqiyatli ishga tushirildi")
+        logger.info("Billing scheduler started")
     except Exception as e:
-        logger.error(f"Billing scheduler ishga tushirishda xato: {e}")
+        logger.error(f"Billing scheduler failed to start: {e}")
 
     logger.info("Backend initialization completed")
 
+    yield  # ← app runs here
 
-@app.on_event("shutdown")
-def on_shutdown():
+    # ── SHUTDOWN ──
     logger.info("Shutting down backend...")
+
+
+# =========================
+# FastAPI App
+# =========================
+app = FastAPI(
+    title="EduComfort API",
+    version="1.0.0",
+    description="Learning Management System API",
+    docs_url=None if settings.ENVIRONMENT == "production" else "/docs",
+    redoc_url=None if settings.ENVIRONMENT == "production" else "/redoc",
+    redirect_slashes=False,  # ✅ Keeps this — eliminates all 307/308 redirects globally
+    lifespan=lifespan,       # ✅ FIX 2: Use new lifespan instead of deprecated on_event
+)
+
+# ========================= Rate Limiting =========================
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+# ========================= Global Exception Handlers =========================
+def _add_cors_headers(response: JSONResponse, request: Request) -> JSONResponse:
+    """Manually add CORS headers to exception handler responses.
+    
+    Starlette's CORS middleware does NOT wrap exception handler responses,
+    so browsers see CORS errors on 422/500 responses. We add the headers
+    manually here as a workaround.
+    """
+    origin = request.headers.get("origin", "")
+    if origin:
+        response.headers["Access-Control-Allow-Origin"] = origin
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Access-Control-Allow-Methods"] = "*"
+        response.headers["Access-Control-Allow-Headers"] = "*"
+    return response
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """Always return a CORS-friendly JSON response for unhandled exceptions.
+    
+    In dev mode: returns full error details for debugging.
+    In production: hides stack trace, returns generic message.
+    
+    NOTE: We do NOT re-raise in dev mode — re-raising bypasses CORS middleware,
+    making 500s appear to the browser as CORS errors instead of 500s.
+    """
+    import traceback as tb
+    error_detail = tb.format_exc()
+    logger.exception(f"Unhandled exception on {request.method} {request.url}: {exc}")
+    
+    if settings.ENVIRONMENT == "production":
+        content = {"detail": "Internal server error"}
+    else:
+        # Dev mode: include full traceback so we can see what's actually wrong
+        content = {
+            "detail": str(exc),
+            "type": type(exc).__name__,
+            "traceback": error_detail,
+        }
+    
+    return _add_cors_headers(
+        JSONResponse(status_code=500, content=content),
+        request,
+    )
+
+
+@app.exception_handler(ResponseValidationError)
+async def validation_exception_handler(request: Request, exc: ResponseValidationError):
+    logger.error(f"ResponseValidationError on {request.url}:")
+    for err in exc.errors():
+        logger.error(str(err))
+    return _add_cors_headers(
+        JSONResponse(status_code=500, content={"message": "Internal Server Error"}),
+        request,
+    )
+
+
+@app.exception_handler(RequestValidationError)
+async def request_validation_exception_handler(request: Request, exc: RequestValidationError):
+    body = await request.body()
+    logger.error(f"RequestValidationError on {request.method} {request.url}")
+    logger.error(f"Body: {body.decode(errors='ignore')}")
+    logger.error(f"Errors: {exc.errors()}")
+    return _add_cors_headers(
+        JSONResponse(status_code=422, content={"detail": exc.errors()}),
+        request,
+    )
+
+
+# =========================
+# CORS Configuration
+# =========================
+raw_origins = settings.CORS_ORIGINS.split(",")
+origins = [o.strip() for o in raw_origins if o.strip()]
+
+if settings.ENVIRONMENT != "production":
+    if "http://localhost:5173" not in origins:
+        origins.append("http://localhost:5173")
+    if "http://127.0.0.1:5173" not in origins:
+        origins.append("http://127.0.0.1:5173")
+
+logger.info(f"CORS origins: {origins} [Env: {settings.ENVIRONMENT}]")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_origin_regex=r"https?://(localhost|127\.0\.0\.1)(:[0-9]+)?",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
+logger.info("CORS middleware configured")
+
+# ========================= Static Files =========================
+# ✅ FIX 4: In production, uploads are served from the VPS nginx or S3.
+#    Never mount local disk in production — path may not exist or be ephemeral.
+if settings.ENVIRONMENT != "production":
+    from pathlib import Path
+    media_path = Path(settings.MEDIA_ROOT)
+    os.makedirs(media_path, exist_ok=True)
+    mount_name = media_path.name
+    app.mount(f"/{mount_name}", StaticFiles(directory=settings.MEDIA_ROOT), name=mount_name)
+    logger.info(f"Serving static files from local /{mount_name} (dev mode)")
+else:
+    logger.info("Production mode: static files served from VPS nginx or S3 — not mounted here")
 
 
 # =========================
 # API Routes
 # =========================
 
-# Public routes (no authentication required)
+# Public (optional)
 if public:
     app.include_router(public.router)
-    print("[INFO] Public routes registered")
+    logger.info("Public routes registered")
 
-# Authentication
+# Auth
 app.include_router(auth.router)
 
 # Institutions (multi-tenancy)
 app.include_router(institutions.router)
-print("[INFO] Institutions routes registered")
+logger.info("Institutions routes registered")
 
-# Learners (public registration and browsing)
+# Learners
 app.include_router(learners.router)
-print("[INFO] Learners routes registered")
+logger.info("Learners routes registered")
 
-# Marketplace / Public Courses
+# Courses / Marketplace
 app.include_router(courses.router)
-print("[INFO] Course Marketplace routes registered")
+logger.info("Course Marketplace routes registered")
 
-# Users management
+# Users
 app.include_router(users.router, prefix="/admin/users", tags=["Users"])
 
-# Groups management
+# Groups
 app.include_router(groups.router)
 
 # Branches
@@ -298,11 +326,7 @@ app.include_router(exams.router, prefix="/exams", tags=["Exams"])
 app.include_router(workbooks.router, prefix="/workbooks", tags=["Workbooks"])
 
 # Interactive Workbook
-app.include_router(
-    interactive_workbook.router,
-    prefix="/interactive-workbook",
-    tags=["Interactive Workbook"]
-)
+app.include_router(interactive_workbook.router, prefix="/interactive-workbook", tags=["Interactive Workbook"])
 
 # IELTS
 app.include_router(ielts.router, prefix="/ielts", tags=["IELTS"])
@@ -310,92 +334,76 @@ app.include_router(ielts.router, prefix="/ielts", tags=["IELTS"])
 # Online Course
 app.include_router(onlinecourse.router, prefix="/online-course", tags=["Online Course"])
 
-# Student Dashboard
+# Role Dashboards
 app.include_router(student.router)
-
-# Teacher Dashboard
 app.include_router(teacher.router)
-
-# Staff Dashboard
 app.include_router(staff.router)
-print("[INFO] Staff routes registered")
+logger.info("Role dashboards registered")
 
-# Messaging (NEW: Updated system with group and private chats)
+# Messaging (optional)
 if messaging_v2:
     app.include_router(messaging_v2.router)
-    print("[INFO] Messaging routes registered")
+    logger.info("Messaging routes registered")
 else:
-    print("⚠️ Messaging routes not available")
+    logger.warning("Messaging routes not available")
 
-# Gamification
+# Gamification & Leaderboards
 app.include_router(gamification.router)
-print("[INFO] Gamification routes registered")
-
-# Leaderboards
 app.include_router(leaderboards.router)
-print("[INFO] Leaderboard routes registered")
-
-"""
-Main FastAPI application entry point
-# Diagnostic reload: 2026-02-19 22:36
-"""
+logger.info("Gamification & Leaderboards registered")
 
 # Social Feed
 app.include_router(feed.router)
-print("[INFO] Feed routes registered")
+logger.info("Feed routes registered")
 
-# Platform Owner
+# Platform Owner & Admin
 app.include_router(admin.router)
 app.include_router(platform.router)
-print("[INFO] Platform Owner routes registered")
+logger.info("Platform Owner routes registered")
 
 # Billing
 app.include_router(billing.router)
-print("[INFO] Billing routes registered")
+logger.info("Billing routes registered")
 
 # Announcements
 app.include_router(announcements.router, prefix="/announcements", tags=["Announcements"])
-print("[INFO] Announcement routes registered")
+logger.info("Announcement routes registered")
 
 # Expenses
 app.include_router(expenses.router)
-print("[INFO] Expense routes registered")
+logger.info("Expense routes registered")
 
 # Avatar Upload
 app.include_router(upload.router, prefix="/api")
-print("[INFO] Upload routes registered")
+logger.info("Upload routes registered")
 
 # Books
 app.include_router(books.router)
-print("[INFO] Books routes registered")
-
-# Book Reader
 app.include_router(book_reader.router)
-print("[INFO] Book Reader routes registered")
-
-# Book Processing Jobs
 app.include_router(book_jobs.router)
-print("[INFO] Book Processing Jobs routes registered")
-
-# Book Review (Phase 3)
 app.include_router(book_review.router)
-print("[INFO] Book Review routes registered")
-
-# Interactive Books (AI-powered subsystem)
 app.include_router(interactive_books.router)
-print("[INFO] Interactive Books routes registered")
+logger.info("Books routes registered")
 
 # AI Billing
 app.include_router(ai_billing.router)
-print("[INFO] AI Billing routes registered")
+logger.info("AI Billing routes registered")
 
-# Gradebook (Offline Manual Exams)
+# Gradebook
 app.include_router(gradebook.router)
-print("[INFO] Gradebook routes registered")
+logger.info("Gradebook routes registered")
 
 # Feedback
 app.include_router(feedbacks.router, prefix="/feedbacks", tags=["Feedback"])
-print("[INFO] Feedback routes registered")
+logger.info("Feedback routes registered")
+
+# Attendance
+app.include_router(attendance.router)
+logger.info("Attendance routes registered")
+
+# Misc
+app.include_router(distractors.router)
+
 
 # =========================
 # Root & Health Endpoints
@@ -405,7 +413,7 @@ def root():
     return {
         "message": "EduComfort API",
         "version": "1.0.0",
-        "docs": "/docs",
+        "docs": "/docs" if settings.ENVIRONMENT != "production" else "disabled",
         "health": "/health"
     }
 
@@ -414,5 +422,6 @@ def root():
 def health_check():
     return {
         "status": "healthy",
-        "service": "EduComfort API"
+        "service": "EduComfort API",
+        "environment": settings.ENVIRONMENT,
     }

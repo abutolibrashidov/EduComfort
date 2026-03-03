@@ -26,6 +26,7 @@ import { fadeInUp } from "../theme/animations";
 import { useLanguage } from "../contexts/LanguageContext";
 import { GlobalOutlined } from "@ant-design/icons";
 import { useIsMobile } from "../hooks/useMediaQuery";
+import { ASSET_BASE_URL } from "../api/config";
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -155,6 +156,7 @@ export default function PlatformOwnerLayout() {
                     style={{
                         background: "linear-gradient(180deg, #1A1A2E 0%, #16213E 100%)", // Darker, purple-ish theme for Platform Owner
                         boxShadow: theme.shadows.xl,
+                        overflowY: "auto"
                     }}
                 >
                     <SidebarContent />
@@ -198,7 +200,7 @@ export default function PlatformOwnerLayout() {
                             <div style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}>
                                 <Avatar
                                     style={{ backgroundColor: '#1A1A2E', cursor: 'pointer', flexShrink: 0 }}
-                                    src={user?.avatar?.startsWith('http') ? user.avatar : (user?.avatar ? `http://localhost:8000${user.avatar}` : null)}
+                                    src={user?.avatar?.startsWith('http') ? user.avatar : (user?.avatar ? `${ASSET_BASE_URL}${user.avatar}` : null)}
                                 >
                                     {!user?.avatar && `${user?.first_name?.[0]?.toUpperCase() || ''}${user?.last_name?.[0]?.toUpperCase() || ''}`}
                                 </Avatar>
@@ -212,7 +214,12 @@ export default function PlatformOwnerLayout() {
                     </div>
                 </Header>
 
-                <Content style={{ margin: "24px 16px", padding: 24, minHeight: 280 }}>
+                <Content style={{
+                    margin: isMobile ? "8px" : "24px 16px",
+                    padding: isMobile ? "12px" : "24px",
+                    minHeight: 280,
+                    overflowX: "hidden",
+                }}>
                     <motion.div {...fadeInUp}>
                         <Outlet />
                     </motion.div>

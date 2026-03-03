@@ -258,7 +258,7 @@ const TeacherExamDetails = () => {
                         title={`Questions (${exam?.questions?.length || 0})`}
                         extra={<Button type="primary" icon={<PlusOutlined />} onClick={() => showModal()}>Add Question</Button>}
                     >
-                        <Table
+                        <Table scroll={{ x: 'max-content' }}
                             columns={columns}
                             dataSource={exam?.questions || []}
                             rowKey="id"

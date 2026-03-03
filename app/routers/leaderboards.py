@@ -33,8 +33,20 @@ async def create_leaderboard_event(
     db: Session = Depends(get_db)
 ):
     """Teacher creates a new leaderboard event for a group."""
-    if current_user.role != "teacher" and current_user.role != "admin":
+    if current_user.role != "teacher" and current_user.role != "admin" and current_user.role != "super_admin":
         raise HTTPException(status_code=403, detail="Siz bu amalni bajara olmaysiz.")
+    
+    # ✅ ISOLATION: Verify teacher belongs to the same institution as the group
+    from app.models.group import Group
+    group = db.query(Group).filter(Group.id == data.group_id).first()
+    if not group:
+        raise HTTPException(status_code=404, detail="Guruh topilmadi.")
+    
+    if current_user.role == "teacher":
+        if group.teacher_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Siz bu guruhning o'qituvchisi emassiz.")
+    elif current_user.institution_id and group.institution_id != current_user.institution_id:
+        raise HTTPException(status_code=403, detail="Bu guruh boshqa muassasaga tegishli.")
         
     # Close any active events for this group
     active_events = db.query(LeaderboardEvent).filter(
@@ -70,6 +82,12 @@ async def get_active_event(
     
     if not event:
         return {"event": None, "rankings": []}
+
+    # ✅ ISOLATION: verify caller has access to this group's institution
+    from app.models.group import Group
+    group = db.query(Group).filter(Group.id == group_id).first()
+    if group and current_user.institution_id and group.institution_id != current_user.institution_id:
+        raise HTTPException(status_code=403, detail="Bu guruhga ruxsatingiz yo'q.")
 
     # Calculate current rankings including all students in the group
     rankings_query = db.query(
@@ -117,8 +135,13 @@ async def rate_student(
     if not event or not event.is_active:
         raise HTTPException(status_code=400, detail="Aktiv reyting taxtasi topilmadi.")
         
-    if event.teacher_id != current_user.id and current_user.role != "admin":
+    if event.teacher_id != current_user.id and current_user.role not in ["admin", "super_admin"]:
         raise HTTPException(status_code=403, detail="Siz bu amalni bajara olmaysiz.")
+
+    # ✅ ISOLATION: verify student is in the same institution
+    student = db.query(User).filter(User.id == data.student_id).first()
+    if student and current_user.institution_id and student.institution_id != current_user.institution_id:
+        raise HTTPException(status_code=403, detail="Bu o'quvchi boshqa muassasaga tegishli.")
 
     log = StudentRatingLog(
         teacher_id=current_user.id,
@@ -209,19 +232,27 @@ async def get_student_history(
     ).filter(
         LeaderboardWinner.student_id == student_id
     ).all()
-    
+
     history = []
     for win in wins:
+        event = win.event
+        # ✅ Fetch teacher name from the event's teacher_id
+        teacher = db.query(User).filter(User.id == event.teacher_id).first() if event.teacher_id else None
+        teacher_name = f"{teacher.first_name} {teacher.last_name}" if teacher else None
+
         history.append({
             "event_id": win.event_id,
-            "start_date": win.event.start_date,
-            "end_date": win.event.end_date,
+            "start_date": event.start_date,
+            "end_date": event.end_date,
             "rank": win.rank,
             "total_points": win.total_points,
             "certificate_url": win.certificate_url,
-            "prize_awarded": win.prize_awarded
+            "prize_awarded": win.prize_awarded,
+            # ✅ NEW: group and teacher info for certificate display
+            "group_name": event.group.name if event.group else None,
+            "teacher_name": teacher_name,
         })
-        
+
     return {"history": history}
 
 @router.post("/winners/{winner_id}/prize")

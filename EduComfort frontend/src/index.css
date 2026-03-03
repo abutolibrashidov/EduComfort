@@ -16,6 +16,8 @@
   writing-mode: horizontal-tb !important;
   /* Force horizontal text */
   text-orientation: mixed !important;
+  /* overflow-wrap (not word-break) prevents mid-word breaks in narrow cells */
+  overflow-wrap: break-word;
 }
 
 a {
@@ -62,4 +64,94 @@ button {
   transform: translateY(-4px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08) !important;
   border-color: #1890ff !important;
+}
+
+/* ── Mobile Responsive Overrides ── */
+@media (max-width: 768px) {
+
+  /* Tables: enable horizontal scroll container */
+  .ant-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ant-table {
+    min-width: 480px;
+  }
+
+  .ant-table-thead>tr>th,
+  .ant-table-tbody>tr>td {
+    padding: 8px 10px !important;
+    font-size: 13px;
+  }
+
+  /* Cards: tighten padding */
+  .ant-card-body {
+    padding: 12px !important;
+  }
+
+  .ant-card-head {
+    padding: 0 12px !important;
+  }
+
+  .ant-card-head-title {
+    font-size: 14px !important;
+  }
+
+  /* Statistic numbers */
+  .ant-statistic-content-value {
+    font-size: 20px !important;
+  }
+
+  /* Page header / title */
+  h1.ant-typography,
+  .ant-typography h1 {
+    font-size: 20px !important;
+  }
+
+  h2.ant-typography,
+  .ant-typography h2 {
+    font-size: 17px !important;
+  }
+
+  /* Form inputs full width */
+  .ant-form-item .ant-input,
+  .ant-form-item .ant-select,
+  .ant-form-item .ant-picker {
+    width: 100% !important;
+  }
+
+  /* Tabs: scrollable */
+  .ant-tabs-nav {
+    overflow-x: auto !important;
+  }
+
+  .ant-tabs-nav-wrap {
+    overflow: visible !important;
+  }
+
+  /* Descriptions: stack label+value vertically on mobile */
+  .ant-descriptions-item {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    padding-bottom: 8px !important;
+  }
+
+  .ant-descriptions-item-label {
+    display: inline !important;
+    min-width: 90px !important;
+    width: auto !important;
+    flex-shrink: 0 !important;
+    font-size: 12px !important;
+    color: #8c8c8c !important;
+    white-space: nowrap !important;
+  }
+
+  .ant-descriptions-item-content {
+    display: inline !important;
+    width: auto !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+  }
 }

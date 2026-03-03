@@ -213,6 +213,7 @@ const FinanceManagement = () => {
                     dataSource={filteredExpenses}
                     rowKey="id"
                     loading={loading}
+                    scroll={{ x: 700 }}
                     pagination={{ pageSize: 10 }}
                 />
             </Card>

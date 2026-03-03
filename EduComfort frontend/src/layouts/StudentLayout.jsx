@@ -30,6 +30,7 @@ import LanguageSwitcher from '../components/LanguageSwitcher';
 import StudentBottomNav from '../components/common/StudentBottomNav';
 import { useBranding } from '../contexts/BrandingContext';
 import EduLogo from '../components/EduLogo';
+import { ASSET_BASE_URL } from '../api/config';
 
 const { Header, Sider, Content } = Layout;
 const { Text } = Typography;
@@ -69,8 +70,8 @@ const StudentLayout = () => {
   // Dynamic branding based on user affiliation via Context
   const brandName = branding?.brand_name || branding?.name || 'EduComfort';
   const logoUrl = branding?.logo_url
-    ? (branding.logo_url.startsWith('http') ? branding.logo_url : `http://localhost:8000${branding.logo_url}`)
-    : 'http://localhost:8000/uploads/logos/default_educomfort.png';
+    ? (branding.logo_url.startsWith('http') ? branding.logo_url : `${ASSET_BASE_URL}${branding.logo_url}`)
+    : `${ASSET_BASE_URL}/uploads/logos/default_educomfort.png`;
 
   // Gamification data
   const userXP = currentUser?.xp || 0;
@@ -255,7 +256,8 @@ const StudentLayout = () => {
             bottom: 0,
             zIndex: 100,
             background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)',
-            boxShadow: '4px 0 24px rgba(0,0,0,0.05)'
+            boxShadow: '4px 0 24px rgba(0,0,0,0.05)',
+            overflowY: "auto"
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -338,7 +340,7 @@ const StudentLayout = () => {
 
             <Avatar
               size={screens.xs ? 36 : 40}
-              src={currentUser?.avatar?.startsWith('http') ? currentUser.avatar : (currentUser?.avatar ? `http://localhost:8000${currentUser.avatar}` : null)}
+              src={currentUser?.avatar?.startsWith('http') ? currentUser.avatar : (currentUser?.avatar ? `${ASSET_BASE_URL}${currentUser.avatar}` : null)}
               style={{
                 background: 'linear-gradient(135deg, #0061f2 0%, #00c6f9 100%)',
                 color: '#fff',

@@ -614,18 +614,6 @@ def delete_material(
     return {"message": "Material deleted successfully"}
 
 
-@router.get("/debug/materials")
-def debug_all_materials(db: Session = Depends(get_db)):
-    """Temporary debug endpoint to view all materials"""
-    materials = db.query(Material).all()
-    return [{
-        "id": m.id,
-        "title": m.title,
-        "group_id": m.group_id,
-        "teacher_id": m.teacher_id,
-        "file_path": m.file_path
-    } for m in materials]
-
 
 @router.get("/attendance")
 def get_attendance_overview(

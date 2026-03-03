@@ -1,180 +1,129 @@
-﻿import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Typography, Avatar, Badge, Progress, Empty, Spin, Button, message } from 'antd';
-import { TrophyOutlined, StarOutlined, FireOutlined, RocketOutlined, CheckCircleFilled } from '@ant-design/icons';
+﻿import React from 'react';
+import { Button } from 'antd';
+import { LockOutlined, TrophyOutlined, RocketOutlined } from '@ant-design/icons';
 import { motion } from 'framer-motion';
-import axios from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 
-const { Title, Text } = Typography;
-
+/**
+ * Achievements page — temporarily locked while gamification system is being built.
+ * Leaderboard competition certificates are visible in the Student Dashboard.
+ */
 const Achievements = () => {
-    const [loading, setLoading] = useState(true);
-    const [stats, setStats] = useState({
-        xp: 0,
-        level: 1,
-        achievements_earned: 0,
-        total_achievements: 0,
-        achievements_completion: 0
-    });
-    const [achievements, setAchievements] = useState([]);
-
-    useEffect(() => {
-        fetchData();
-    }, []);
-
-    const fetchData = async () => {
-        try {
-            setLoading(true);
-            const [statsRes, achievementsRes] = await Promise.all([
-                axios.get('/gamification/stats'),
-                axios.get('/gamification/achievements')
-            ]);
-
-            setStats({
-                ...statsRes.data,
-                achievements_completion: statsRes.data.total_achievements > 0
-                    ? Math.round((statsRes.data.achievements_earned / statsRes.data.total_achievements) * 100)
-                    : 0
-            });
-            setAchievements(achievementsRes.data);
-
-            if (achievementsRes.data.length === 0) {
-                await axios.post('/gamification/seed-achievements');
-                const retryRes = await axios.get('/gamification/achievements');
-                setAchievements(retryRes.data);
-            }
-
-        } catch (error) {
-            console.error('Error fetching achievements:', error);
-            message.error('Failed to load achievements');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const IconMap = {
-        RocketOutlined: <RocketOutlined />,
-        FireOutlined: <FireOutlined />,
-        StarOutlined: <StarOutlined />,
-        TrophyOutlined: <TrophyOutlined />
-    };
-
-    if (loading) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <Spin size="large" />
-            </div>
-        );
-    }
+    const navigate = useNavigate();
 
     return (
-        <div style={{ padding: 24, paddingBottom: 48 }}>
-            <Title level={2}>Achievements</Title>
-            <Text type="secondary">Track your progress and unlock badges</Text>
+        <div style={{
+            minHeight: '80vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 32,
+        }}>
+            <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: 'easeOut' }}
+                style={{ textAlign: 'center', maxWidth: 480 }}
+            >
+                {/* Lock icon backdrop */}
+                <div style={{
+                    width: 110,
+                    height: 110,
+                    borderRadius: '50%',
+                    background: 'linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 28px',
+                    boxShadow: '0 12px 40px rgba(99,102,241,0.15)',
+                    position: 'relative',
+                }}>
+                    <TrophyOutlined style={{ fontSize: 44, color: '#6366f1' }} />
+                    <div style={{
+                        position: 'absolute',
+                        bottom: 6,
+                        right: 6,
+                        width: 32,
+                        height: 32,
+                        borderRadius: '50%',
+                        background: '#fff',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                    }}>
+                        <LockOutlined style={{ fontSize: 16, color: '#94a3b8' }} />
+                    </div>
+                </div>
 
-            <Row gutter={[16, 16]} style={{ marginTop: 24 }}>
-                <Col xs={24} sm={12} lg={6}>
-                    <Card bordered={false} style={{ borderRadius: 12 }}>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontSize: 32, fontWeight: 'bold', color: '#0061f2' }}>
-                                {stats.xp}
-                            </div>
-                            <Text type="secondary">Total XP</Text>
+                <h2 style={{
+                    fontSize: 26,
+                    fontWeight: 800,
+                    color: '#0f172a',
+                    marginBottom: 12,
+                    letterSpacing: '-0.5px',
+                }}>
+                    Yutuqlar Tez Kunda
+                </h2>
+
+                <p style={{
+                    fontSize: 15,
+                    color: '#64748b',
+                    lineHeight: 1.7,
+                    marginBottom: 8,
+                }}>
+                    Gamifikatsiya tizimi hozirda ishlab chiqilmoqda. Yaqin orada XP, darajalar va yutuqlar bilan to'liq yangi tajriba taqdim etiladi!
+                </p>
+
+                <p style={{
+                    fontSize: 13,
+                    color: '#94a3b8',
+                    marginBottom: 32,
+                }}>
+                    💡 O'qituvchi tomonidan o'tkazilgan musobaqalar natijalari esa hozirda dashboard da ko'rinadi.
+                </p>
+
+                {/* Feature preview cards */}
+                <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 32 }}>
+                    {[
+                        { icon: '⭐', label: 'XP balllar' },
+                        { icon: '📈', label: 'Darajalar' },
+                        { icon: '🏅', label: 'Nishonlar' },
+                    ].map((item) => (
+                        <div key={item.label} style={{
+                            background: '#f8fafc',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: 12,
+                            padding: '12px 16px',
+                            fontSize: 13,
+                            color: '#475569',
+                            textAlign: 'center',
+                            minWidth: 90,
+                        }}>
+                            <div style={{ fontSize: 22, marginBottom: 4 }}>{item.icon}</div>
+                            {item.label}
                         </div>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                    <Card bordered={false} style={{ borderRadius: 12 }}>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontSize: 32, fontWeight: 'bold', color: '#7c3aed' }}>
-                                {stats.level}
-                            </div>
-                            <Text type="secondary">Current Level</Text>
-                        </div>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                    <Card bordered={false} style={{ borderRadius: 12 }}>
-                        <div style={{ textAlign: 'center' }}>
-                            <div style={{ fontSize: 32, fontWeight: 'bold', color: '#00d97e' }}>
-                                {stats.achievements_earned}
-                            </div>
-                            <Text type="secondary">Achievements Earned</Text>
-                        </div>
-                    </Card>
-                </Col>
-                <Col xs={24} sm={12} lg={6}>
-                    <Card bordered={false} style={{ borderRadius: 12 }}>
-                        <div style={{ textAlign: 'center' }}>
-                            <Progress
-                                type="circle"
-                                percent={stats.achievements_completion}
-                                width={80}
-                            />
-                            <div style={{ marginTop: 8 }}>
-                                <Text type="secondary">Completion</Text>
-                            </div>
-                        </div>
-                    </Card>
-                </Col>
-            </Row>
-
-            <Title level={3} style={{ marginTop: 32 }}>All Achievements</Title>
-
-            {achievements.length === 0 ? (
-                <Empty description="No achievements found.">
-                    <Button type="primary" onClick={fetchData}>Refresh</Button>
-                </Empty>
-            ) : (
-                <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
-                    {achievements.map((achievement, index) => (
-                        <Col xs={24} sm={12} lg={8} xl={6} key={achievement.id}>
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                            >
-                                <Card
-                                    hoverable
-                                    style={{
-                                        textAlign: 'center',
-                                        background: achievement.earned ? '#f0f9ff' : '#fafafa',
-                                        border: achievement.earned ? '2px solid #00c6f9' : '1px solid #d9d9d9',
-                                        borderRadius: 16,
-                                        height: '100%',
-                                        opacity: achievement.earned ? 1 : 0.7
-                                    }}
-                                    styles={{ body: { padding: 24 } }}
-                                >
-                                    <Avatar
-                                        size={80}
-                                        icon={IconMap[achievement.icon] || <StarOutlined />}
-                                        style={{
-                                            background: achievement.earned ? '#00c6f9' : '#d9d9d9',
-                                            color: '#fff',
-                                            marginBottom: 16
-                                        }}
-                                    />
-
-                                    <Title level={5} style={{ marginBottom: 8 }}>
-                                        {achievement.name}
-                                    </Title>
-
-                                    <Text type="secondary" style={{ fontSize: 13, display: 'block', minHeight: 40 }}>
-                                        {achievement.description}
-                                    </Text>
-
-                                    <div style={{ marginTop: 16 }}>
-                                        <Badge
-                                            count={`+${achievement.xp_reward} XP`}
-                                            style={{ backgroundColor: achievement.earned ? '#52c41a' : '#bfbfbf' }}
-                                        />
-                                    </div>
-                                </Card>
-                            </motion.div>
-                        </Col>
                     ))}
-                </Row>
-            )}
+                </div>
+
+                <Button
+                    type="primary"
+                    icon={<RocketOutlined />}
+                    size="large"
+                    onClick={() => navigate('/student/dashboard')}
+                    style={{
+                        background: 'linear-gradient(135deg, #6366f1, #4f46e5)',
+                        border: 'none',
+                        borderRadius: 10,
+                        fontWeight: 600,
+                        height: 48,
+                        paddingInline: 28,
+                    }}
+                >
+                    Dashboardga qaytish
+                </Button>
+            </motion.div>
         </div>
     );
 };

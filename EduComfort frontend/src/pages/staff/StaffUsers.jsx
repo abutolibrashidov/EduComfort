@@ -366,7 +366,7 @@ const StaffUsers = () => {
           </Select>
         </Space>
 
-        <Table
+        <Table scroll={{ x: 'max-content' }}
           columns={columns}
           dataSource={filteredUsers}
           rowKey="id"

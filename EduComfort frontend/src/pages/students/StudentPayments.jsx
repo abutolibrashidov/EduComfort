@@ -159,7 +159,7 @@ const StudentPayments = () => {
             image={Empty.PRESENTED_IMAGE_SIMPLE}
           />
         ) : (
-          <Table
+          <Table scroll={{ x: 'max-content' }}
             dataSource={payments}
             columns={columns}
             rowKey="id"

@@ -277,6 +277,7 @@ const AllInstitutions = () => {
                 dataSource={institutions}
                 rowKey="id"
                 loading={loading}
+                scroll={{ x: 900 }}
                 pagination={{ pageSize: 10 }}
             />
 
@@ -312,7 +313,14 @@ const AllInstitutions = () => {
                             { pattern: /^[a-z0-9-]+$/, message: 'Only lowercase letters, digits, and hyphens' }
                         ]}
                     >
-                        <Input placeholder="e.g. sevenplus" addonBefore="app/" />
+                        <Space.Compact style={{ width: '100%' }}>
+                            <Input
+                                disabled
+                                style={{ width: 60, color: '#888', background: '#f5f5f5', textAlign: 'center' }}
+                                value="app/"
+                            />
+                            <Input placeholder="e.g. sevenplus" style={{ flex: 1 }} />
+                        </Space.Compact>
                     </Form.Item>
 
                     <Form.Item label="Subscription Plan" name="subscription_plan">

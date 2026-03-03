@@ -184,7 +184,7 @@ const TeacherReviewPage = () => {
                         </Text>
                     </div>
                 ) : (
-                    <Table
+                    <Table scroll={{ x: 'max-content' }}
                         columns={columns}
                         dataSource={pages}
                         rowKey="id"

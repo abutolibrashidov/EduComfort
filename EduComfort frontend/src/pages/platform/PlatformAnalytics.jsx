@@ -153,7 +153,7 @@ const PlatformAnalytics = () => {
                 {loading ? (
                     <Skeleton active paragraph={{ rows: 5 }} />
                 ) : (
-                    <Table
+                    <Table scroll={{ x: 'max-content' }}
                         dataSource={institutions}
                         columns={columns}
                         rowKey="id"

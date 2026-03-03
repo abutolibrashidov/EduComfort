@@ -22,14 +22,27 @@ const TeacherExamCreator = () => {
     const fetchMetadata = async () => {
         try {
             const [subjectsResp, groupsResp] = await Promise.all([
-                axiosClient.get('/subjects'),
+                axiosClient.get('/subjects').catch(() => ({ data: [] })),
                 axiosClient.get('/teacher/groups')
             ]);
-            setSubjects(subjectsResp.data);
-            setGroups(groupsResp.data);
+            const fetchedGroups = groupsResp.data || [];
+            setGroups(fetchedGroups);
+
+            let fetchedSubjects = subjectsResp.data || [];
+
+            // ✅ Fallback: if no subjects in DB for this institution,
+            // derive unique subjects from the teacher's own assigned groups
+            if (fetchedSubjects.length === 0 && fetchedGroups.length > 0) {
+                const seen = new Set();
+                fetchedSubjects = fetchedGroups
+                    .filter(g => g.subject_id && g.subject_name && !seen.has(g.subject_id) && seen.add(g.subject_id))
+                    .map(g => ({ id: g.subject_id, name: g.subject_name }));
+            }
+
+            setSubjects(fetchedSubjects);
         } catch (err) {
             console.error('Error fetching metadata:', err);
-            message.error('Failed to load subjects or groups');
+            message.warning('Guruhlar yuklanmadi, sahifani yangilang');
         }
     };
 

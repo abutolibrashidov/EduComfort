@@ -250,7 +250,7 @@ const TeacherLeaderboards = () => {
                                     </Row>
                                 </div>
 
-                                <Table
+                                <Table scroll={{ x: 'max-content' }}
                                     dataSource={rankings}
                                     columns={columns}
                                     rowKey="student_id"

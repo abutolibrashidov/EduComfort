@@ -133,6 +133,7 @@ const AdminTeacherPayments = () => {
         >
             <Card style={{ borderRadius: 12, border: `1px solid ${B.border}` }}>
                 <Table columns={teachersColumns} dataSource={teachers} rowKey="id" loading={loading}
+                    scroll={{ x: 600 }}
                     pagination={{ pageSize: 10, showTotal: (t) => `Jami ${t} ta o'qituvchi` }}
                 />
             </Card>

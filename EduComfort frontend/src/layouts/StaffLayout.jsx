@@ -21,6 +21,7 @@ import { theme } from "../theme";
 import { fadeInUp } from "../theme/animations";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import axiosClient from "../api/axiosClient";
+import { ASSET_BASE_URL } from "../api/config";
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -126,7 +127,7 @@ export default function StaffLayout() {
           }}>
             {branding.logo_url ? (
               <img
-                src={`http://localhost:8000${branding.logo_url}`}
+                src={`${ASSET_BASE_URL}${branding.logo_url}`}
                 alt={branding.brand_name}
                 style={{ width: "100%", height: "100%", objectFit: "contain" }}
               />
@@ -252,6 +253,13 @@ export default function StaffLayout() {
           style={{
             background: theme.gradients.ocean,
             boxShadow: theme.shadows.xl,
+            height: '100vh',
+            position: 'fixed',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            zIndex: 100,
+            overflowY: "auto"
           }}
           trigger={null}
         >
@@ -346,7 +354,7 @@ export default function StaffLayout() {
                 <Avatar
                   style={{ background: theme.gradients.info }}
                   size={isMobile ? "default" : "large"}
-                  src={user?.avatar?.startsWith('http') ? user.avatar : (user?.avatar ? `http://localhost:8000${user.avatar}` : null)}
+                  src={user?.avatar?.startsWith('http') ? user.avatar : (user?.avatar ? `${ASSET_BASE_URL}${user.avatar}` : null)}
                 >
                   {!user?.avatar && initials}
                 </Avatar>
@@ -367,9 +375,10 @@ export default function StaffLayout() {
 
         {/* Content Area */}
         <Content style={{
-          padding: "24px",
+          padding: isMobile ? "12px" : "24px",
           background: theme.colors.background.default,
           minHeight: "calc(100vh - 64px)",
+          overflowX: "hidden",
         }}>
           <motion.div {...fadeInUp}>
             <Outlet />

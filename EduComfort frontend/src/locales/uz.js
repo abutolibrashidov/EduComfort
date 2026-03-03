@@ -1,5 +1,13 @@
 export const uz = {
     // General
+    "full_name": "F.I.SH. (To'liq ism)",
+    "phone": "Telefon raqami",
+    "password": "Parol",
+    "already_have_account": "Hisobingiz bormi?",
+    "copyright": "© 2025 EduComfort. Barcha huquqlar himoyalangan.",
+    "powered_by": "EduComfort tomonidan taqdim etiladi",
+    "privacy_policy": "Maxfiylik siyosati",
+    "terms_of_service": "Foydalanish shartlari",
     "super_admin": "Super Admin",
     "admin": "Admin",
     "common.save": "Saqlash",
@@ -147,6 +155,19 @@ export const uz = {
     // CTA
     "lp_cta_title": "Bugun boshlang – bepul!",
     "lp_cta_sub": "Ta'lim markazingizni raqamli dunyoga olib chiqing. Hisob yarating va 14 kun bepul sinab ko'ring.",
+
+    // Registration
+    "reg.center_title": "O'quv markazingizni ro'yxatdan o'tkazing",
+    "reg.center_sub": "O'z shaxsiy platformangizni yarating",
+    "reg.inst_name": "Markaz / Akademiya nomi",
+    "reg.inst_placeholder": "Masalan: Seven Plus Academy",
+    "reg.agreement": "Siz Foydalanish shartlari va Maxfiylik siyosatiga rozi bo'lishingiz kerak",
+    "reg.i_agree": "Men",
+    "reg.and": "va",
+    "reg.read_agree": "o'qib chiqdim va rozi ekanligimni tasdiqlayman",
+    "reg.btn": "Markazni ro'yxatdan o'tkazish",
+    "reg.success": "Markaz muvaffaqiyatli ro'yxatdan o'tkazildi! Yo'naltirilmoqda...",
+    "reg.failed": "Ro'yxatdan o'tishda xatolik yuz berdi. Iltimos, qaytadan urinib ko'ring.",
 
     // Navigation
     "nav.dashboard": "Boshqaruv Paneli",

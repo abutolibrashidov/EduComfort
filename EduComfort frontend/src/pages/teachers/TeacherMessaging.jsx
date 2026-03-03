@@ -17,6 +17,7 @@ import {
   Tag,
   Spin,
   Modal,
+  Grid,
   message as antMessage,
   Drawer,
   Tooltip
@@ -45,6 +46,7 @@ dayjs.extend(relativeTime);
 const { TextArea } = Input;
 const { Text, Title } = Typography;
 const { Option } = Select;
+const { useBreakpoint } = Grid;
 
 export default function TeacherMessaging() {
   const [conversations, setConversations] = useState([]);
@@ -62,6 +64,8 @@ export default function TeacherMessaging() {
   const messagesEndRef = useRef(null);
   const currentUser = getCurrentUser();
   const { t } = useTranslation();
+  const screens = useBreakpoint();
+  const isMobile = !screens.md;
 
   // Scroll to bottom helper
   const scrollToBottom = () => {
@@ -333,8 +337,8 @@ export default function TeacherMessaging() {
       </div>
 
       <div style={{ flex: 1, background: '#fff', borderRadius: 24, overflow: 'hidden', display: 'flex', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-        {/* Sidebar - Desktop */}
-        <div style={{ width: 350, borderRight: '1px solid #f0f0f0', display: window.innerWidth < 768 ? 'none' : 'block' }}>
+        {/* Sidebar - Desktop (hidden on mobile until chat is opened via drawer) */}
+        <div style={{ width: 350, borderRight: '1px solid #f0f0f0', display: isMobile ? 'none' : 'block' }}>
           <ConversationList />
         </div>
 
@@ -366,10 +370,9 @@ export default function TeacherMessaging() {
                 <Space size={16}>
                   <Button
                     icon={<ArrowLeftOutlined />}
-                    className="md:hidden"
-                    style={{ display: window.innerWidth >= 768 ? 'none' : 'inline-flex' }} // Only show on mobile
+                    style={{ display: isMobile ? 'inline-flex' : 'none' }}
                     type="text"
-                    onClick={() => { setSelectedChat(null); setMobileDrawerVisible(true); }} // Go back logic for mobile
+                    onClick={() => { setSelectedChat(null); setMobileDrawerVisible(true); }}
                   />
                   <Avatar
                     size={48}
@@ -388,7 +391,7 @@ export default function TeacherMessaging() {
                     </Text>
                   </div>
                 </Space>
-                <Button icon={<MenuUnfoldOutlined />} className="md:hidden" onClick={() => setMobileDrawerVisible(true)} style={{ display: window.innerWidth >= 768 ? 'none' : 'inline-flex' }} />
+                <Button icon={<MenuUnfoldOutlined />} onClick={() => setMobileDrawerVisible(true)} style={{ display: isMobile ? 'inline-flex' : 'none' }} />
               </div>
 
               {/* Messages */}
@@ -455,7 +458,12 @@ export default function TeacherMessaging() {
               </div>
 
               {/* Input Area */}
-              <div style={{ padding: 20, background: '#fff', borderTop: '1px solid #f0f0f0' }}>
+              <div style={{
+                padding: isMobile ? '10px 12px' : '20px',
+                background: '#fff',
+                borderTop: '1px solid #f0f0f0',
+                paddingBottom: isMobile ? 'calc(10px + env(safe-area-inset-bottom))' : '20px',
+              }}>
                 <div style={{
                   display: 'flex',
                   background: '#f8fafc',
@@ -503,7 +511,7 @@ export default function TeacherMessaging() {
               <Button
                 type="primary"
                 shape="round"
-                style={{ marginTop: 24, display: window.innerWidth < 768 ? 'inline-block' : 'none' }}
+                style={{ marginTop: 24, display: isMobile ? 'inline-block' : 'none' }}
                 onClick={() => setMobileDrawerVisible(true)}
               >
                 {t('chat.all_conversations')}

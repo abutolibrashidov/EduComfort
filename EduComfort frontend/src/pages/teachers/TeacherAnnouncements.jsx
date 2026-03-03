@@ -44,7 +44,7 @@ const TeacherAnnouncements = () => {
     const fetchAnnouncements = async () => {
         setLoading(true);
         try {
-            const response = await axiosClient.get("/announcements/");
+            const response = await axiosClient.get("/announcements");
             setAnnouncements(response.data);
         } catch (error) {
             console.error("Error fetching announcements:", error);
@@ -56,7 +56,7 @@ const TeacherAnnouncements = () => {
 
     const handleCreate = async (values) => {
         try {
-            await axiosClient.post("/announcements/", {
+            await axiosClient.post("/announcements", {
                 title: values.title,
                 content: values.content,
                 target_audience: "all"

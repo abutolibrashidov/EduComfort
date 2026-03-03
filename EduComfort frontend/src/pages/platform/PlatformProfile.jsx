@@ -126,6 +126,7 @@ const PlatformProfile = () => {
                         email: user?.email,
                         first_name: user?.first_name,
                         last_name: user?.last_name,
+                        phone_number: user?.phone_number,
                     }}
                     onFinish={onFinish}
                 >
@@ -143,6 +144,13 @@ const PlatformProfile = () => {
                         rules={[{ required: true, message: 'Last name is required' }]}
                     >
                         <Input prefix={<UserOutlined />} size="large" placeholder="e.g. Rashidov" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label="Phone Number"
+                        name="phone_number"
+                    >
+                        <Input prefix={<UserOutlined />} size="large" placeholder="+998..." />
                     </Form.Item>
 
                     <Form.Item

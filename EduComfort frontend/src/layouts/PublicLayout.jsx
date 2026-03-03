@@ -175,20 +175,28 @@ const PublicLayout = () => {
                 </AnimatePresence>
             </Content>
 
-            <Footer style={{ textAlign: 'center', background: '#f8fafc', padding: '32px 0' }}>
-                <Space orientation="vertical" size="small">
-                    <Text type="secondary">{t('copyright').replace('EduComfort', brandName)}</Text>
-                    <Space size="middle" style={{ marginTop: 8 }}>
-                        <Button type="link" size="small" onClick={() => navigate('/privacy-policy')} style={{ color: '#8c8c8c' }}>
-                            {t('privacy_policy', 'Privacy Policy')}
+            <Footer style={{ textAlign: 'center', background: '#f8fafc', padding: '40px 0', borderTop: '1px solid #f1f5f9' }}>
+                <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                    <Space size="large" style={{ marginBottom: 8 }}>
+                        <Button type="link" size="small" onClick={() => navigate('/privacy-policy')} style={{ color: '#64748b', fontWeight: 500 }}>
+                            {t('privacy_policy')}
                         </Button>
-                        <Button type="link" size="small" onClick={() => navigate('/terms-of-service')} style={{ color: '#8c8c8c' }}>
-                            {t('terms_of_service', 'Terms of Service')}
+                        <Button type="link" size="small" onClick={() => navigate('/terms-of-service')} style={{ color: '#64748b', fontWeight: 500 }}>
+                            {t('terms_of_service')}
                         </Button>
                     </Space>
-                    <Text type="secondary" style={{ fontSize: '12px', opacity: 0.7, marginTop: 8 }}>
-                        {t('powered_by')}
-                    </Text>
+
+                    <div style={{ opacity: 0.6 }}>
+                        <Text style={{ color: '#94a3b8', fontSize: '13px' }}>
+                            {t('copyright').replace('EduComfort', brandName)}
+                        </Text>
+                    </div>
+
+                    <div style={{ marginTop: 4 }}>
+                        <Text style={{ fontSize: '11px', color: '#cbd5e1', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+                            {t('powered_by')}
+                        </Text>
+                    </div>
                 </Space>
             </Footer>
         </Layout>

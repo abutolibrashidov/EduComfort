@@ -109,7 +109,7 @@ const StaffPayments = () => {
                     style={{ borderRadius: 16, boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}
                     styles={{ body: { padding: 24 } }}
                 >
-                    <Table
+                    <Table scroll={{ x: 'max-content' }}
                         columns={salaryColumns}
                         dataSource={salaryData}
                         rowKey="id"

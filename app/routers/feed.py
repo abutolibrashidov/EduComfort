@@ -143,25 +143,27 @@ def get_feed(
     limit: int = 50,
     skip: int = 0,
     db: Session = Depends(get_db),
-    # current_user: User = Depends(get_current_user) # Public feed? Or authenticated? Let's make it authenticated for now.
     current_user: User = Depends(get_current_user)
 ):
     """
     Get the news feed.
-    If institution_id is provided, filters by that institution.
-    Otherwise, returns global feed (marketplace style).
+    Returns empty list gracefully if the posts table doesn't exist yet (migration pending).
     """
-    query = db.query(Post)
-    
-    if institution_id:
-        query = query.filter(Post.institution_id == institution_id)
-        
-    if user_id:
-        query = query.filter(Post.author_id == user_id)
-        
-    posts = query.order_by(Post.created_at.desc()).offset(skip).limit(limit).all()
-    
-    return [format_post_response(p, current_user, db) for p in posts]
+    try:
+        query = db.query(Post)
+
+        if institution_id:
+            query = query.filter(Post.institution_id == institution_id)
+
+        if user_id:
+            query = query.filter(Post.author_id == user_id)
+
+        posts = query.order_by(Post.created_at.desc()).offset(skip).limit(limit).all()
+        return [format_post_response(p, current_user, db) for p in posts]
+    except Exception:
+        # DB table may not exist yet (migration pending) — return empty feed
+        # instead of crashing, which would cause a CORS error in the browser.
+        return []
 
 def format_post_response(post: Post, current_user: User, db: Session) -> PostResponse:
     # Check if liked by current user

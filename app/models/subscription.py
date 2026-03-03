@@ -5,9 +5,10 @@ import enum
 from app.models.base import Base
 
 class SubscriptionPlan(str, enum.Enum):
-    BRONZE = "bronze" # Management only
-    SILVER = "silver" # Management + Gamification (No marketplace)
-    GOLD = "gold"     # Full Scale (Everything)
+    SMALL = "small"           # Up to 50 students
+    MEDIUM = "medium"         # 51-150 students
+    LARGE = "large"           # 151-300 students
+    ENTERPRISE = "enterprise" # 300+ students
 
 class SubscriptionStatus(str, enum.Enum):
     ACTIVE = "active"
@@ -21,7 +22,7 @@ class InstitutionSubscription(Base):
     id = Column(Integer, primary_key=True, index=True)
     institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), unique=True, nullable=False)
     
-    plan = Column(SqlEnum(SubscriptionPlan), default=SubscriptionPlan.SILVER)
+    plan = Column(SqlEnum(SubscriptionPlan), default=SubscriptionPlan.SMALL)
     status = Column(SqlEnum(SubscriptionStatus), default=SubscriptionStatus.ACTIVE)
     
     start_date = Column(DateTime, default=datetime.utcnow)

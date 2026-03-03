@@ -259,6 +259,7 @@ const TeacherExamResults = () => {
                         columns={columns}
                         dataSource={submissions}
                         rowKey="id"
+                        scroll={{ x: 700 }}
                         pagination={{ pageSize: 10 }}
                     />
                 </Card>

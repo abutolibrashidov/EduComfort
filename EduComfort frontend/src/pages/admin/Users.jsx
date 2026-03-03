@@ -6,18 +6,20 @@ import {
 import {
   PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined,
   UserOutlined, PhoneOutlined, MailOutlined, LockOutlined,
-  EyeOutlined, StarOutlined,
+  StarOutlined, EyeOutlined,
 } from '@ant-design/icons';
-import { Rate } from 'antd';
+import { Rate, Descriptions, Drawer } from 'antd';
 import axiosClient from '../../api/axiosClient';
 import { AdminPage, B, roleTagStyle, statusTagStyle, Pill } from '../../components/AdminPage';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const { Search } = Input;
 const { Option } = Select;
 
 export default function Users() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -28,11 +30,13 @@ export default function Users() {
   const [roleFilter, setRoleFilter] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
 
-  // Rating modal
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
   const [ratingTarget, setRatingTarget] = useState(null);
   const [ratingValue, setRatingValue] = useState(0);
   const [ratingComment, setRatingComment] = useState('');
+
+  // View user drawer
+  const [viewUser, setViewUser] = useState(null);
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -98,27 +102,18 @@ export default function Users() {
     });
   };
 
-  const handleImpersonate = (user) => {
-    Modal.confirm({
-      title: 'Rol sifatida ko\'rish',
-      content: `${user.first_name} sifatida kirasizmi?`,
-      okText: 'Ha, kirish',
-      onOk: async () => {
-        try {
-          const { data } = await axiosClient.post(`/auth/impersonate/${user.id}`);
-          // Only save the original token if we're NOT already impersonating
-          if (!localStorage.getItem('sp_platform_token')) {
-            localStorage.setItem('sp_platform_token', localStorage.getItem('sp_token'));
-            localStorage.setItem('sp_platform_user', localStorage.getItem('sp_user'));
-          }
-          localStorage.setItem('sp_token', data.access_token);
-          localStorage.setItem('sp_user', JSON.stringify(data.user));
-          const roleRoutes = { admin: '/admin', super_admin: '/admin', teacher: '/teacher', student: '/student', staff: '/staff' };
-          window.location.href = roleRoutes[data.user.role] || '/';
-        } catch { message.error("Kirish amalga oshmadi"); }
-      },
-    });
+  // Navigate to the user's role-specific dashboard
+  const getDashboardPath = (role) => {
+    switch (role) {
+      case 'student': return '/student/dashboard';
+      case 'teacher': return '/teacher/dashboard';
+      case 'staff': return '/admin';
+      case 'admin': return '/admin';
+      case 'super_admin': return '/admin';
+      default: return '/admin';
+    }
   };
+
 
   const submitRating = async () => {
     if (!ratingValue) { message.error("Yulduzcha tanlang"); return; }
@@ -198,10 +193,6 @@ export default function Users() {
       key: 'actions',
       render: (_, r) => (
         <Space>
-          <Button type="text" size="small" icon={<EyeOutlined />}
-            style={{ color: B.teal }} onClick={() => handleImpersonate(r)}
-            title="Rol sifatida ko'rish"
-          />
           {r.role === 'teacher' && (
             <Button type="text" size="small" icon={<StarOutlined />}
               style={{ color: '#d97706' }}
@@ -209,6 +200,11 @@ export default function Users() {
               title="Reyting berish"
             />
           )}
+          <Button type="text" size="small" icon={<EyeOutlined />}
+            style={{ color: '#0891b2' }}
+            onClick={() => setViewUser(r)}
+            title="Dashboardni ko'rish"
+          />
           <Button type="text" size="small" icon={<EditOutlined />}
             style={{ color: B.primary }}
             onClick={() => {
@@ -378,6 +374,70 @@ export default function Users() {
           placeholder="Bu o'qituvchi haqida fikringizni yozing..."
         />
       </Modal>
+
+      {/* View User Drawer */}
+      <Drawer
+        open={!!viewUser}
+        onClose={() => setViewUser(null)}
+        title={
+          viewUser && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Avatar style={{ background: B.primary, fontWeight: 700 }} size={40}>
+                {viewUser.first_name?.[0]?.toUpperCase()}
+              </Avatar>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 15 }}>{viewUser.first_name} {viewUser.last_name}</div>
+                <div style={{ fontSize: 12, color: '#94a3b8' }}>{viewUser.email || viewUser.phone_number}</div>
+              </div>
+            </div>
+          )
+        }
+        size="large"
+        footer={
+          viewUser && (
+            <Button
+              type="primary"
+              icon={<EyeOutlined />}
+              block
+              style={{ background: '#0891b2', borderColor: '#0891b2', height: 44, fontWeight: 600 }}
+              onClick={() => {
+                const path = getDashboardPath(viewUser.role);
+                setViewUser(null);
+                navigate(path);
+              }}
+            >
+              {viewUser.first_name} dashboardiga o'tish
+            </Button>
+          )
+        }
+      >
+        {viewUser && (
+          <Descriptions column={1} bordered size="small">
+            <Descriptions.Item label="Ism">{viewUser.first_name} {viewUser.last_name}</Descriptions.Item>
+            <Descriptions.Item label="Telefon">{viewUser.phone_number || '—'}</Descriptions.Item>
+            <Descriptions.Item label="Email">{viewUser.email || '—'}</Descriptions.Item>
+            <Descriptions.Item label="Rol">
+              <Pill bg={roleTagStyle(viewUser.role).bg} color={roleTagStyle(viewUser.role).color}>
+                {roleTagStyle(viewUser.role).label}
+              </Pill>
+            </Descriptions.Item>
+            <Descriptions.Item label="Holat">
+              <Pill bg={viewUser.is_active ? '#d1fae5' : '#fee2e2'} color={viewUser.is_active ? '#065f46' : '#991b1b'}>
+                {viewUser.is_active ? 'Faol' : 'Faol emas'}
+              </Pill>
+            </Descriptions.Item>
+            {viewUser.student_groups?.length > 0 && (
+              <Descriptions.Item label="Guruhlar">
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                  {viewUser.student_groups.map(g => (
+                    <Pill key={g.id} bg="#e0f2fe" color="#0369a1">{g.name}</Pill>
+                  ))}
+                </div>
+              </Descriptions.Item>
+            )}
+          </Descriptions>
+        )}
+      </Drawer>
     </AdminPage>
   );
 }

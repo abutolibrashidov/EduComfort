@@ -146,7 +146,7 @@ const ExamDashboard = () => {
                                                     rowKey="id"
                                                     pagination={false}
                                                     showHeader={false}
-                                                    size="small"
+                                                    scroll={{ x: 'max-content' }}
                                                     columns={[
                                                         {
                                                             dataIndex: 'title',
@@ -210,6 +210,7 @@ const ExamDashboard = () => {
                     <Table
                         dataSource={dashboardData.other_exams}
                         rowKey="id"
+                        scroll={{ x: 'max-content' }}
                         columns={[
                             { title: 'Title', dataIndex: 'title', key: 'title' },
                             { title: 'Created', dataIndex: 'created_at', render: d => new Date(d).toLocaleDateString() },

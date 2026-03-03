@@ -27,6 +27,7 @@ import { logout, getCurrentUser } from "../api/auth";
 import axiosClient from "../api/axiosClient";
 import { useBranding } from "../contexts/BrandingContext";
 import { useIsMobile } from "../hooks/useMediaQuery";
+import { ASSET_BASE_URL } from "../api/config";
 
 const { Sider, Header, Content } = Layout;
 const { Text, Title } = Typography;
@@ -77,7 +78,7 @@ const SidebarContent = ({
         }}>
           {branding?.logo_url ? (
             <img
-              src={`http://localhost:8000${branding.logo_url}`}
+              src={`${ASSET_BASE_URL}${branding.logo_url}`}
               alt={branding.brand_name}
               style={{
                 maxHeight: collapsed && !isDrawer ? 32 : 40,
@@ -304,7 +305,8 @@ function TeacherLayout() {
             bottom: 0,
             zIndex: 1000,
             boxShadow: "2px 0 8px rgba(0,0,0,0.15)",
-            background: '#001529' // Fallback
+            background: '#001529', // Fallback
+            overflowY: "auto"
           }}
         >
           <SidebarContent
@@ -384,7 +386,7 @@ function TeacherLayout() {
               )}
               <Avatar
                 icon={!currentUser?.avatar && <UserOutlined />}
-                src={currentUser?.avatar?.startsWith('http') ? currentUser.avatar : (currentUser?.avatar ? `http://localhost:8000${currentUser.avatar}` : null)}
+                src={currentUser?.avatar?.startsWith('http') ? currentUser.avatar : (currentUser?.avatar ? `${ASSET_BASE_URL}${currentUser.avatar}` : null)}
                 style={{ backgroundColor: '#1890ff' }}
               />
             </div>

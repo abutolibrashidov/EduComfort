@@ -170,7 +170,7 @@ const TeacherGradebookExam = () => {
                     </Button>
                 }
             >
-                <Table
+                <Table scroll={{ x: 'max-content' }}
                     columns={columns}
                     dataSource={studentsData}
                     rowKey="student_id"

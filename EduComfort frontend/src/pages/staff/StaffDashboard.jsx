@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   Row,
@@ -43,7 +43,7 @@ const StaffAnnouncementsSection = () => {
   const { t } = useTranslation();
 
   useEffect(() => {
-    axiosClient.get("/announcements/").then((res) => setAnnouncements(res.data)).catch(() => { });
+    axiosClient.get("/announcements").then((res) => setAnnouncements(res.data)).catch(() => { });
   }, []);
 
   if (announcements.length === 0) return null;

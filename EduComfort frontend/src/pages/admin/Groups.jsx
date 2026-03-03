@@ -89,10 +89,10 @@ export default function Groups() {
         end_date: values.dates?.[1]?.format('YYYY-MM-DD'),
       };
       if (modalMode === 'create') {
-        await axiosClient.post('/admin/groups/', payload);
+        await axiosClient.post('/admin/groups', payload);
         message.success("Guruh yaratildi!");
       } else {
-        await axiosClient.put(`/admin/groups/${selectedGroup.id}/`, payload);
+        await axiosClient.put(`/admin/groups/${selectedGroup.id}`, payload);
         message.success("Guruh yangilandi!");
       }
       setIsModalVisible(false); form.resetFields(); fetchGroups();
@@ -104,7 +104,7 @@ export default function Groups() {
       title: "Guruhni o'chirish",
       content: `"${group.name}" guruhini o'chirmoqchimisiz?`,
       okText: "O'chirish", okType: 'danger',
-      onOk: async () => { try { await axiosClient.delete(`/admin/groups/${group.id}/`); message.success("O'chirildi!"); fetchGroups(); } catch { message.error("O'chirib bo'lmadi"); } },
+      onOk: async () => { try { await axiosClient.delete(`/admin/groups/${group.id}`); message.success("O'chirildi!"); fetchGroups(); } catch { message.error("O'chirib bo'lmadi"); } },
     });
   };
 

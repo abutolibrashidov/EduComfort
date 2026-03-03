@@ -87,7 +87,7 @@ def create_group_conversation(db: Session, group_id: int) -> Conversation:
     )
     db.add(teacher_participant)
     
-    # Add all students as participants
+    # Add all active students as participants
     students = db.query(GroupStudent).filter(
         GroupStudent.group_id == group_id,
         GroupStudent.is_active == True
@@ -100,14 +100,25 @@ def create_group_conversation(db: Session, group_id: int) -> Conversation:
         )
         db.add(student_participant)
     
-    # Add all super admins as participants
-    super_admins = db.query(User).filter(User.role == "super_admin").all()
-    for admin in super_admins:
-        admin_participant = ConversationParticipant(
-            conversation_id=conversation.id,
-            user_id=admin.id
-        )
-        db.add(admin_participant)
+    # ✅ INSTITUTION ISOLATION: Only add super_admins from the SAME institution as the group
+    # Do NOT add all system-wide super_admins — that leaks cross-institution data
+    if group.institution_id:
+        institution_admins = db.query(User).filter(
+            User.role == "super_admin",
+            User.institution_id == group.institution_id
+        ).all()
+        for admin in institution_admins:
+            # Avoid duplicate if teacher is also admin
+            already_added = db.query(ConversationParticipant).filter(
+                ConversationParticipant.conversation_id == conversation.id,
+                ConversationParticipant.user_id == admin.id
+            ).first()
+            if not already_added:
+                admin_participant = ConversationParticipant(
+                    conversation_id=conversation.id,
+                    user_id=admin.id
+                )
+                db.add(admin_participant)
     
     db.commit()
     db.refresh(conversation)
@@ -183,17 +194,34 @@ def get_conversations(
     from app.models.group_students import GroupStudent
     from app.security.permissions import is_teacher, is_admin_or_higher
 
-    # Find all groups user belongs to
+    # Find all groups user belongs to (scoped to their institution)
     user_group_ids = []
-    # As Teacher or Admin
-    if is_teacher(current_user) or is_admin_or_higher(current_user):
-        user_group_ids = [g.id for g in db.query(Group).filter(Group.teacher_id == current_user.id).all()]
-    elif current_user.role == "student":
+
+    if current_user.role == "student":
+        # Students: find groups they are actively enrolled in
         enrollments = db.query(GroupStudent).filter(
             GroupStudent.student_id == current_user.id,
             GroupStudent.is_active == True
         ).all()
         user_group_ids = [e.group_id for e in enrollments]
+
+    elif is_teacher(current_user):
+        # Teachers: find groups they teach, scoped to their institution
+        teacher_q = db.query(Group).filter(Group.teacher_id == current_user.id)
+        if current_user.institution_id:
+            teacher_q = teacher_q.filter(Group.institution_id == current_user.institution_id)
+        user_group_ids = [g.id for g in teacher_q.all()]
+
+    elif is_admin_or_higher(current_user):
+        # Admins/super_admins: find all groups in their institution
+        # ✅ ISOLATION: Filter by institution_id, not teacher_id
+        if current_user.institution_id:
+            admin_groups = db.query(Group).filter(
+                Group.institution_id == current_user.institution_id
+            ).all()
+            user_group_ids = [g.id for g in admin_groups]
+        # Platform-level super_admin (no institution_id) gets no auto-sync groups
+        # to avoid being added to every institution's chats
 
     # Ensure conversation exists for each group
     for gid in user_group_ids:
@@ -301,30 +329,24 @@ def create_private_conversation(
     if not other_user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    # Tenant Isolation Check
-    if current_user.role != "super_admin":
-        # 1. If I am institution user, target must be in same institution
-        if current_user.institution_id:
-            if other_user.institution_id != current_user.institution_id and other_user.role != "super_admin":
-                 raise HTTPException(status_code=403, detail="Cannot chat with users outside your institution")
-        
-        # 2. If I am individual (no institution), I can only chat with? 
-        # User said "Individual learners should be isolated".
-        # Maybe they can chat with Super Admin? Or nobody?
-        # For now, if I have no institution, I can't start chat freely unless I'm super admin.
-        if not current_user.institution_id and other_user.role != "super_admin":
-             # Maybe allow if other user is a teacher linked via some enrollment?
-             # But generally, isolation means blocking random chats.
-             # We'll rely on enrollments. If enrolled, checks might pass if logic allowed.
-             # But here we strictly block cross-tenant initiation.
-             pass 
-             # Actually, if I am student in group, I might want to chat with teacher.
-             # But teacher is in institution. 
-             # If I am individual learner, I effectively have NO institution.
-             # If I joined a group, do I get institution_id? 
-             # The system seems to assume User.institution_id is strict.
-             pass
+    # ✅ STRICT INSTITUTION ISOLATION
+    # Platform-level super admins (no institution) can chat with anyone.
+    # Everyone else must be in the same institution.
+    if current_user.role != "super_admin" or current_user.institution_id:
+        # If either party has an institution, they must match
+        my_inst = current_user.institution_id
+        their_inst = other_user.institution_id
+        their_role = other_user.role
 
+        # Allow chatting with platform-level super_admin (institution_id=None)
+        is_platform_admin = (their_role == "super_admin" and not their_inst)
+
+        if not is_platform_admin:
+            if my_inst != their_inst:
+                raise HTTPException(
+                    status_code=403,
+                    detail="Cannot start a conversation with users from a different institution"
+                )
     
     # Can't create conversation with self
     if data.participant_id == current_user.id:

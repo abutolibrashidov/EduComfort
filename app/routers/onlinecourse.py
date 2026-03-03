@@ -61,6 +61,9 @@ async def create_online_course(
         prerequisites=course_data.prerequisites,
         learning_outcomes=course_data.learning_outcomes,
     )
+    # ✅ ISOLATION: stamp the institution so we can filter later
+    if hasattr(OnlineCourse, 'institution_id') and current_user.institution_id:
+        course.institution_id = current_user.institution_id
     
     db.add(course)
     db.commit()
@@ -74,10 +77,26 @@ async def list_online_courses(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """List all online courses"""
+    """List all online courses — scoped to caller's institution"""
     query = db.query(OnlineCourse)
     
-    # Students only see published courses
+    # ✅ ISOLATION: non-platform-admins only see courses from their institution
+    from app.security.permissions import is_platform_owner
+    if not is_platform_owner(current_user):
+        if current_user.institution_id:
+            # If OnlineCourse has institution_id column, use it
+            if hasattr(OnlineCourse, 'institution_id'):
+                query = query.filter(OnlineCourse.institution_id == current_user.institution_id)
+            else:
+                # Fall back to filtering by instructor's institution
+                instructor_ids = [
+                    u.id for u in db.query(User).filter(
+                        User.institution_id == current_user.institution_id
+                    ).all()
+                ]
+                query = query.filter(OnlineCourse.instructor_id.in_(instructor_ids))
+    
+    # Students only see published/active courses
     if current_user.role == "student":
         query = query.filter(OnlineCourse.status == CourseStatus.active)
     

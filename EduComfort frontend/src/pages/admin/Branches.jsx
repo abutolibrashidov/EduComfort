@@ -336,6 +336,7 @@ export default function Branches() {
           dataSource={branches}
           rowKey="id"
           loading={loading}
+          scroll={{ x: 750 }}
           pagination={{
             pageSize: 10,
             showSizeChanger: true,

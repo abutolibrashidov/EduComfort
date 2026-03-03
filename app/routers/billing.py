@@ -69,25 +69,32 @@ def get_plans():
     """Mavjud obuna rejalari"""
     return [
         {
-            "id": "bronze",
-            "name": "🥉 Bronza",
-            "price_example": 100_000,
-            "features": ["Boshqaruv tizimi"],
-            "description": "Kichik o'quv markazlari uchun"
-        },
-        {
-            "id": "silver",
-            "name": "🥈 Kumush",
+            "id": "small",
+            "name": "🌱 Kichik Markaz",
             "price_example": 200_000,
-            "features": ["Boshqaruv", "Gamifikatsiya"],
-            "description": "O'rta o'quv markazlari uchun"
+            "features": ["Barcha imkoniyatlar", "SMS xabarnomalar", "Gamifikatsiya"],
+            "description": "50 tagacha o'quvchisi bor markazlar uchun"
         },
         {
-            "id": "gold",
-            "name": "🥇 Oltin",
-            "price_example": 500_000,
-            "features": ["Barcha imkoniyatlar", "Bozor", "Ustuvor yordam"],
-            "description": "Yirik o'quv markazlari uchun"
+            "id": "medium",
+            "name": "🌿 O'rta Markaz",
+            "price_example": 400_000,
+            "features": ["Barcha imkoniyatlar", "SMS xabarnomalar", "Gamifikatsiya"],
+            "description": "51 dan 150 tagacha o'quvchi uchun"
+        },
+        {
+            "id": "large",
+            "name": "🌳 Yirik Markaz",
+            "price_example": 700_000,
+            "features": ["Barcha imkoniyatlar", "Cheklanmagan o'qituvchilar"],
+            "description": "151 dan 300 tagacha o'quvchi uchun"
+        },
+        {
+            "id": "enterprise",
+            "name": "🏢 Korporativ",
+            "price_example": 1_000_000,
+            "features": ["Barcha imkoniyatlar", "Ustuvor qo'llab-quvvatlash"],
+            "description": "300 dan ortiq o'quvchilar uchun"
         },
     ]
 
@@ -138,7 +145,7 @@ def assign_subscription(
     except ValueError:
         raise HTTPException(
             status_code=400,
-            detail=f"Noto'g'ri reja. Qabul qilinadiganlar: bronze, silver, gold"
+            detail=f"Noto'g'ri reja. Qabul qilinadiganlar: small, medium, large, enterprise"
         )
 
     # Muassasa mavjudligini tekshirish

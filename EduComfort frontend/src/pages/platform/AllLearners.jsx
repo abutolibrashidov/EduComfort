@@ -1,13 +1,17 @@
 import React from 'react';
-import { Table, Input, Tag, Button, message, Popconfirm, Space } from 'antd';
+import { Table, Input, Tag, Button, message, Popconfirm, Space, Typography } from 'antd';
 import { SearchOutlined, DeleteOutlined, StopOutlined, CheckCircleOutlined } from '@ant-design/icons';
-
+import { useIsMobile } from '../../hooks/useMediaQuery';
 import { getAllUsers, deleteUser, blockUser, unblockUser } from '../../services/platformService';
 
 const AllLearners = () => {
+    const { Title, Text } = Typography;
+    const isMobile = useIsMobile();
     const [users, setUsers] = React.useState([]);
     const [filteredUsers, setFilteredUsers] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
+    // ✅ FIX: separate loading state for delete so table doesn't flicker
+    const [deletingId, setDeletingId] = React.useState(null);
     const [searchText, setSearchText] = React.useState('');
 
     const fetchUsers = async () => {
@@ -16,8 +20,8 @@ const AllLearners = () => {
             setUsers(data);
             setFilteredUsers(data);
         } catch (err) {
-            console.error("Failed to fetch users", err);
-            message.error("Failed to fetch users");
+            console.error('Failed to fetch users', err);
+            message.error('Failed to fetch users');
         } finally {
             setLoading(false);
         }
@@ -30,32 +34,45 @@ const AllLearners = () => {
     const handleSearch = (e) => {
         const value = e.target.value.toLowerCase();
         setSearchText(value);
-        const filtered = users.filter(user =>
-            user.name.toLowerCase().includes(value) ||
-            (user.email && user.email.toLowerCase().includes(value)) ||
-            (user.phone && user.phone.includes(value)) ||
-            (user.institution_name && user.institution_name.toLowerCase().includes(value)) ||
-            user.role.toLowerCase().includes(value)
-        );
+        const filtered = users.filter(user => {
+            // ✅ FIX: null-safe role check — role may be undefined or an object
+            const role = (user.role ?? '').toString().toLowerCase();
+            return (
+                (user.name ?? '').toLowerCase().includes(value) ||
+                (user.email ?? '').toLowerCase().includes(value) ||
+                (user.phone ?? '').includes(value) ||
+                (user.institution_name ?? '').toLowerCase().includes(value) ||
+                role.includes(value)
+            );
+        });
         setFilteredUsers(filtered);
     };
 
     const handleDelete = async (id) => {
+        // ✅ FIX: prevent double-click while delete is in-flight
+        if (deletingId === id) return;
+        setDeletingId(id);
+
         try {
             console.log(`🗑️ Attempting to delete user ID: ${id}`);
             const result = await deleteUser(id);
-            console.log("✅ Delete API response:", result);
-            message.success(result.message || "User deleted successfully");
+            console.log('✅ Delete API response:', result);
 
-            // Force refresh with logging
-            console.log("🔄 Refreshing user list...");
-            await fetchUsers();
-            console.log("✅ User list refreshed");
+            // ✅ Optimistic UI — remove from local state immediately
+            // Works for both 'processing' (new delete) and 'already_deleted' (idempotent)
+            setUsers(prev => prev.filter(u => u.id !== id));
+            setFilteredUsers(prev => prev.filter(u => u.id !== id));
+
+            message.success(result.message || 'User deleted successfully');
+            // NOTE: no fetchUsers() here — the backend soft-delete means the user
+            // would come back in the GET response until background hard-delete finishes.
+            // The optimistic removal above is the source of truth for the UI.
         } catch (err) {
-            console.error("❌ Delete error:", err);
-            console.error("Error response:", err.response?.data);
-            const errorMsg = err.response?.data?.detail || err.message || "Unknown error";
+            console.error('❌ Delete error:', err);
+            const errorMsg = err.response?.data?.detail || err.message || 'Unknown error';
             message.error(`Failed to delete user: ${errorMsg}`);
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -63,14 +80,14 @@ const AllLearners = () => {
         try {
             if (record.is_active) {
                 await blockUser(record.id);
-                message.warning("User blocked");
+                message.warning('User blocked');
             } else {
                 await unblockUser(record.id);
-                message.success("User unblocked");
+                message.success('User unblocked');
             }
             fetchUsers();
         } catch (err) {
-            message.error("Action failed: " + (err.response?.data?.message || err.message));
+            message.error('Action failed: ' + (err.response?.data?.message || err.message));
         }
     };
 
@@ -79,27 +96,34 @@ const AllLearners = () => {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            sorter: (a, b) => a.name.localeCompare(b.name),
+            sorter: (a, b) => (a.name ?? '').localeCompare(b.name ?? ''),
         },
         {
             title: 'Role',
             dataIndex: 'role',
             key: 'role',
-            render: role => <Tag color={role === 'platform_owner' ? 'gold' : 'blue'}>{role ? role.toUpperCase() : 'UNKNOWN'}</Tag>,
+            render: role => (
+                <Tag color="blue">
+                    {role ? role.toString().toUpperCase() : 'UNKNOWN'}
+                </Tag>
+            ),
+            // ✅ FIX: removed 'platform_owner' filter option — backend no longer returns them
             filters: [
                 { text: 'Student', value: 'student' },
                 { text: 'Teacher', value: 'teacher' },
                 { text: 'Admin', value: 'admin' },
                 { text: 'Super Admin', value: 'super_admin' },
-                { text: 'Platform Owner', value: 'platform_owner' },
             ],
-            onFilter: (value, record) => record.role === value,
+            onFilter: (value, record) => {
+                const role = (record.role ?? '').toString().toLowerCase();
+                return role === value;
+            },
         },
         {
             title: 'Institution',
             dataIndex: 'institution_name',
             key: 'institution_name',
-            sorter: (a, b) => (a.institution_name || "").localeCompare(b.institution_name || ""),
+            sorter: (a, b) => (a.institution_name ?? '').localeCompare(b.institution_name ?? ''),
         },
         {
             title: 'Email',
@@ -127,14 +151,14 @@ const AllLearners = () => {
             render: (_, record) => (
                 <Space>
                     <Button
-                        type={record.is_active ? "default" : "primary"}
+                        type={record.is_active ? 'default' : 'primary'}
                         danger={record.is_active}
                         icon={record.is_active ? <StopOutlined /> : <CheckCircleOutlined />}
                         size="small"
                         onClick={() => handleBlock(record)}
                         disabled={record.role === 'platform_owner'}
                     >
-                        {record.is_active ? "Block" : "Unblock"}
+                        {record.is_active ? 'Block' : 'Unblock'}
                     </Button>
                     <Popconfirm
                         title="Delete this user?"
@@ -148,7 +172,9 @@ const AllLearners = () => {
                             danger
                             icon={<DeleteOutlined />}
                             size="small"
-                            disabled={record.role === 'platform_owner'}
+                            // ✅ FIX: disable during in-flight delete to prevent double-submit
+                            loading={deletingId === record.id}
+                            disabled={record.role === 'platform_owner' || deletingId === record.id}
                         >
                             Delete
                         </Button>
@@ -159,24 +185,37 @@ const AllLearners = () => {
     ];
 
     return (
-        <div>
+        <div style={{ padding: isMobile ? '0 8px' : '0' }}>
             <div style={{ marginBottom: 24 }}>
-                <h2>Global User Management</h2>
-                <p>Manage all users across the platform (Platform Owner View).</p>
-                <Input
-                    placeholder="Search by name, email, phone, or institution..."
-                    prefix={<SearchOutlined />}
-                    style={{ width: 400, marginTop: 12 }}
-                    value={searchText}
-                    onChange={handleSearch}
-                />
+                <Title level={2} style={{ fontSize: isMobile ? '20px' : '30px' }}>
+                    Global User Management
+                </Title>
+                <Text type="secondary">Manage all users across the platform (Platform Owner View).</Text>
+                <div style={{ marginTop: 16 }}>
+                    <Input
+                        placeholder="Search by name, email, phone, or institution..."
+                        prefix={<SearchOutlined />}
+                        style={{ width: isMobile ? '100%' : 400 }}
+                        value={searchText}
+                        onChange={handleSearch}
+                    />
+                </div>
             </div>
             <Table
-                columns={columns}
+                columns={columns.map(col => ({
+                    ...col,
+                    responsive:
+                        col.key === 'name' || col.key === 'action'
+                            ? ['xs', 'sm', 'md', 'lg', 'xl']
+                            : col.key === 'role' || col.key === 'institution_name'
+                                ? ['sm', 'md', 'lg', 'xl']
+                                : ['md', 'lg', 'xl'],
+                }))}
                 dataSource={filteredUsers}
                 rowKey="id"
                 loading={loading}
                 pagination={{ pageSize: 15 }}
+                scroll={{ x: 1000 }}
             />
         </div>
     );

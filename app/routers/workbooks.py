@@ -77,11 +77,14 @@ async def create_workbook(
         level=level,
         total_tasks=total_tasks,
         max_points=max_points,
-        file_path=file_url,   # now stores the URL, not a local path
+        file_path=file_url,
         file_name=file_name,
         file_type=file_type,
         status="draft"
     )
+    # ✅ ISOLATION: stamp institution_id so list endpoint can filter
+    if hasattr(Workbook, 'institution_id') and current_user.institution_id:
+        workbook.institution_id = current_user.institution_id
 
     db.add(workbook)
     db.commit()
@@ -97,8 +100,23 @@ async def list_workbooks(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """List all workbooks (students see published, teachers/admin see all)"""
+    """List all workbooks — scoped to caller's institution"""
     query = db.query(Workbook)
+    
+    # ✅ ISOLATION: non-platform-admins only see workbooks from their institution
+    from app.security.permissions import is_platform_owner
+    if not is_platform_owner(current_user):
+        if current_user.institution_id:
+            if hasattr(Workbook, 'institution_id'):
+                query = query.filter(Workbook.institution_id == current_user.institution_id)
+            else:
+                # Fall back to filtering by creator's institution
+                creator_ids = [
+                    u.id for u in db.query(User).filter(
+                        User.institution_id == current_user.institution_id
+                    ).all()
+                ]
+                query = query.filter(Workbook.created_by_id.in_(creator_ids))
     
     # Students only see published workbooks
     if current_user.role == "student":

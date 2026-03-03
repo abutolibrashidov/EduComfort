@@ -8,25 +8,24 @@ from app.constants.roles import Role
 def is_platform_owner(user: User) -> bool:
     """
     Check if user has platform-level access (can access ALL institutions).
-    This includes:
-    - Users with is_platform_admin attribute set to True
-    - Users with super_admin role (platform owner)
-    - Users with platform_owner role
+
+    ✅ Only true platform owners (is_platform_admin flag OR platform_owner role).
+
+    ❌ super_admin is institution-scoped — they are the owner of THEIR institution,
+       NOT a cross-institution admin. Do NOT add super_admin here.
     """
-    # Check attribute
+    # Check the is_platform_admin flag (set on EduComfort staff accounts)
     if getattr(user, "is_platform_admin", False):
         return True
-    
+
     # Check role (handle both string and enum)
     user_role = user.role
     if hasattr(user_role, "value"):
         user_role = user_role.value
-    
+
     return user_role in [
         Role.PLATFORM_OWNER.value,
-        Role.SUPER_ADMIN.value,
         "platform_owner",
-        "super_admin"
     ]
 
 
