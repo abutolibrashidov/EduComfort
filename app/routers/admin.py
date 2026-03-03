@@ -11,7 +11,7 @@ from app.auth.dependencies import get_current_user
 from app.models.user import User
 from app.models.group import Group
 from app.models.payment import Payment
-from app.models.teacher_payment import TeacherPayment
+
 from app.models.expense import Expense
 from app.models.group_students import GroupStudent
 from app.models.attendance import Attendance
@@ -128,16 +128,14 @@ def get_dashboard_stats(
             revenue_growth = 100.0
 
         # --- EXPENSES & NET PROFIT ---
-        # Total Expenses = Older TeacherPayment + New Expense model
-        tp_sum = db.query(func.sum(TeacherPayment.amount))
+        # NOTE: salary payments recorded via /expenses/ endpoint auto-sync to TeacherPayment table.
+        # To avoid double-counting, we ONLY sum from the Expenses table (single source of truth).
         exp_sum = db.query(func.sum(Expense.amount))
         
         if institution_id:
-            # TeacherPayment has teacher_id, need to check if user belongs to institution
-            tp_sum = tp_sum.join(User, TeacherPayment.teacher_id == User.id).filter(User.institution_id == institution_id)
             exp_sum = exp_sum.filter(Expense.institution_id == institution_id)
             
-        total_staff_costs = (tp_sum.scalar() or 0.0) + (exp_sum.scalar() or 0.0)
+        total_staff_costs = exp_sum.scalar() or 0.0
         net_profit = total_revenue - total_staff_costs
 
         # Monthly Stats (Last 6 Months)
@@ -192,9 +190,6 @@ def get_dashboard_stats(
                 "total_revenue": total_revenue,
                 "total_expenses": total_staff_costs,
                 "net_profit": net_profit,
-                "current_month_revenue": current_month_revenue,
-                "last_month_revenue": last_month_revenue,
-                "revenue_growth": round(revenue_growth, 1),
                 "current_month_revenue": current_month_revenue,
                 "last_month_revenue": last_month_revenue,
                 "revenue_growth": round(revenue_growth, 1),
