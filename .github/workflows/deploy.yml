@@ -16,7 +16,7 @@ jobs:
     name: Backend – Lint & Test
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql://neondb_owner:npg_A03dorqIHTvj@ep-autumn-base-a1xn6i20-pooler.ap-southeast-1.aws.neon.tech/educomfort?sslmode=require&channel_binding=require
+      DATABASE_URL: postgresql+psycopg2://neondb_owner:npg_A03dorqIHTvj@ep-autumn-base-a1xn6i20-pooler.ap-southeast-1.aws.neon.tech/educomfort?sslmode=require
       SECRET_KEY: 24efcc42bbef44b7f950d5b34e57479d74eca53cddc82772bdb9b8d3173451beb2f699deb04d38a332a1dfe5047fea00e4b72f391b75be4b00df76ee85cb1b81
       ENVIRONMENT: development
       CORS_ORIGINS: http://localhost:5173
