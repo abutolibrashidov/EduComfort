@@ -52,6 +52,21 @@ def verify_student(current_user: User):
         )
 
 
+def get_target_student_id(current_user: User, student_id: Optional[int] = None) -> int:
+    """Determine which student's data to show, handling admin impersonation"""
+    if not student_id:
+        return current_user.id
+        
+    role_str = getattr(current_user.role, 'value', current_user.role)
+    if role_str in ["admin", "super_admin"] or getattr(current_user, 'is_platform_admin', False):
+        return student_id
+        
+    if student_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Cannot view other students' data")
+        
+    return current_user.id
+
+
 # ============================================
 # SCHEMAS
 # ============================================
@@ -229,18 +244,7 @@ def get_student_dashboard(
     verify_student(current_user)
     
     # Determine which student's data to show
-    target_student_id = current_user.id
-    
-    if student_id:
-        # Only admins/super_admins can view other students
-        from app.security.permissions import is_admin_or_higher
-            
-        if is_admin_or_higher(current_user):
-            target_student_id = student_id
-        else:
-            # Regular students cannot view others
-            if student_id != current_user.id:
-                raise HTTPException(status_code=403, detail="Cannot view other students' data")
+    target_student_id = get_target_student_id(current_user, student_id)
     
     # Get enrolled groups
     enrollments = db.query(GroupStudent).filter(
@@ -455,14 +459,17 @@ def get_student_dashboard(
 
 @router.get("/courses", response_model=List[GroupInfo])
 def get_student_courses(
+    student_id: Optional[int] = Query(None, description="Admin only: View specific student courses"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get all courses/groups the student is enrolled in"""
     verify_student(current_user)
     
+    target_student_id = get_target_student_id(current_user, student_id)
+        
     enrollments = db.query(GroupStudent).filter(
-        GroupStudent.student_id == current_user.id,
+        GroupStudent.student_id == target_student_id,
         GroupStudent.is_active == True
     ).all()
     
@@ -493,14 +500,17 @@ def get_student_courses(
 
 @router.get("/payments", response_model=List[PaymentInfo])
 def get_student_payments(
+    student_id: Optional[int] = Query(None, description="Admin only: View specific student payments"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get all payments for the student"""
     verify_student(current_user)
     
+    target_student_id = get_target_student_id(current_user, student_id)
+        
     payments = db.query(Payment).filter(
-        Payment.student_id == current_user.id
+        Payment.student_id == target_student_id
     ).order_by(Payment.payment_date.desc()).all()
     
     return [
@@ -518,6 +528,7 @@ def get_student_payments(
 
 @router.get("/rating")
 def get_student_rating(
+    student_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -531,14 +542,20 @@ def get_student_rating(
 
 @router.get("/teachers")
 def get_student_teachers(
+    student_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get all teachers in the student's institution along with their group stats"""
     verify_student(current_user)
+    target_student_id = get_target_student_id(current_user, student_id)
     
     # Check if student belongs to an institution
-    institution_id = current_user.institution_id
+    target_student = db.query(User).filter(User.id == target_student_id).first()
+    if not target_student:
+        raise HTTPException(status_code=404, detail="Student not found")
+        
+    institution_id = target_student.institution_id
     if not institution_id:
         return []
     
@@ -587,13 +604,15 @@ def get_student_teachers(
 
 @router.get("/profile", response_model=StudentProfileResponse)
 def get_student_profile(
+    student_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get current student's profile with stats"""
     verify_student(current_user)
+    target_student_id = get_target_student_id(current_user, student_id)
     
-    student = db.query(User).filter(User.id == current_user.id).first()
+    student = db.query(User).filter(User.id == target_student_id).first()
     
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
@@ -643,13 +662,15 @@ def get_student_profile(
 @router.put("/profile")
 def update_student_profile(
     profile_data: StudentProfileUpdate,
+    student_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Update current student's profile"""
     verify_student(current_user)
+    target_student_id = get_target_student_id(current_user, student_id)
     
-    student = db.query(User).filter(User.id == current_user.id).first()
+    student = db.query(User).filter(User.id == target_student_id).first()
     
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
@@ -688,13 +709,15 @@ def update_student_profile(
 @router.post("/change-password")
 def change_student_password(
     password_data: StudentPasswordChange,
+    student_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Change student's password"""
     verify_student(current_user)
+    target_student_id = get_target_student_id(current_user, student_id)
     
-    student = db.query(User).filter(User.id == current_user.id).first()
+    student = db.query(User).filter(User.id == target_student_id).first()
     
     if not student:
         raise HTTPException(status_code=404, detail="Student not found")
@@ -729,15 +752,18 @@ def change_student_password(
 
 @router.get("/attendance/history", response_model=AttendanceHistoryResponse)
 def get_student_attendance_history(
+    student_id: Optional[int] = Query(None, description="Admin only: View specific student attendance"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get the student's attendance history for their enrolled groups for the last 30 distinct dates."""
     verify_student(current_user)
     
+    target_student_id = get_target_student_id(current_user, student_id)
+        
     # Get all active enrollments
     enrollments = db.query(GroupStudent).filter(
-        GroupStudent.student_id == current_user.id,
+        GroupStudent.student_id == target_student_id,
         GroupStudent.is_active == True
     ).all()
     
@@ -761,7 +787,7 @@ def get_student_attendance_history(
     # Get student's attendance records for these dates and groups
     if dates:
         records = db.query(Attendance).filter(
-            Attendance.student_id == current_user.id,
+            Attendance.student_id == target_student_id,
             Attendance.group_id.in_(group_ids),
             Attendance.date.in_(dates)
         ).all()

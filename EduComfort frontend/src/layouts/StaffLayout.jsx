@@ -22,6 +22,7 @@ import { fadeInUp } from "../theme/animations";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import axiosClient from "../api/axiosClient";
 import { ASSET_BASE_URL } from "../api/config";
+import FeedbackWidget from "../components/FeedbackWidget";
 
 const { Header, Sider, Content } = Layout;
 const { Title } = Typography;
@@ -385,6 +386,7 @@ export default function StaffLayout() {
           </motion.div>
         </Content>
       </Layout>
+      <FeedbackWidget />
     </Layout>
   );
 }

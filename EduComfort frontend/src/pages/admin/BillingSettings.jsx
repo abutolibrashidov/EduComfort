@@ -79,7 +79,7 @@ const BillingSettings = () => {
                         children: (
                             <Card>
                                 <Alert
-                                    title={`Joriy Obuna Rejangiz: ${currentPlan.toUpperCase()}`}
+                                    title={`Joriy Obuna Rejangiz: ${t(`plan.${currentPlan}`) || currentPlan.toUpperCase()}`}
                                     description={`Holat: ${status.toUpperCase()} | Keyingi to'lov sanasi: ${nextBilling}`}
                                     type="info"
                                     showIcon
@@ -95,7 +95,7 @@ const BillingSettings = () => {
                                 </div>
                                 <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
                                     <Card title="Plan Details" size="small" style={{ width: 350 }}>
-                                        <h3>{currentPlan.toUpperCase()}</h3>
+                                        <h3>{t(`plan.${currentPlan}`) || currentPlan.toUpperCase()}</h3>
                                         <p><BankOutlined /> Boshqaruv Tizimi</p>
                                         <p><ClockCircleOutlined /> 24/7 Qollab Quvvatlash</p>
                                         <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: '10px' }}>

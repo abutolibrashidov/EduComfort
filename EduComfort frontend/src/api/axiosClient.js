@@ -29,6 +29,19 @@ axiosClient.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
+
+    // Impersonation logic
+    const impStudentId = sessionStorage.getItem("impersonatedStudentId");
+    const impTeacherId = sessionStorage.getItem("impersonatedTeacherId");
+
+    if (config.url) {
+      if (impTeacherId && (config.url.startsWith('/teacher') || config.url.includes('/teacher/'))) {
+        config.params = { ...config.params, teacher_id: impTeacherId };
+      } else if (impStudentId && (config.url.startsWith('/student') || config.url.includes('/student/'))) {
+        config.params = { ...config.params, student_id: impStudentId };
+      }
+    }
+
     return config;
   },
   (error) => Promise.reject(error)

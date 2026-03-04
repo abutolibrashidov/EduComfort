@@ -24,7 +24,6 @@ import { getCurrentUser } from '../../api/auth';
 import { motion } from 'framer-motion';
 import dayjs from 'dayjs';
 import MyBooks from '../../components/books/MyBooks';
-import FeedbackWidget from '../../components/FeedbackWidget';
 import CertificateModal from '../../components/CertificateModal';
 import { ASSET_BASE_URL } from '../../api/config';
 
@@ -721,7 +720,6 @@ const StudentDashboard = () => {
           </motion.div>
         </Col>
       </Row>
-      <FeedbackWidget />
       {/* Premium Certificate Modal */}
       <CertificateModal
         open={!!selectedCert}

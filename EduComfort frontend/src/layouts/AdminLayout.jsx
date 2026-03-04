@@ -30,6 +30,7 @@ import { fadeInUp } from "../theme/animations";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import axiosClient from "../api/axiosClient";
 import EduLogo from "../components/EduLogo";
+import FeedbackWidget from "../components/FeedbackWidget";
 // ✅ FIX 1: Use assetUrl helper instead of ASSET_BASE_URL string concatenation.
 //    ASSET_BASE_URL was not exported from the updated config.js — this replaces it cleanly.
 import { assetUrl } from "../api/config";
@@ -464,6 +465,7 @@ export default function AdminLayout() {
           </motion.div>
         </Content>
       </Layout>
-    </Layout>
+      <FeedbackWidget />
+    </Layout >
   );
 }

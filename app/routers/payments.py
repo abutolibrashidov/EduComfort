@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import datetime
@@ -212,29 +212,49 @@ def delete_payment(
 
 @router.get("/teacher/salary", response_model=list[TeacherPaymentRead])
 def get_teacher_salary(
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get salary history for current teacher"""
-    if current_user.role != "teacher" and not current_user.is_platform_admin:
+    target_id = current_user.id
+    role_str = getattr(current_user.role, 'value', current_user.role)
+    
+    if role_str not in ["teacher", "admin", "super_admin"] and not getattr(current_user, 'is_platform_admin', False):
          raise HTTPException(status_code=403, detail="Access denied")
          
-    payments = db.query(TeacherPayment).filter(TeacherPayment.teacher_id == current_user.id).all()
+    if teacher_id:
+        if role_str in ["admin", "super_admin"] or getattr(current_user, 'is_platform_admin', False):
+            target_id = teacher_id
+        elif teacher_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
+            
+    payments = db.query(TeacherPayment).filter(TeacherPayment.teacher_id == target_id).all()
     return payments
 
 
 @router.get("/teacher/students")
 def get_teacher_student_payments(
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get payments from students in groups taught by the teacher"""
-    if current_user.role != "teacher" and not current_user.is_platform_admin:
+    target_id = current_user.id
+    role_str = getattr(current_user.role, 'value', current_user.role)
+    
+    if role_str not in ["teacher", "admin", "super_admin"] and not getattr(current_user, 'is_platform_admin', False):
          raise HTTPException(status_code=403, detail="Access denied")
+         
+    if teacher_id:
+        if role_str in ["admin", "super_admin"] or getattr(current_user, 'is_platform_admin', False):
+            target_id = teacher_id
+        elif teacher_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied")
 
     # 1. Find groups where current_user is the teacher
     # Assuming Group model has 'teacher_id'
-    groups = db.query(Group).filter(Group.teacher_id == current_user.id).all()
+    groups = db.query(Group).filter(Group.teacher_id == target_id).all()
     group_ids = [g.id for g in groups]
     
     if not group_ids:

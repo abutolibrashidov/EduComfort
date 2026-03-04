@@ -183,6 +183,20 @@ def verify_teacher(current_user: User):
         )
 
 
+def get_target_teacher_id(current_user: User, teacher_id: Optional[int] = None) -> int:
+    """Determine which teacher's data to show, handling admin impersonation"""
+    if not teacher_id:
+        return current_user.id
+        
+    role_str = getattr(current_user.role, 'value', current_user.role)
+    if role_str in ["admin", "super_admin", "platform_owner"]:
+        return teacher_id
+        
+    if teacher_id != current_user.id:
+        raise HTTPException(status_code=403, detail="Cannot view other teachers' data")
+        
+    return current_user.id
+
 def get_teacher_groups(db: Session, teacher_id: int) -> List[Group]:
     """Get all groups assigned to a teacher"""
     return db.query(Group).filter(
@@ -208,17 +222,7 @@ def get_teacher_dashboard(
     verify_teacher(current_user)
     
     # Determine which teacher's data to show
-    target_teacher_id = current_user.id
-    
-    if teacher_id:
-        # Only admins/super_admins can view other teachers
-        from app.security.permissions import is_admin_or_higher
-            
-        if is_admin_or_higher(current_user):
-            target_teacher_id = teacher_id
-        else:
-            if teacher_id != current_user.id:
-                raise HTTPException(status_code=403, detail="Cannot view other teachers' data")
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
 
     # Get teacher's groups
     groups = get_teacher_groups(db, target_teacher_id)
@@ -339,6 +343,7 @@ def get_teacher_dashboard(
 
 @router.get("/groups", response_model=List[GroupSummary])
 def get_teacher_groups_list(
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -347,8 +352,9 @@ def get_teacher_groups_list(
     /teacher/groups
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
-    groups = get_teacher_groups(db, current_user.id)
+    groups = get_teacher_groups(db, target_teacher_id)
     
     result = []
     for group in groups:
@@ -389,6 +395,7 @@ def get_teacher_groups_list(
 @router.get("/groups/{group_id}/students", response_model=List[StudentInGroup])
 def get_group_students(
     group_id: int,
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -397,11 +404,12 @@ def get_group_students(
     Teachers can only access their own groups
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     # Verify this group belongs to the teacher
     group = db.query(Group).filter(
         Group.id == group_id,
-        Group.teacher_id == current_user.id
+        Group.teacher_id == target_teacher_id
     ).first()
     
     if not group and current_user.role != "super_admin":
@@ -436,6 +444,7 @@ def get_group_students(
 
 @router.get("/courses")
 def get_teacher_courses(
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -444,8 +453,9 @@ def get_teacher_courses(
     Aggregated view of all groups by subject
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
-    groups = get_teacher_groups(db, current_user.id)
+    groups = get_teacher_groups(db, target_teacher_id)
     
     # Group by subject
     courses = {}
@@ -481,6 +491,7 @@ def get_teacher_courses(
 
 @router.get("/materials", response_model=List[MaterialResponse])
 def get_teacher_materials(
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -488,10 +499,11 @@ def get_teacher_materials(
     Get materials uploaded by the teacher
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     # If super admin, they might want to see all materials or their own
     # For now, let's keep it scoped to the user's uploads unless we explicitly handle admin view
-    materials = db.query(Material).filter(Material.teacher_id == current_user.id).all()
+    materials = db.query(Material).filter(Material.teacher_id == target_teacher_id).all()
     
     result = []
     for m in materials:
@@ -517,6 +529,7 @@ async def upload_material(
     title: str = Form(...),
     description: Optional[str] = Form(None),
     group_id: Optional[int] = Form(None),
+    teacher_id: Optional[int] = Query(None),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -525,6 +538,7 @@ async def upload_material(
     Upload a new study material
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     # Validate extension
     file_ext = Path(file.filename).suffix.lower()
@@ -556,7 +570,7 @@ async def upload_material(
         file_name=file.filename,
         file_type=file_ext.replace(".", ""),
         file_size=file_size,
-        teacher_id=current_user.id,
+        teacher_id=target_teacher_id,
         group_id=group_id
     )
     
@@ -583,6 +597,7 @@ async def upload_material(
 @router.delete("/materials/{material_id}")
 def delete_material(
     material_id: int,
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -590,10 +605,11 @@ def delete_material(
     Delete a study material
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     material = db.query(Material).filter(
         Material.id == material_id,
-        Material.teacher_id == current_user.id
+        Material.teacher_id == target_teacher_id
     ).first()
     
     if not material:
@@ -617,6 +633,7 @@ def delete_material(
 
 @router.get("/attendance")
 def get_attendance_overview(
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -624,8 +641,9 @@ def get_attendance_overview(
     Get attendance overview for teacher's groups
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
-    groups = get_teacher_groups(db, current_user.id)
+    groups = get_teacher_groups(db, target_teacher_id)
     
     group_stats = []
     for g in groups:
@@ -653,11 +671,13 @@ def get_attendance_overview(
 def get_group_attendance(
     group_id: int,
     date_str: str,  # passing as string to ease parsing YYYY-MM-DD
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get attendance for a specific group and date"""
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     try:
         target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
@@ -665,7 +685,7 @@ def get_group_attendance(
         raise HTTPException(status_code=400, detail="Invalid date format. Use YYYY-MM-DD")
         
     # Verify group ownership
-    group = db.query(Group).filter(Group.id == group_id, Group.teacher_id == current_user.id).first()
+    group = db.query(Group).filter(Group.id == group_id, Group.teacher_id == target_teacher_id).first()
     if not group and current_user.role != "super_admin":
         raise HTTPException(status_code=403, detail="Access denied")
         
@@ -705,14 +725,16 @@ def get_group_attendance(
 @router.post("/attendance")
 def save_attendance(
     data: AttendanceBatchCreate,
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Save or update attendance"""
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     # Verify group ownership
-    group = db.query(Group).filter(Group.id == data.group_id, Group.teacher_id == current_user.id).first()
+    group = db.query(Group).filter(Group.id == data.group_id, Group.teacher_id == target_teacher_id).first()
     if not group and current_user.role != "super_admin":
         raise HTTPException(status_code=403, detail="Access denied")
         
@@ -749,14 +771,16 @@ def save_attendance(
 @router.get("/groups/{group_id}/attendance/history", response_model=AttendanceHistoryResponse)
 def get_group_attendance_history(
     group_id: int,
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     """Get attendance history for a specific group for the last 30 classes"""
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     # Verify group ownership
-    group = db.query(Group).filter(Group.id == group_id, Group.teacher_id == current_user.id).first()
+    group = db.query(Group).filter(Group.id == group_id, Group.teacher_id == target_teacher_id).first()
     if not group and getattr(current_user.role, 'value', current_user.role) not in ["super_admin", "admin"]:
         raise HTTPException(status_code=403, detail="Access denied")
         
@@ -807,6 +831,7 @@ def get_group_attendance_history(
 
 @router.get("/rating")
 def get_teacher_rating(
+    teacher_id: Optional[int] = Query(None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -814,9 +839,10 @@ def get_teacher_rating(
     Get teacher's ratings and feedback
     """
     verify_teacher(current_user)
+    target_teacher_id = get_target_teacher_id(current_user, teacher_id)
     
     # Calculate stats
-    ratings_query = db.query(TeacherRating).filter(TeacherRating.teacher_id == current_user.id)
+    ratings_query = db.query(TeacherRating).filter(TeacherRating.teacher_id == target_teacher_id)
     
     total_reviews = ratings_query.count()
     average_rating = ratings_query.with_entities(func.avg(TeacherRating.rating)).scalar() or 0.0

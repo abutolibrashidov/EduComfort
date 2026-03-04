@@ -208,9 +208,10 @@ export const en = {
     "billing.payment_methods": "Payment Methods",
 
     // Plans
-    "plan.bronze": "Bronze (Management)",
-    "plan.silver": "Silver (+Gamification)",
-    "plan.gold": "Gold (Full Suite)",
+    "plan.small": "Small (Up to 50)",
+    "plan.medium": "Medium (51-150)",
+    "plan.large": "Large (151-300)",
+    "plan.enterprise": "Enterprise (300+)",
 
     // Layout
     "super_admin": "Super Admin",

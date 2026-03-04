@@ -147,9 +147,9 @@ const AllInstitutions = () => {
             key: 'subscription_tier',
             render: plan => {
                 const color = plan === 'enterprise' ? 'purple'
-                    : plan === 'gold' ? 'gold'
-                        : plan === 'silver' ? 'blue'
-                            : plan === 'bronze' ? 'orange'
+                    : plan === 'large' ? 'gold'
+                        : plan === 'medium' ? 'blue'
+                            : plan === 'small' ? 'green'
                                 : 'default';
                 return <Tag color={color}>{plan ? plan.toUpperCase() : 'BASIC'}</Tag>;
             },
@@ -326,9 +326,9 @@ const AllInstitutions = () => {
                     <Form.Item label="Subscription Plan" name="subscription_plan">
                         <Select>
                             <Option value="basic">Basic (Free)</Option>
-                            <Option value="bronze">Bronze</Option>
-                            <Option value="silver">Silver</Option>
-                            <Option value="gold">Gold</Option>
+                            <Option value="small">Small</Option>
+                            <Option value="medium">Medium</Option>
+                            <Option value="large">Large</Option>
                             <Option value="enterprise">Enterprise</Option>
                         </Select>
                     </Form.Item>

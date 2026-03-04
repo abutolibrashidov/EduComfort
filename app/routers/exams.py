@@ -415,15 +415,14 @@ def get_student_exam_sets(
     Get all exams for the student, grouped by Unit -> Set.
     Only returns PUBLISHED exams.
     """
-    if not is_student(current_user):
-        raise HTTPException(status_code=403, detail="Only students can access this")
+    if not (is_student(current_user) or is_admin_or_higher(current_user)):
+        raise HTTPException(status_code=403, detail="Only students and admins can access this")
         
     # Get all published exams for this student (filtered by institution and group if applicable)
     # Note: Logic from list_exams but tailored
-    query = db.query(Exam).filter(
-        Exam.status == ExamStatus.published,
-        Exam.institution_id == current_user.institution_id
-    )
+    query = db.query(Exam).filter(Exam.status == ExamStatus.published)
+    if not is_super_admin(current_user):
+        query = query.filter(Exam.institution_id == current_user.institution_id)
     
     # If student is in a group, we might want to filter by group_id effectively?
     # Usually Exam.group_id is nullable or specific. 

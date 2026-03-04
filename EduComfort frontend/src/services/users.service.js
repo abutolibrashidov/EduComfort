@@ -49,23 +49,31 @@ export const activateUser = async (id) => {
    STUDENT – DASHBOARD
    ========================= */
 
-export const getStudentDashboard = async () => {
-  const res = await axios.get("/student/dashboard");
+export const getStudentDashboard = async (studentId = null) => {
+  const impId = studentId || sessionStorage.getItem('impersonatedStudentId');
+  const params = impId ? { student_id: impId } : {};
+  const res = await axios.get("/student/dashboard", { params });
   return res.data;
 };
 
-export const getStudentCourses = async () => {
-  const res = await axios.get("/student/courses");
+export const getStudentCourses = async (studentId = null) => {
+  const impId = studentId || sessionStorage.getItem('impersonatedStudentId');
+  const params = impId ? { student_id: impId } : {};
+  const res = await axios.get("/student/courses", { params });
   return res.data;
 };
 
-export const getStudentPayments = async () => {
-  const res = await axios.get("/student/payments");
+export const getStudentPayments = async (studentId = null) => {
+  const impId = studentId || sessionStorage.getItem('impersonatedStudentId');
+  const params = impId ? { student_id: impId } : {};
+  const res = await axios.get("/student/payments", { params });
   return res.data;
 };
 
-export const getStudentRating = async () => {
-  const res = await axios.get("/student/rating");
+export const getStudentRating = async (studentId = null) => {
+  const impId = studentId || sessionStorage.getItem('impersonatedStudentId');
+  const params = impId ? { student_id: impId } : {};
+  const res = await axios.get("/student/rating", { params });
   return res.data;
 };
 

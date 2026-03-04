@@ -96,6 +96,20 @@ class User(Base):
         index=True
     )  # EduComfort staff who can manage all institutions
 
+    # 🔹 User Type Discriminator (Phase 1 Architecture Redesign)
+    # Controls which gamification engine is selected and which domain this user belongs to.
+    #   'institution' — a student, teacher, staff, or admin within a Learning Center
+    #   'individual'  — a self-study learner, not affiliated with any institution
+    #   'platform'    — EduComfort platform staff (aligned with is_platform_admin=True)
+    # Backfill: all existing users default to 'institution'; platform admins → 'platform'
+    # See Alembic Rev 001 + Rev 002 for migration.
+    user_type = Column(
+        String(20),
+        nullable=False,
+        default="institution",
+        index=True
+    )
+
     # 🔹 Organization
     institution_id = Column(
         Integer,

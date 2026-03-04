@@ -21,9 +21,11 @@ import {
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { logout, getCurrentUser } from "../api/auth";
-import { theme } from "../theme";
 import { fadeInUp } from "../theme/animations";
+import theme from "../theme";
+
 import { useLanguage } from "../contexts/LanguageContext";
+import FeedbackWidget from "../components/FeedbackWidget";
 import { GlobalOutlined } from "@ant-design/icons";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { ASSET_BASE_URL } from "../api/config";
@@ -225,6 +227,7 @@ export default function PlatformOwnerLayout() {
                     </motion.div>
                 </Content>
             </Layout>
+            <FeedbackWidget />
         </Layout>
     );
 }

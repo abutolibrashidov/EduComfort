@@ -25,6 +25,7 @@ import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { logout, getCurrentUser } from "../api/auth";
 import axiosClient from "../api/axiosClient";
+import FeedbackWidget from "../components/FeedbackWidget";
 import { useBranding } from "../contexts/BrandingContext";
 import { useIsMobile } from "../hooks/useMediaQuery";
 import { ASSET_BASE_URL } from "../api/config";
@@ -218,6 +219,9 @@ function TeacherLayout() {
   };
 
   const handleLogout = () => {
+    sessionStorage.removeItem('impersonatedStudentId');
+    sessionStorage.removeItem('impersonatedTeacherId');
+    sessionStorage.removeItem('impersonatedStaffId');
     logout();
     navigate("/login");
   };
@@ -405,6 +409,7 @@ function TeacherLayout() {
           <Outlet />
         </Content>
       </Layout>
+      <FeedbackWidget />
     </Layout>
   );
 }

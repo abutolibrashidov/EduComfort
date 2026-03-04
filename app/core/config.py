@@ -29,6 +29,15 @@ class Settings(BaseSettings):
     # Environment
     ENVIRONMENT: str = "development"
 
+    # Redis (optional — features degrade gracefully when not set)
+    # DB 0 = app caching (leaderboards, XP caps, rate limits)
+    # DB 1 = Celery broker (set CELERY_BROKER_URL separately if needed)
+    REDIS_URL: Optional[str] = None  # e.g. redis://localhost:6379/0
+
+    # Read Replica (optional — falls back to DATABASE_URL when not set)
+    DATABASE_READ_URL: Optional[str] = None
+
+
     # Sentry
     SENTRY_DSN: Optional[str] = None
 

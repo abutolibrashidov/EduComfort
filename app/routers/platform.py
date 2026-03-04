@@ -15,6 +15,7 @@ from app.models.user import User
 from app.services.user_service import robust_cascade_delete_user
 from app.services.institution_service import robust_cascade_delete_institution
 from app.constants.roles import Role
+from app.models.platform_setting import PlatformSetting
 
 _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -105,6 +106,87 @@ def _hard_delete_user_bg(user_id: int, user_name: str) -> None:
         db.close()
 
 
+# ==================== Plan Pricing Helpers ====================
+
+_DEFAULT_PRICES = {
+    "plan_price_small":    50,
+    "plan_price_medium":  200,
+    "plan_price_large":   500,
+}
+
+
+class PlanPricesIn(BaseModel):
+    small:  float
+    medium: float
+    large:  float
+
+
+class PlanPricesOut(BaseModel):
+    small:  float
+    medium: float
+    large:  float
+
+
+def _seed_default_prices(db: Session) -> None:
+    """Ensure the three default plan-price rows exist (safe to call on every boot)."""
+    for key, val in _DEFAULT_PRICES.items():
+        if not db.query(PlatformSetting).filter_by(key=key).first():
+            db.add(PlatformSetting(key=key, value=val, description=f"Monthly price for {key.split('_')[-1]} plan"))
+    db.commit()
+
+
+def _get_plan_prices(db: Session) -> dict:
+    """Return {SubscriptionPlan.SMALL: price, ...} from the DB (or defaults)."""
+    rows = db.query(PlatformSetting).filter(
+        PlatformSetting.key.in_(["plan_price_small", "plan_price_medium", "plan_price_large"])
+    ).all()
+    lookup = {r.key: float(r.value) for r in rows}
+    return {
+        SubscriptionPlan.SMALL:   lookup.get("plan_price_small",  _DEFAULT_PRICES["plan_price_small"]),
+        SubscriptionPlan.MEDIUM:  lookup.get("plan_price_medium", _DEFAULT_PRICES["plan_price_medium"]),
+        SubscriptionPlan.LARGE:   lookup.get("plan_price_large",  _DEFAULT_PRICES["plan_price_large"]),
+    }
+
+
+# ==================== Pricing Endpoints ====================
+
+@router.get("/settings/prices", response_model=PlanPricesOut)
+def get_plan_prices(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """Return the current subscription plan prices. Accessible by all authenticated users."""
+    _seed_default_prices(db)   # idempotent – creates rows only if missing
+    prices = _get_plan_prices(db)
+    return PlanPricesOut(
+        small=prices[SubscriptionPlan.SMALL],
+        medium=prices[SubscriptionPlan.MEDIUM],
+        large=prices[SubscriptionPlan.LARGE],
+    )
+
+
+@router.put("/settings/prices", response_model=PlanPricesOut)
+def update_plan_prices(
+    payload: PlanPricesIn,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(verify_platform_owner),
+):
+    """Update the subscription plan prices. Restricted to platform_owner."""
+    _seed_default_prices(db)
+    for key, val in [
+        ("plan_price_small",  payload.small),
+        ("plan_price_medium", payload.medium),
+        ("plan_price_large",  payload.large),
+    ]:
+        row = db.query(PlatformSetting).filter_by(key=key).first()
+        if row:
+            row.value = val
+        else:
+            db.add(PlatformSetting(key=key, value=val))
+    db.commit()
+    return PlanPricesOut(small=payload.small, medium=payload.medium, large=payload.large)
+
+
 # ==================== Dashboard ====================
 
 @router.get("/dashboard")
@@ -123,11 +205,7 @@ def get_platform_dashboard(
 
         revenue_mtd = 0
         try:
-            plan_prices = {
-                SubscriptionPlan.BRONZE: 50,
-                SubscriptionPlan.SILVER: 200,
-                SubscriptionPlan.GOLD: 500,
-            }
+            plan_prices = _get_plan_prices(db)
             active_subs = db.query(InstitutionSubscription).filter(
                 InstitutionSubscription.status == "active"
             ).all()

@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Card, Form, Input, Switch, Button, message, Divider,
-    Typography, Row, Col, Tag, Alert,
+    Typography, Row, Col, Tag, Alert, InputNumber, Spin,
 } from 'antd';
 import {
     SettingOutlined, GlobalOutlined, MailOutlined, WarningOutlined,
-    SaveOutlined, PoweroffOutlined,
+    SaveOutlined, PoweroffOutlined, DollarOutlined,
 } from '@ant-design/icons';
+import axiosClient from '../../api/axiosClient';
 
 const { Title, Text } = Typography;
 
@@ -33,6 +34,41 @@ const PlatformSettings = () => {
     const [leaderboards, setLeaderboards] = useState(stored.show_leaderboards);
     const [saving, setSaving] = useState(false);
     const [form] = Form.useForm();
+
+    // ── Plan Pricing ──────────────────────────────────────────────────
+    const [priceForm] = Form.useForm();
+    const [pricesLoading, setPricesLoading] = useState(true);
+    const [pricesSaving, setPricesSaving] = useState(false);
+
+    useEffect(() => {
+        axiosClient.get('/platform/settings/prices')
+            .then(({ data }) => {
+                priceForm.setFieldsValue({
+                    small: data.small,
+                    medium: data.medium,
+                    large: data.large,
+                });
+            })
+            .catch(() => message.warning('Could not load plan prices'))
+            .finally(() => setPricesLoading(false));
+    }, [priceForm]);
+
+    const savePrices = async (values) => {
+        setPricesSaving(true);
+        try {
+            await axiosClient.put('/platform/settings/prices', {
+                small: values.small,
+                medium: values.medium,
+                large: values.large,
+            });
+            message.success('✅ Plan prices updated successfully');
+        } catch {
+            message.error('Failed to update prices. Please try again.');
+        } finally {
+            setPricesSaving(false);
+        }
+    };
+    // ──────────────────────────────────────────────────────────────────
 
     const onFinish = async (values) => {
         setSaving(true);
@@ -69,6 +105,77 @@ const PlatformSettings = () => {
                     style={{ marginBottom: 20 }}
                 />
             )}
+
+            {/* ── Plan Pricing Card ─────────────────────────────────── */}
+            <Card
+                title={<><DollarOutlined style={{ marginRight: 8 }} />Subscription Plan Prices (USD / month)</>}
+                style={{ borderRadius: 10, marginBottom: 24 }}
+                extra={<Tag color="blue">Live – affects revenue dashboard</Tag>}
+            >
+                {pricesLoading ? (
+                    <Spin />
+                ) : (
+                    <Form form={priceForm} layout="vertical" onFinish={savePrices}>
+                        <Row gutter={24}>
+                            <Col xs={24} sm={8}>
+                                <Form.Item
+                                    label={<><Tag color="green">Small</Tag> (up to 50 students)</>}
+                                    name="small"
+                                    rules={[{ required: true, message: 'Required' }]}
+                                >
+                                    <InputNumber
+                                        prefix="$"
+                                        min={0}
+                                        precision={2}
+                                        style={{ width: '100%' }}
+                                        size="large"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={8}>
+                                <Form.Item
+                                    label={<><Tag color="blue">Medium</Tag> (51–150 students)</>}
+                                    name="medium"
+                                    rules={[{ required: true, message: 'Required' }]}
+                                >
+                                    <InputNumber
+                                        prefix="$"
+                                        min={0}
+                                        precision={2}
+                                        style={{ width: '100%' }}
+                                        size="large"
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} sm={8}>
+                                <Form.Item
+                                    label={<><Tag color="gold">Large</Tag> (151–500 students)</>}
+                                    name="large"
+                                    rules={[{ required: true, message: 'Required' }]}
+                                >
+                                    <InputNumber
+                                        prefix="$"
+                                        min={0}
+                                        precision={2}
+                                        style={{ width: '100%' }}
+                                        size="large"
+                                    />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+                        <Button
+                            type="primary"
+                            htmlType="submit"
+                            icon={<SaveOutlined />}
+                            loading={pricesSaving}
+                            style={{ background: '#1A1A2E' }}
+                        >
+                            Save Prices
+                        </Button>
+                    </Form>
+                )}
+            </Card>
+            {/* ─────────────────────────────────────────────────────── */}
 
             <Form
                 form={form}
@@ -171,7 +278,7 @@ const PlatformSettings = () => {
                             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                                 <div><Text type="secondary">Environment:</Text> <Tag color="green">Production</Tag></div>
                                 <div><Text type="secondary">Version:</Text> <Tag>EduComfort v1.0</Tag></div>
-                                <div><Text type="secondary">Database:</Text> <Tag color="blue">SQLite</Tag></div>
+                                <div><Text type="secondary">Database:</Text> <Tag color="blue">PostgreSQL</Tag></div>
                                 <div>
                                     <Text type="secondary">Platform Owner:</Text>{' '}
                                     <Tag color="purple">Abutolib Rashidov</Tag>

@@ -40,12 +40,26 @@ from app.models.teacher_payment import TeacherPayment
 from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner
 from app.models.expense import Expense
 
+# ── New domain model imports (Phase 1 Architecture Redesign) ──────────────
+# These imports ensure Alembic can detect the new tables.
+from app.gamification.models import XPLedger, UserXPSummary
+from app.marketplace.models import MarketplaceListing, MarketplaceOrder, MarketplaceCommission
+from app.individual.models import (
+    IndividualEnrollment,
+    IndividualLessonProgress,
+    IndividualCourseProgress,
+)
+
 from app.data.seed_super_admin import seed_super_admin
 from app.data.seed_subjects import seed_subjects
 
 # ========================= Schedulers =========================
-from app.services.rating_cycle_scheduler import start_scheduler
-from app.services.billing_scheduler import start_billing_scheduler
+# NOTE: APScheduler has been replaced by Celery Beat (Phase 5 scalability plan).
+# Periodic jobs (billing, rating cycles, leaderboard warmup) now run as
+# Celery tasks. Start Celery Beat separately:
+#   celery -A app.core.celery_app beat --loglevel=info
+# DO NOT re-add start_scheduler/start_billing_scheduler() here — they are
+# not safe under multi-worker Gunicorn (each worker would run its own scheduler).
 
 # ========================= Router Imports =========================
 # ✅ FIX 1: Removed duplicate imports of `public` and `messaging_v2`.
@@ -147,6 +161,17 @@ async def lifespan(app: FastAPI):
         logger.error(f"Billing scheduler failed to start: {e}")
 
     logger.info("Backend initialization completed")
+
+    # Log Redis status
+    from app.core.redis_client import get_redis_client
+    redis = get_redis_client()
+    if redis:
+        logger.info("Redis connected — leaderboard caching and XP daily caps active")
+    else:
+        logger.warning(
+            "Redis not configured (REDIS_URL not set) — "
+            "leaderboard queries will hit DB directly, daily XP caps will not be enforced"
+        )
 
     yield  # ← app runs here
 

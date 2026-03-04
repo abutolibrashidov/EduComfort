@@ -21,6 +21,7 @@ from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, Leaderboa
 from app.models.expense import Expense
 from app.models.payment import Payment
 from app.models.attendance import Attendance
+from app.models.platform_setting import PlatformSetting
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

@@ -28,6 +28,7 @@ import { useTranslation } from 'react-i18next';
 import axiosClient from '../api/axiosClient';
 import LanguageSwitcher from '../components/LanguageSwitcher';
 import StudentBottomNav from '../components/common/StudentBottomNav';
+import FeedbackWidget from '../components/FeedbackWidget';
 import { useBranding } from '../contexts/BrandingContext';
 import EduLogo from '../components/EduLogo';
 import { ASSET_BASE_URL } from '../api/config';
@@ -86,6 +87,9 @@ const StudentLayout = () => {
   };
 
   const handleLogout = () => {
+    sessionStorage.removeItem('impersonatedStudentId');
+    sessionStorage.removeItem('impersonatedTeacherId');
+    sessionStorage.removeItem('impersonatedStaffId');
     logout();
     navigate('/login');
   };
@@ -399,6 +403,8 @@ const StudentLayout = () => {
 
       {/* Mobile Bottom Navigation */}
       {!screens.md && <StudentBottomNav menuItems={visibleMenuItems} />}
+
+      <FeedbackWidget />
     </Layout>
   );
 };

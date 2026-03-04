@@ -191,9 +191,10 @@ export const uz = {
     "billing.payment_methods": "To'lov usullari",
 
     // Plans
-    "plan.bronze": "Bronza (Boshqaruv)",
-    "plan.silver": "Kumush (+Gamifikatsiya)",
-    "plan.gold": "Oltin (To'liq paket)",
+    "plan.small": "Small (50 o'quvchigacha)",
+    "plan.medium": "Medium (51-150 o'quvchi)",
+    "plan.large": "Large (151-300 o'quvchi)",
+    "plan.enterprise": "Enterprise (300+ o'quvchi)",
 
     // Layout
     "super_admin": "Super Admin",

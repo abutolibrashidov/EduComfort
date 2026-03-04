@@ -402,6 +402,23 @@ export default function Users() {
               style={{ background: '#0891b2', borderColor: '#0891b2', height: 44, fontWeight: 600 }}
               onClick={() => {
                 const path = getDashboardPath(viewUser.role);
+                if (viewUser.role === 'student') {
+                  sessionStorage.setItem('impersonatedStudentId', viewUser.id);
+                  sessionStorage.removeItem('impersonatedTeacherId');
+                  sessionStorage.removeItem('impersonatedStaffId');
+                } else if (viewUser.role === 'teacher') {
+                  sessionStorage.setItem('impersonatedTeacherId', viewUser.id);
+                  sessionStorage.removeItem('impersonatedStudentId');
+                  sessionStorage.removeItem('impersonatedStaffId');
+                } else if (viewUser.role === 'staff') {
+                  sessionStorage.setItem('impersonatedStaffId', viewUser.id);
+                  sessionStorage.removeItem('impersonatedStudentId');
+                  sessionStorage.removeItem('impersonatedTeacherId');
+                } else {
+                  sessionStorage.removeItem('impersonatedStudentId');
+                  sessionStorage.removeItem('impersonatedTeacherId');
+                  sessionStorage.removeItem('impersonatedStaffId');
+                }
                 setViewUser(null);
                 navigate(path);
               }}

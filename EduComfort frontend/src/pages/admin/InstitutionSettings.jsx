@@ -19,6 +19,7 @@ import {
     SaveOutlined,
 } from '@ant-design/icons';
 import { useBranding } from '../../contexts/BrandingContext';
+import { useTranslation } from 'react-i18next';
 import institutionService from '../../services/institutionService';
 import { ASSET_BASE_URL } from '../../api/config';
 
@@ -26,6 +27,7 @@ const { Title, Text } = Typography;
 const { TextArea } = Input;
 
 export default function InstitutionSettings() {
+    const { t } = useTranslation();
     const [form] = Form.useForm();
     const { branding, refreshBranding } = useBranding();
     const [loading, setLoading] = useState(false);
@@ -230,7 +232,7 @@ export default function InstitutionSettings() {
                             <div style={{ textAlign: 'center', marginBottom: 16 }}>
                                 <Title level={4} style={{ margin: 0, color: '#1890ff' }}>
                                     {branding?.subscription?.plan
-                                        ? branding.subscription.plan.toUpperCase()
+                                        ? t(`plan.${branding.subscription.plan.toLowerCase()}`) || branding.subscription.plan.toUpperCase()
                                         : 'UNKNOWN'} PLAN
                                 </Title>
                                 <Tag color={branding?.subscription?.status === 'active' ? 'success' : 'error'}>
