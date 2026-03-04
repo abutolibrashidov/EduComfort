@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
@@ -14,9 +14,7 @@ from app.models.exam import Exam, ExamQuestion, ExamSubmission, ExamAnswer, Exam
 from app.models.subject import Subject
 from app.schemas.exam import (
     ExamCreate, ExamUpdate, ExamResponse, ExamDetailResponse, ExamListResponse,
-    ExamAnswerSubmit, ExamSubmissionResponse, ExamGradingResponse,
-    StudentExamPerformance, ExamDashboardResponse, QuestionType,
-    ExamSubmissionUpdate, ExamQuestionCreate, ExamSecurityEvent,
+    ExamAnswerSubmit, ExamSubmissionResponse, ExamSubmissionUpdate, ExamQuestionCreate, ExamSecurityEvent,
     ExamHierarchyUnit, ExamHierarchySet, ExamHierarchyVariant
 )
 
@@ -24,8 +22,7 @@ from app.security.permissions import (
     is_super_admin,
     is_admin_or_higher,
     is_teacher,
-    is_student,
-    is_platform_owner
+    is_student
 )
 
 router = APIRouter(tags=["Exams"])
@@ -172,7 +169,7 @@ def get_imported_exams(
     import json
     
     # Base query for imported exams only
-    query = db.query(Exam).filter(Exam.is_imported == True)
+    query = db.query(Exam).filter(Exam.is_imported)
     
     # Apply institution filter (multi-tenancy)
     if not is_super_admin(current_user):
@@ -223,7 +220,7 @@ def get_imported_exams_hierarchy(
     import json
     
     # 1. Fetch all imported exams for institution
-    query = db.query(Exam).filter(Exam.is_imported == True)
+    query = db.query(Exam).filter(Exam.is_imported)
     
     if not is_super_admin(current_user):
         query = query.filter(Exam.institution_id == current_user.institution_id)
@@ -324,7 +321,7 @@ def assign_set_to_group(
     import json
     
     # Get all imported exams first (optimization: can filter by custom_data in DB if using Postgres with JSONB, but here we do in python)
-    imported_exams = db.query(Exam).filter(Exam.is_imported == True).all()
+    imported_exams = db.query(Exam).filter(Exam.is_imported).all()
     
     exams_to_assign = []
     for exam in imported_exams:
@@ -793,7 +790,7 @@ def list_exams(
             or_(
                 Exam.created_by_id == current_user.id,
                 Exam.group_id.in_(teaching_group_ids),
-                Exam.group_id == None  # Also show global/unassigned exams if that's the intention? Or remove this line if strict isolation.
+                Exam.group_id is None  # Also show global/unassigned exams if that's the intention? Or remove this line if strict isolation.
                 # Let's keep strict isolation + explicitly assigned or created.
             )
         )
@@ -1366,7 +1363,7 @@ def get_exam_submissions(
         # force evaluation to trigger any pydantic or relationship errors
         [s.answers for s in submissions]
         return submissions
-    except Exception as e:
+    except Exception:
         import traceback
         with open("error_log.txt", "a") as f:
             f.write(traceback.format_exc() + "\\n")
@@ -1419,7 +1416,7 @@ def get_pending_submissions(
     
     # Get all submitted but not reviewed submissions
     submissions = db.query(ExamSubmission).filter(
-        ExamSubmission.submitted_to_admin == True,
+        ExamSubmission.submitted_to_admin,
         ExamSubmission.status.in_([SubmissionStatus.graded, SubmissionStatus.submitted])
     ).all()
     

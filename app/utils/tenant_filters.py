@@ -2,10 +2,9 @@
 Tenant Filtering Utilities
 Helper functions for filtering database queries by institution
 """
-from fastapi import Request, Depends
+from fastapi import Request
 from sqlalchemy.orm import Session, Query
 from typing import TypeVar, Type
-from app.core.database import get_db
 from app.middleware.tenant_context import get_tenant_id
 
 

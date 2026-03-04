@@ -10,7 +10,6 @@ from app.models.user import User
 from app.models.workbook import Workbook, WorkbookSubmission
 from app.models.subject import Subject
 from app.schemas.workbook import (
-    WorkbookCreate,
     WorkbookUpdate,
     WorkbookResponse,
     WorkbookListResponse,
@@ -19,7 +18,6 @@ from app.schemas.workbook import (
     WorkbookSubmissionSubmit,
     WorkbookGradeSubmission,
     WorkbookGradingResponse,
-    StudentWorkbookPerformance,
     WorkbookDashboardResponse,
     WorkbookSubmissionStatus,
 )

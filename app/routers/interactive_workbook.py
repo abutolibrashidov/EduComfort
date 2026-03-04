@@ -178,7 +178,6 @@ async def upload_workbook_file(
     else:
         with open(file_path, "r", encoding="utf-8") as f:
             extracted_text = f.read()
-        page_count = 1
     
     # Store extracted text as metadata (optional)
     workbook.extracted_text = extracted_text

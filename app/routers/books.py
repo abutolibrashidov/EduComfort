@@ -256,7 +256,7 @@ async def assign_book(
     # Get the MASTER book (where assigned_to_student_id is None)
     book = db.query(StudentBook).filter(
         StudentBook.id == assignment.book_id,
-        StudentBook.assigned_to_student_id == None  # Master copy
+        StudentBook.assigned_to_student_id is None  # Master copy
     ).first()
     
     if not book:
@@ -305,7 +305,7 @@ async def assign_book(
                 StudentBook.title == book.title,
                 StudentBook.assigned_by_id == current_user.id,
                 StudentBook.assigned_to_student_id == student.id,
-                StudentBook.is_active == True
+                StudentBook.is_active
             ).first()
             
             if not existing:
@@ -337,7 +337,7 @@ async def assign_book(
             StudentBook.title == book.title,
             StudentBook.assigned_by_id == current_user.id,
             StudentBook.assigned_to_student_id == assignment.assigned_to_student_id,
-            StudentBook.is_active == True
+            StudentBook.is_active
         ).first()
         
         if existing:
@@ -382,8 +382,8 @@ async def get_teacher_library(
     
     books = db.query(StudentBook).filter(
         StudentBook.assigned_by_id == current_user.id,
-        StudentBook.assigned_to_student_id == None,  # Only master copies
-        StudentBook.is_active == True  # Filter out deleted books
+        StudentBook.assigned_to_student_id is None,  # Only master copies
+        StudentBook.is_active  # Filter out deleted books
     ).all()
     
     return books
@@ -408,7 +408,7 @@ async def get_my_books(
     
     query = db.query(StudentBook).filter(
         StudentBook.assigned_to_student_id == current_user.id,
-        StudentBook.is_active == True
+        StudentBook.is_active
     )
     
     # Filter by subject if provided
@@ -512,7 +512,7 @@ async def get_book_details(
         assignment = db.query(StudentBook).filter(
             StudentBook.file_path == book.file_path,
             StudentBook.assigned_to_student_id == current_user.id,
-            StudentBook.is_active == True
+            StudentBook.is_active
         ).first()
         
         if assignment:
@@ -564,7 +564,7 @@ async def delete_book(
     related_books = db.query(StudentBook).filter(
         StudentBook.assigned_by_id == current_user.id,
         StudentBook.file_path == book.file_path,
-        StudentBook.is_active == True
+        StudentBook.is_active
     ).all()
     
     deleted_count = 0

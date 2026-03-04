@@ -4,12 +4,11 @@ AI-powered book processing with units, exercises, progress tracking, and teacher
 """
 from sqlalchemy import (
     Column, Integer, String, Text, Boolean, DateTime, Float, 
-    ForeignKey, JSON, CheckConstraint, Index, ARRAY, Computed
+    ForeignKey, JSON, CheckConstraint, Index, Computed
 )
 from sqlalchemy.orm import relationship
 # from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
-from typing import Optional, Dict, Any, List
 from app.models.base import Base
 
 

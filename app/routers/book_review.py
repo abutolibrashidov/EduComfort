@@ -75,7 +75,7 @@ async def get_pages_needing_review(
     # Get pages needing review
     pages = db.query(BookContent).filter(
         BookContent.book_id == book_id,
-        BookContent.needs_review == True
+        BookContent.needs_review
     ).order_by(BookContent.page_number).all()
     
     # Format response

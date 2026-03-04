@@ -10,9 +10,7 @@ from app.auth.dependencies import get_current_user
 from app.models.user import User
 from app.security.permissions import (
     is_admin_or_higher,
-    is_super_admin,
-    require_institution_access,
-    check_institution_access
+    is_super_admin
 )
 
 router = APIRouter()

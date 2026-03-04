@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File, status
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import os
@@ -9,9 +9,10 @@ from pydantic import BaseModel
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
 from app.models.user import User
-from app.security.permissions import is_admin_or_higher
+
+from app.security.permissions import is_admin_or_higher, is_teacher
 from app.models.feed import Post, PostLike, UserFollow, Comment
-from app.models.institution import Institution
+
 
 router = APIRouter(prefix="/feed", tags=["News Feed"])
 
@@ -69,8 +70,8 @@ def create_post(
     Create a new post.
     Teachers/Admins can post on behalf of their institution.
     """
-    from app.security.permissions import is_teacher
-    
+    # Authorization check
+
     if not (is_teacher(current_user) or is_admin_or_higher(current_user)):
         raise HTTPException(status_code=403, detail="Only staff can create posts")
 

@@ -4,7 +4,7 @@ CRUD endpoints for AI-powered interactive book subsystem
 """
 from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import func, and_, or_
+from sqlalchemy import func
 from typing import List, Optional
 import os
 import shutil
@@ -17,13 +17,13 @@ from app.models.interactive_book import (
 )
 from app.models.user import User
 from app.schemas.interactive_book import (
-    BookCreate, BookUpdate, BookResponse, BookWithUnits,
-    UnitCreate, UnitUpdate, UnitResponse, UnitWithExercises,
-    ExerciseCreate, ExerciseUpdate, ExerciseResponse,
+    BookUpdate, BookResponse, BookWithUnits,
+    UnitUpdate, UnitResponse, UnitWithExercises,
+    ExerciseUpdate, ExerciseResponse,
     StudentAnswerCreate, StudentAnswerResponse,
     UnitProgressResponse, UnitProgressUpdate, BookProgressResponse,
     TeacherReviewCreate, TeacherReviewResponse,
-    AIProcessingLogResponse, AIProcessingTrigger
+    AIProcessingLogResponse
 )
 from app.auth.dependencies import get_current_user
 from app.security.permissions import is_teacher, is_admin_or_higher
@@ -172,7 +172,7 @@ def list_books(
     # Students only see published books
     if not is_teacher(current_user) and not is_admin_or_higher(current_user):
         print(f"DEBUG: list_books filtering for student/other. User={current_user.id} Role={current_user.role}")
-        query = query.filter(Book.is_published == True)
+        query = query.filter(Book.is_published)
     else:
         print(f"DEBUG: list_books showing all for teacher/admin. User={current_user.id} Role={current_user.role}")
     
@@ -609,7 +609,7 @@ def get_my_book_progress(
     book = db.query(Book).filter(
         Book.id == book_id,
         Book.institution_id == current_user.institution_id,
-        Book.is_published == True
+        Book.is_published
     ).first()
     
     if not book:
@@ -651,7 +651,7 @@ def get_my_unit_progress(
     book = db.query(Book).filter(
         Book.id == unit.book_id,
         Book.institution_id == current_user.institution_id,
-        Book.is_published == True
+        Book.is_published
     ).first()
     
     if not book:
@@ -744,7 +744,7 @@ def get_items_needing_review(
         raise HTTPException(status_code=403, detail="Permission denied")
     
     exercises = db.query(Exercise).join(Book).filter(
-        Exercise.needs_review == True,
+        Exercise.needs_review,
         Book.institution_id == current_user.institution_id
     ).order_by(Exercise.ai_confidence.asc()).all()
     
@@ -872,7 +872,7 @@ def get_processing_status(
     exercise_count = db.query(func.count(Exercise.id)).filter(Exercise.book_id == book_id).scalar()
     exercises_needing_review = db.query(func.count(Exercise.id)).filter(
         Exercise.book_id == book_id,
-        Exercise.needs_review == True
+        Exercise.needs_review
     ).scalar()
     
     return {
@@ -967,7 +967,7 @@ def _update_unit_progress(db: Session, student_id: int, unit_id: int, book_id: i
     correct = db.query(func.count(func.distinct(StudentAnswer.exercise_id))).filter(
         StudentAnswer.student_id == student_id,
         StudentAnswer.unit_id == unit_id,
-        StudentAnswer.is_correct == True
+        StudentAnswer.is_correct
     ).scalar()
     
     # Calculate points

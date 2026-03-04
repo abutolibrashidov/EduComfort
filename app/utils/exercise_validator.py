@@ -97,7 +97,7 @@ class ExerciseValidator:
         if accept_partial:
             similarity = ExerciseValidator._similarity(student_answer, correct_answer)
             if similarity >= 0.85:  # 85% similar
-                return True, f"Correct! (Minor spelling variation accepted) ✓"
+                return True, "Correct! (Minor spelling variation accepted) ✓"
             elif similarity >= 0.70:  # 70% similar
                 return False, f"Close, but not quite. Expected: {correct_answer}"
         
@@ -133,7 +133,7 @@ class ExerciseValidator:
         if student_ans in true_variations or student_ans in false_variations:
             if (student_ans in true_variations and correct_ans in true_variations) or \
                (student_ans in false_variations and correct_ans in false_variations):
-                return True, f"Correct! ✓"
+                return True, "Correct! ✓"
             else:
                 correct_display = "True" if correct_ans in true_variations else "False"
                 return False, f"Incorrect. The correct answer is {correct_display}."
@@ -228,7 +228,7 @@ class PDFExtractor:
         
         except ImportError:
             return "", 0  # PyPDF2 not installed
-        except Exception as e:
+        except Exception:
             return "", 0
 
     @staticmethod
@@ -248,7 +248,7 @@ class PDFExtractor:
         
         except ImportError:
             return "", 0
-        except Exception as e:
+        except Exception:
             return "", 0
 
     @staticmethod

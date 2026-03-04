@@ -11,7 +11,6 @@ from app.models.teacher_payment import TeacherPayment
 from app.models.group import Group
 from app.models.group_students import GroupStudent
 from pydantic import BaseModel
-from datetime import datetime
 from app.schemas.payment import PaymentCreate, PaymentRead, PaymentUpdate, TeacherPaymentRead
 
 router = APIRouter()

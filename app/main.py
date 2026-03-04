@@ -12,7 +12,6 @@ import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 import os
 
-from app.models.base import Base
 from app.models.subject import Subject
 from app.core.config import settings
 from app.core.database import SessionLocal
@@ -31,27 +30,11 @@ if settings.SENTRY_DSN:
 limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 
 # ========================= Model Imports =========================
-from app.models.group_students import GroupStudent
-from app.models.conversation import Conversation, ConversationParticipant, Message
-from app.models.achievement import Achievement, UserAchievement
-from app.models.subscription import InstitutionSubscription
-from app.models.announcement import Announcement
-from app.models.teacher_payment import TeacherPayment
-from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner
-from app.models.expense import Expense
 
 # ── New domain model imports (Phase 1 Architecture Redesign) ──────────────
 # These imports ensure Alembic can detect the new tables.
-from app.gamification.models import XPLedger, UserXPSummary
-from app.marketplace.models import MarketplaceListing, MarketplaceOrder, MarketplaceCommission
-from app.individual.models import (
-    IndividualEnrollment,
-    IndividualLessonProgress,
-    IndividualCourseProgress,
-)
 
 from app.data.seed_super_admin import seed_super_admin
-from app.data.seed_subjects import seed_subjects
 
 # ========================= Schedulers =========================
 # NOTE: APScheduler has been replaced by Celery Beat (Phase 5 scalability plan).
@@ -148,17 +131,7 @@ async def lifespan(app: FastAPI):
     finally:
         db.close()
 
-    try:
-        start_scheduler()
-        logger.info("Rating scheduler started")
-    except Exception as e:
-        logger.error(f"Failed to start rating scheduler: {e}")
 
-    try:
-        start_billing_scheduler()
-        logger.info("Billing scheduler started")
-    except Exception as e:
-        logger.error(f"Billing scheduler failed to start: {e}")
 
     logger.info("Backend initialization completed")
 

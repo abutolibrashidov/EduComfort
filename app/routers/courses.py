@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from pydantic import BaseModel 
 
 from app.core.database import get_db
-from app.models.group import Group, GroupStatus
+from app.models.group import Group
 from app.models.institution import Institution
 from app.models.subject import Subject
 from app.models.user import User
@@ -40,7 +40,7 @@ def get_public_courses(
     query = db.query(Group).join(Institution).join(Subject).join(User, Group.teacher_id == User.id)
     
     # Filter for active/upcoming
-    query = query.filter(Group.is_active == True)
+    query = query.filter(Group.is_active)
     # query = query.filter(Group.status == GroupStatus.UPCOMING) # Optional strictness
     
     if subject_id:

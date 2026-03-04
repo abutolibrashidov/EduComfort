@@ -40,13 +40,13 @@ def migrate_add_columns(db: Session = Depends(get_db)):
     try:
         db.execute("ALTER TABLE branches ADD COLUMN phone_number VARCHAR(20)")
         db.commit()
-    except Exception as e:
+    except Exception:
         db.rollback()
 
     try:
         db.execute("ALTER TABLE branches ADD COLUMN description TEXT")
         db.commit()
-    except Exception as e:
+    except Exception:
         db.rollback()
 
     return {"message": "Migration completed", "columns_added": ["phone_number", "description"]}

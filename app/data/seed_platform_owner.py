@@ -1,5 +1,4 @@
-from sqlalchemy.orm import Session
-from app.core.database import SessionLocal, engine
+from app.core.database import SessionLocal
 from app.models.user import User
 from app.core.security import get_password_hash
 from app.constants.roles import Role

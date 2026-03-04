@@ -2,9 +2,9 @@
 Billing Router — Haqiqiy oylik obuna va hisob-kitob tizimi
 Barcha xabarlar Uzbek tilida.
 """
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime, timedelta
 from pydantic import BaseModel
 
@@ -145,7 +145,7 @@ def assign_subscription(
     except ValueError:
         raise HTTPException(
             status_code=400,
-            detail=f"Noto'g'ri reja. Qabul qilinadiganlar: small, medium, large, enterprise"
+            detail="Noto'g'ri reja. Qabul qilinadiganlar: small, medium, large, enterprise"
         )
 
     # Muassasa mavjudligini tekshirish
@@ -412,7 +412,6 @@ def send_test_sms(
 # ──────────────────────────────────────────────────────────
 
 from fastapi import Request
-from app.core.config import settings
 from app.services.click_service import generate_click_url, check_click_signature
 
 @router.post("/institutions/{institution_id}/create-click-link")

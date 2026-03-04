@@ -3,7 +3,6 @@ app/services/attendance_service.py
 Business logic for attendance — keeps routers clean.
 """
 from sqlalchemy.orm import Session
-from sqlalchemy import and_
 from typing import Optional, List
 from datetime import date
 from fastapi import HTTPException, status
@@ -119,7 +118,7 @@ def bulk_create_attendance(
     institution_id: int,
 ) -> list:
     """Take attendance for an entire group at once. Skips duplicates gracefully."""
-    group = _verify_group_belongs_to_institution(db, data.group_id, institution_id)
+    _verify_group_belongs_to_institution(db, data.group_id, institution_id)
 
     # Fetch existing records for this group+date to avoid duplicates
     existing_student_ids = {

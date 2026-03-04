@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import List, Optional
 from datetime import datetime, timedelta
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from passlib.context import CryptContext
 
 from app.core.database import get_db
@@ -12,8 +12,7 @@ from app.models.user import User
 from app.models.branch import Branch
 from app.models.institution import Institution
 from app.models.payment import Payment
-from app.models.payment import Payment
-from sqlalchemy import and_, extract
+from sqlalchemy import extract
 from app.services.stats_service import (
     calculate_attendance_rate,
     calculate_payment_collection_rate,
@@ -155,7 +154,6 @@ def get_staff_dashboard(
     verify_staff(current_user)
     
     # Determine which staff's data to show
-    target_staff_id = current_user.id
     target_inst_id = current_user.institution_id
     
     if staff_id:
@@ -164,7 +162,6 @@ def get_staff_dashboard(
         if hasattr(role, 'value'): role = role.value
             
         if role == "super_admin":
-            target_staff_id = staff_id
             # Get target staff's institution
             target_user = db.query(User).filter(User.id == staff_id).first()
             if target_user:
@@ -205,13 +202,13 @@ def get_staff_dashboard(
         # 3. Active Students
         active_students = db.query(func.count(User.id)).filter(
             User.role == "student",
-            User.is_active == True,
+            User.is_active,
             User.institution_id == inst_id
         ).scalar() or 0
         
         # 4. Pending Approvals
         pending_approvals = db.query(func.count(User.id)).filter(
-            User.is_active == False,
+            not User.is_active,
             User.institution_id == inst_id
         ).scalar() or 0
         

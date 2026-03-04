@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from typing import List, Optional, Dict
 from datetime import datetime, date
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel
 from passlib.context import CryptContext
 
 from app.core.database import get_db
@@ -17,11 +17,9 @@ from app.models.material import Material
 from app.models.gradebook import GradebookLevel, GradebookExam, GradebookScore
 from app.models.lesson import Lesson
 from app.models.exam import Exam, ExamStatus
-from app.models.rating import TeacherRating
 from app.models.attendance import Attendance
 from app.services.stats_service import (
     calculate_attendance_rate,
-    calculate_payment_collection_rate,
     calculate_course_completion_rate
 )
 
@@ -230,7 +228,7 @@ class StudentProfileResponse(BaseModel):
 # ENDPOINTS
 # ============================================
 
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Query
 
 # ... imports ...
 
@@ -249,7 +247,7 @@ def get_student_dashboard(
     # Get enrolled groups
     enrollments = db.query(GroupStudent).filter(
         GroupStudent.student_id == target_student_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
     
     group_ids = [e.group_id for e in enrollments]
@@ -384,7 +382,7 @@ def get_student_dashboard(
         # Fetch all levels for student's groups
         levels = db.query(GradebookLevel).filter(
             GradebookLevel.group_id.in_(group_ids),
-            GradebookLevel.is_active == True
+            GradebookLevel.is_active
         ).all()
         
         for lvl in levels:
@@ -470,7 +468,7 @@ def get_student_courses(
         
     enrollments = db.query(GroupStudent).filter(
         GroupStudent.student_id == target_student_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
     
     group_ids = [e.group_id for e in enrollments]
@@ -563,7 +561,7 @@ def get_student_teachers(
     teachers = db.query(User).filter(
         User.institution_id == institution_id,
         User.role == "teacher",
-        User.is_active == True
+        User.is_active
     ).all()
     
     teachers_list = []
@@ -620,7 +618,7 @@ def get_student_profile(
     # Calculate stats
     enrolled_groups_count = db.query(func.count(GroupStudent.id)).filter(
         GroupStudent.student_id == student.id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).scalar() or 0
     
     # Get enrolled courses (distinct subjects)
@@ -628,7 +626,7 @@ def get_student_profile(
         GroupStudent, Group.id == GroupStudent.group_id
     ).filter(
         GroupStudent.student_id == student.id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     )
     enrolled_courses_count = enrolled_courses_query.scalar() or 0
     
@@ -764,7 +762,7 @@ def get_student_attendance_history(
     # Get all active enrollments
     enrollments = db.query(GroupStudent).filter(
         GroupStudent.student_id == target_student_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
     
     group_ids = [e.group_id for e in enrollments]

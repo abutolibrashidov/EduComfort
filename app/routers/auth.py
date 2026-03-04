@@ -9,7 +9,7 @@ from app.schemas.auth import LoginRequest, ForgotPasswordRequest, ResetPasswordR
 from app.core.security import verify_password, create_access_token, get_password_hash, SECRET_KEY, ALGORITHM
 from app.auth.dependencies import get_current_user
 from app.constants.roles import Role
-from jose import jwt, JWTError
+from jose import JWTError
 
 from slowapi import Limiter
 from slowapi.util import get_remote_address

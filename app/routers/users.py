@@ -7,10 +7,10 @@ from passlib.context import CryptContext
 
 from app.core.dependencies import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserRead, UserUpdate, UserListItem
+from app.schemas.user import UserCreate, UserRead, UserUpdate
 from app.auth.dependencies import get_current_user
 from app.constants.roles import Role
-from app.security.permissions import require_super_admin, check_institution_access, can_view_user, is_platform_owner
+from app.security.permissions import require_super_admin, can_view_user, is_platform_owner
 from app.models.rating import TeacherRating
 from datetime import datetime
 from pydantic import BaseModel
@@ -78,7 +78,7 @@ def get_users(
 ):
     """Get all users with optional filters"""
     # ✅ FIX: Always exclude soft-deleted users from listings
-    query = db.query(User).filter(User.is_active == True)
+    query = db.query(User).filter(User.is_active)
 
     # Multitenancy Scope: Isolate users by Institution
     if not current_user.is_platform_admin:
@@ -127,7 +127,7 @@ def get_user(
     current_user: User = Depends(get_current_user)
 ):
     """Get a specific user by ID"""
-    user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
+    user = db.query(User).filter(User.id == user_id, User.is_active).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     if not can_view_user(current_user, user):
@@ -148,7 +148,7 @@ def create_user(
     # Without this, soft-deleted users block their phone number forever.
     existing_user = db.query(User).filter(
         User.phone_number == user_data.phone_number,
-        User.is_active == True,
+        User.is_active,
     ).first()
     if existing_user:
         raise HTTPException(status_code=400, detail="Phone number already registered")
@@ -157,7 +157,7 @@ def create_user(
         # ✅ FIX: Same — only active users for email uniqueness
         existing_email = db.query(User).filter(
             User.email == user_data.email,
-            User.is_active == True,
+            User.is_active,
         ).first()
         if existing_email:
             raise HTTPException(status_code=400, detail="Email already registered")
@@ -202,7 +202,7 @@ def update_user(
 ):
     """Update a user"""
 
-    user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
+    user = db.query(User).filter(User.id == user_id, User.is_active).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -225,7 +225,7 @@ def update_user(
         existing = db.query(User).filter(
             User.phone_number == update_data["phone_number"],
             User.id != user_id,
-            User.is_active == True,
+            User.is_active,
         ).first()
         if existing:
             raise HTTPException(status_code=400, detail="Phone number already in use")
@@ -234,7 +234,7 @@ def update_user(
         existing = db.query(User).filter(
             User.email == update_data["email"],
             User.id != user_id,
-            User.is_active == True,
+            User.is_active,
         ).first()
         if existing:
             raise HTTPException(status_code=400, detail="Email already in use")
@@ -273,7 +273,6 @@ def delete_user(
     if user.is_super_admin:
         raise HTTPException(status_code=400, detail="Cannot delete super admin")
 
-    user_name = f"{user.first_name} {user.last_name}"
 
     # ✅ FIX: Two-phase delete pattern — same as platform.py
     # Phase 1 (sync, <100ms): soft-delete so UI removes the row immediately.
@@ -331,7 +330,7 @@ def view_user_profile(
     db: Session = Depends(get_db)
 ):
     """Increment profile view count for a user (public endpoint)."""
-    user = db.query(User).filter(User.id == user_id, User.is_active == True).first()
+    user = db.query(User).filter(User.id == user_id, User.is_active).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
@@ -355,7 +354,7 @@ def rate_teacher(
     teacher = db.query(User).filter(
         User.id == rating_data.teacher_id,
         User.role.in_(["teacher", "admin", "super_admin"]),
-        User.is_active == True,
+        User.is_active,
     ).first()
     if not teacher:
         raise HTTPException(status_code=404, detail="Teacher not found")

@@ -224,7 +224,6 @@ class AdvancedContentAnalyzer:
         passages = []
         lines = text.split('\n')
         
-        passage_start_idx = None
         passage_lines = []
         question_lines = []
         in_passage = False
@@ -235,7 +234,6 @@ class AdvancedContentAnalyzer:
             # Check for passage marker
             if self.question_patterns['passage_start'].match(line_stripped):
                 in_passage = True
-                passage_start_idx = i
                 continue
             
             # Check for question start (ends passage)

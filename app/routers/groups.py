@@ -5,10 +5,9 @@ from typing import List, Optional
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
 from app.models.user import User
-from app.security.permissions import is_platform_owner, is_super_admin, is_admin_or_higher
+from app.security.permissions import is_platform_owner, is_admin_or_higher
 from app.models.group import Group
-from app.schemas.group import GroupCreate, GroupUpdate, GroupRead, GroupListItem
-from app.models.group_students import GroupStudent
+from app.schemas.group import GroupCreate, GroupUpdate, GroupRead
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/admin/groups", tags=["Groups"])
@@ -78,7 +77,7 @@ def get_groups(
     # ✅ FIX: role_str was referenced before definition — moved to top of function
     role_str = _get_role_str(current_user)
 
-    query = db.query(Group).filter(Group.is_active == True)
+    query = db.query(Group).filter(Group.is_active)
 
     is_privileged = is_platform_owner(current_user)
 
@@ -194,7 +193,7 @@ def update_group(
     current_user: User = Depends(get_current_user),
 ):
     """Update group information"""
-    role_str = _get_role_str(current_user)
+    _get_role_str(current_user)
 
     # Only platform owners are truly unscoped; super_admin/admin are scoped to their institution
     is_platform_owner_user = is_platform_owner(current_user)

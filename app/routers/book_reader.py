@@ -219,7 +219,7 @@ async def get_book_page(
     # Master book has the same file_path but assigned_to_student_id is None
     master_book = db.query(StudentBook).filter(
         StudentBook.file_path == book.file_path,
-        StudentBook.assigned_to_student_id == None
+        StudentBook.assigned_to_student_id is None
     ).first()
     
     if not master_book:
@@ -287,7 +287,7 @@ async def get_book_chapters(
     # Find master book
     master_book = db.query(StudentBook).filter(
         StudentBook.file_path == book.file_path,
-        StudentBook.assigned_to_student_id == None
+        StudentBook.assigned_to_student_id is None
     ).first()
     
     if not master_book:
@@ -355,7 +355,7 @@ async def get_my_progress(
         # Find the master book (content is stored with master book ID)
         master_book = db.query(StudentBook).filter(
             StudentBook.file_path == book.file_path,
-            StudentBook.assigned_to_student_id == None
+            StudentBook.assigned_to_student_id is None
         ).first()
         
         if not master_book:
@@ -365,7 +365,7 @@ async def get_my_progress(
             )
 
         # Get total pages from BookContent for the master book
-        total_pages_in_book = db.query(BookContent).filter(
+        db.query(BookContent).filter(
             BookContent.book_id == master_book.id
         ).count()
         

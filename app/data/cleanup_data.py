@@ -1,4 +1,3 @@
-from sqlalchemy.orm import Session
 from app.core.database import SessionLocal
 from app.models.user import User
 from app.models.institution import Institution

@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import Optional, List
-from datetime import datetime, date
+from datetime import date
 from pydantic import BaseModel, EmailStr
 
 from app.core.database import get_db
 from app.models.user import User
-from app.models.achievement import Achievement  # Assuming you have this model
+from app.models.institution import Institution
+
 
 router = APIRouter(prefix="/public", tags=["Public"])
 
@@ -228,12 +229,12 @@ def get_public_stats(db: Session = Depends(get_db)):
     
     total_students = db.query(User).filter(
         User.role == "student",
-        User.is_active == True
+        User.is_active
     ).count()
     
     total_teachers = db.query(User).filter(
         User.role == "teacher",
-        User.is_active == True
+        User.is_active
     ).count()
     
     # Add more stats as needed
@@ -242,7 +243,6 @@ def get_public_stats(db: Session = Depends(get_db)):
         "total_students": total_students,
         "total_teachers": total_teachers,
         "success_rate": 95,  # Mock data
-        "average_score": 8.2,  # Mock data
         "average_score": 8.2,  # Mock data
         "years_of_experience": 10,
     }
@@ -296,7 +296,7 @@ def get_public_institutions(
     db: Session = Depends(get_db)
 ):
     """List all institutions publicly"""
-    institutions = db.query(Institution).filter(Institution.is_active == True).limit(limit).all()
+    institutions = db.query(Institution).filter(Institution.is_active).limit(limit).all()
     
     results = []
     for inst in institutions:
@@ -317,7 +317,7 @@ def get_public_teachers(
     db: Session = Depends(get_db)
 ):
     """List all teachers publicly"""
-    teachers = db.query(User).filter(User.role == "teacher", User.is_active == True).limit(limit).all()
+    teachers = db.query(User).filter(User.role == "teacher", User.is_active).limit(limit).all()
     
     results = []
     for t in teachers:

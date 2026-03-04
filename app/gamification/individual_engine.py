@@ -20,9 +20,8 @@ Rules:
 """
 from __future__ import annotations
 
-from datetime import date, timezone
+from datetime import date
 
-from sqlalchemy.orm import Session
 
 from app.gamification.engine_base import GamificationEngine
 from app.models.user import User
@@ -126,7 +125,6 @@ class IndividualGamificationEngine(GamificationEngine):
 
         # Daily streak bonus (once per calendar day)
         today = date.today().isoformat()
-        from app.core.redis_client import check_daily_xp_cap, increment_daily_xp_cap
         streak_key_today = f"streak:{user.id}:{today}"
         from app.core.redis_client import get_redis_client
         redis = get_redis_client()

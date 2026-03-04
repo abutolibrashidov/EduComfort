@@ -3,9 +3,9 @@ Distractor generation endpoint for gap-filling questions
 Generates plausible wrong answers based on context
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List
 import random
 
 router = APIRouter()

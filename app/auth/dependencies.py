@@ -15,7 +15,7 @@ def get_current_user(
     token: str = Depends(oauth2_scheme), 
     db: Session = Depends(get_db)
 ) -> User:
-    print(f"[INFO] get_current_user: Validating token...", flush=True)
+    print("[INFO] get_current_user: Validating token...", flush=True)
     """
     Dependency to get the current authenticated user from JWT token.
     

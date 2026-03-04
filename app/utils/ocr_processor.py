@@ -5,13 +5,11 @@ Handles image preprocessing, OCR extraction, and text post-processing for scanne
 import os
 import json
 import logging
-from typing import Dict, List, Tuple, Any, Optional
-from pathlib import Path
+from typing import Dict, List, Any, Optional
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import cv2
 import numpy as np
-from PIL import Image
 import pytesseract
 from pdf2image import convert_from_path
 from spellchecker import SpellChecker

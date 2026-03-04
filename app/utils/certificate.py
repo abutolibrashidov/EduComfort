@@ -146,7 +146,6 @@ def generate_certificate(student_name: str, rank: int, group_name: str, total_po
     GOLD      = (212, 175,  55)
     GOLD_LT   = (255, 223, 100)
     GOLD_DK   = (158, 118,  18)
-    WHITE     = (255, 255, 255)
     NEAR_WHITE= (220, 230, 255)
     LIGHT_BLU = (180, 200, 240)
     PALE_BLUE = (140, 165, 215)

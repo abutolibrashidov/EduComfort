@@ -15,7 +15,6 @@ Leaderboard:    Redis-cached, 5-minute TTL, keyed by institution_id
 """
 from __future__ import annotations
 
-from sqlalchemy.orm import Session
 
 from app.gamification.engine_base import GamificationEngine
 from app.models.user import User

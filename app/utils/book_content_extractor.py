@@ -4,7 +4,7 @@ Extracts structured content from PDF/DOCX books including chapters, pages, and e
 """
 import re
 import json
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 from pypdf import PdfReader
 import os
 
@@ -216,7 +216,7 @@ class BookContentExtractor:
         
         # Check for gap filling (______ or ___)
         if re.search(r'_{3,}', text):
-            gaps = re.findall(r'_{3,}', text)
+            re.findall(r'_{3,}', text)
             return ("gap_filling", None, None)
         
         # Check for True/False

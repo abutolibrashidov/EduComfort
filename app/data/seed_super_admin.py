@@ -1,5 +1,4 @@
 from sqlalchemy.orm import Session
-from sqlalchemy import inspect
 
 from app.models.user import User
 from app.constants.roles import Role

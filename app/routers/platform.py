@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from loguru import logger
 from sqlalchemy.orm import Session
 from sqlalchemy import func, extract
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime, timedelta, timezone
 from pydantic import BaseModel
 from passlib.context import CryptContext
@@ -196,11 +196,11 @@ def get_platform_dashboard(
 ):
     try:
         total_institutions = db.query(Institution).count()
-        active_institutions = db.query(Institution).filter(Institution.is_active == True).count()
+        active_institutions = db.query(Institution).filter(Institution.is_active).count()
         total_users = db.query(User).count()
         individual_learners = db.query(User).filter(
             User.role == Role.STUDENT,
-            User.institution_id == None,
+            User.institution_id.is_(None),
         ).count()
 
         revenue_mtd = 0
@@ -237,7 +237,7 @@ def get_all_institutions(
     current_user: User = Depends(verify_platform_owner),
 ):
     # ✅ FIX: exclude soft-deleted institutions so they disappear immediately after delete
-    institutions = db.query(Institution).filter(Institution.is_active == True).all()
+    institutions = db.query(Institution).filter(Institution.is_active).all()
     result = []
     for inst in institutions:
         try:
@@ -251,7 +251,7 @@ def get_all_institutions(
                 .filter(
                     User.institution_id == inst.id,
                     User.role.in_([Role.ADMIN, Role.SUPER_ADMIN, "admin", "super_admin"]),
-                    User.is_active == True,
+                    User.is_active,
                 )
                 .order_by(User.is_super_admin.desc(), User.id.asc())
                 .first()
@@ -369,7 +369,7 @@ def get_all_users(
 ):
     # ✅ FIX: exclude soft-deleted users (is_active=False) so they disappear
     # from the UI immediately after deletion without waiting for background hard-delete
-    users = db.query(User).filter(User.is_active == True).all()
+    users = db.query(User).filter(User.is_active).all()
     return [
         {
             "id": u.id,
@@ -480,7 +480,7 @@ def create_institution(
 
     existing = db.query(Institution).filter(
         Institution.subdomain == data.subdomain,
-        Institution.is_active == True  # ✅ FIX: don't block reuse of subdomains from deleted/suspended institutions
+        Institution.is_active  # ✅ FIX: don't block reuse of subdomains from deleted/suspended institutions
     ).first()
     if existing:
         raise HTTPException(status_code=400, detail="Subdomain already taken")
@@ -514,7 +514,7 @@ def create_institution(
 
     # ✅ Platform notification: inform platform owner about new institution
     notif = PlatformNotification(
-        title=f"Yangi muassasa ro'yxatdan o'tdi",
+        title="Yangi muassasa ro'yxatdan o'tdi",
         message=(
             f"'{data.name}' muassasasi muvaffaqiyatli yaratildi. "
             f"Admin: {data.admin_first_name} {data.admin_last_name} ({data.admin_phone}). "
@@ -608,7 +608,7 @@ def get_platform_notifications(
     from app.models.platform_notification import PlatformNotification
     q = db.query(PlatformNotification).order_by(PlatformNotification.created_at.desc())
     if unread_only:
-        q = q.filter(PlatformNotification.is_read == False)
+        q = q.filter(~PlatformNotification.is_read)
     notifs = q.limit(50).all()
     return [
         {
@@ -647,6 +647,6 @@ def mark_all_notifications_read(
 ):
     """Mark all platform notifications as read."""
     from app.models.platform_notification import PlatformNotification
-    db.query(PlatformNotification).filter(PlatformNotification.is_read == False).update({"is_read": True})
+    db.query(PlatformNotification).filter(~PlatformNotification.is_read).update({"is_read": True})
     db.commit()
     return {"message": "All notifications marked as read"}

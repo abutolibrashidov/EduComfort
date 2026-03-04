@@ -13,7 +13,6 @@ from app.models.interactive_workbook import (
     WorkbookExercise,
     StudentExerciseSubmission,
     WorkbookProgress,
-    ExerciseTypeEnum,
 )
 from app.models.user import User
 from app.schemas.interactive_workbook import (

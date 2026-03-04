@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, Body
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func, desc
 from typing import List, Optional
@@ -10,8 +10,7 @@ from app.auth.dependencies import get_current_user
 from app.models.user import User
 from app.models.institution import Institution
 from app.models.interactive_book import AIProcessingLog, Book
-from app.constants.roles import Role
-from app.security.permissions import is_admin_or_higher, is_platform_owner
+from app.security.permissions import is_platform_owner
 
 router = APIRouter(prefix="/ai-billing", tags=["AI Billing"])
 

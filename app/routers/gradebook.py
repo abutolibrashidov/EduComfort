@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
@@ -10,8 +10,7 @@ from app.models.group import Group
 from app.models.gradebook import GradebookLevel, GradebookExam, GradebookScore
 from app.schemas.gradebook import (
     GradebookLevelCreate, GradebookLevelResponse, GradebookLevelDetailResponse,
-    GradebookExamCreate, GradebookExamResponse, GradebookExamWithScoresResponse,
-    GradebookBulkScoreInput, GradebookScoreResponse
+    GradebookExamCreate, GradebookExamResponse, GradebookBulkScoreInput, GradebookScoreResponse
 )
 from app.security.permissions import is_teacher, is_admin_or_higher, is_super_admin
 

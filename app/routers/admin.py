@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from sqlalchemy import func, and_, or_
-from typing import List, Optional, Dict, Any
+from sqlalchemy import func
+from typing import List, Dict
 from datetime import datetime, timedelta
 from sqlalchemy import extract
 from pydantic import BaseModel
@@ -59,7 +59,7 @@ def get_dashboard_stats(
         institution_id = current_user.institution_id
         
         # Base query for users in this institution
-        user_query = db.query(User).filter(User.is_active == True)
+        user_query = db.query(User).filter(User.is_active)
         
         if institution_id:
             user_query = user_query.filter(User.institution_id == institution_id)
@@ -231,7 +231,7 @@ def get_admin_group_attendance_history(
     # Get all active students in group
     students = db.query(GroupStudent).filter(
         GroupStudent.group_id == group_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
 
     # Get the last 30 distinct dates with attendance for this group

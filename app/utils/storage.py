@@ -4,10 +4,8 @@ Cloud storage utility for EduComfort.
 Uses AWS S3 for file storage. Falls back to local disk storage in
 development when AWS credentials are not configured.
 """
-import os
 import uuid
 from pathlib import Path
-from typing import Optional
 
 import boto3
 from botocore.exceptions import BotoCoreError, ClientError

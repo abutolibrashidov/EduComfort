@@ -1,6 +1,6 @@
 import re
 import io
-from typing import List, Dict, Optional
+from typing import List, Optional
 from pydantic import BaseModel
 
 # Library imports (lazy loaded in function usually, but here global is fine if installed)
@@ -41,7 +41,7 @@ def extract_text_from_file(file_content: bytes, filename: str) -> str:
     elif filename.endswith(".txt"):
         try:
             text = file_content.decode("utf-8", errors="ignore")
-        except Exception as e:
+        except Exception:
              raise ValueError("Invalid Text file")
     
     else:

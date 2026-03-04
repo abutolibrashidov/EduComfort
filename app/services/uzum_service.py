@@ -1,9 +1,7 @@
 import hashlib
 import hmac
 from app.core.config import settings
-from loguru import logger
 from fastapi import HTTPException
-from pydantic import BaseModel
 
 def generate_uzum_url(institution_id: int, amount_uzs: float):
     if not settings.UZUM_TERMINAL_ID:

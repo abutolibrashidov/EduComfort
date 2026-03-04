@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 
 from app.core.dependencies import get_db
@@ -8,8 +8,7 @@ from app.auth.dependencies import get_current_user
 from app.models.user import User
 from app.models.ielts import (
     IELTSExam, IELTSReadingPassage, IELTSReadingQuestion, IELTSReadingAnswer,
-    IELTSListeningSection, IELTSListeningQuestion, IELTSListeningAnswer,
-    IELTSWritingTask, IELTSWritingSubmission, IELTSSubmission, IELTSSubmissionStatus
+    IELTSListeningSection, IELTSListeningQuestion, IELTSWritingTask, IELTSWritingSubmission, IELTSSubmission, IELTSSubmissionStatus
 )
 from app.models.subject import Subject
 from app.schemas.ielts import (
@@ -17,8 +16,7 @@ from app.schemas.ielts import (
     IELTSReadingPassageCreate, IELTSReadingPassageResponse,
     IELTSReadingQuestionCreate, IELTSReadingQuestionResponse, IELTSReadingAnswerSubmit,
     IELTSListeningSectionCreate, IELTSListeningSectionResponse, 
-    IELTSListeningQuestionCreate, IELTSListeningQuestionResponse, IELTSListeningAnswerSubmit,
-    IELTSWritingTaskResponse, IELTSWritingSubmissionCreate, IELTSWritingGrade,
+    IELTSListeningQuestionCreate, IELTSWritingSubmissionCreate, IELTSWritingGrade,
     IELTSResultsResponse, StudentIELTSPerformance
 )
 from app.security.permissions import require_role
@@ -469,8 +467,8 @@ async def get_student_ielts_performance(
         )
     
     overall_bands = [s.overall_band_score for s in submissions if s.overall_band_score]
-    reading_bands = [s.reading_band for s in submissions if s.reading_band]
-    listening_bands = [s.listening_band for s in submissions if s.listening_band]
+    [s.reading_band for s in submissions if s.reading_band]
+    [s.listening_band for s in submissions if s.listening_band]
     
     return StudentIELTSPerformance(
         student_id=student_id,

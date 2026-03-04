@@ -19,7 +19,7 @@ import json
 from typing import Optional
 
 from sqlalchemy.orm import Session
-from sqlalchemy import text, func
+from sqlalchemy import text
 
 from app.models.user import User
 from app.gamification.engine_base import GamificationEngine

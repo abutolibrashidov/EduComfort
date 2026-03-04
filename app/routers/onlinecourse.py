@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List, Optional
+from typing import List
 from datetime import datetime
 from pathlib import Path
 
@@ -8,9 +8,8 @@ from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
 from app.models.user import User
 from app.models.onlinecourse import (
-    OnlineCourse, CourseModule, CourseLesson, LessonResource,
-    LiveClass, LiveClassAttendance, StudentEnrollment, StudentCourseProgress,
-    StudentLessonProgress, CourseAssignment, AssignmentSubmission,
+    OnlineCourse, CourseModule, CourseLesson, LiveClass, StudentEnrollment, StudentCourseProgress,
+    CourseAssignment, AssignmentSubmission,
     CourseStatus, EnrollmentStatus, AssignmentStatus
 )
 from app.models.subject import Subject

@@ -5,7 +5,7 @@ Har kuni soat 09:00 (Toshkent) da ishlaydi:
   2. Muddati o'tib, to'lov olmagan → avtomatik bloklash
 """
 import logging
-from datetime import datetime, timedelta, date
+from datetime import datetime, timedelta
 
 import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -36,7 +36,7 @@ def check_upcoming_payments():
         # Faol obunalar, to'lov sanasi ertaga
         subscriptions = db.query(InstitutionSubscription).filter(
             InstitutionSubscription.status == SubscriptionStatus.ACTIVE,
-            InstitutionSubscription.next_billing_date != None,
+            InstitutionSubscription.next_billing_date is not None,
         ).all()
 
         notified = 0
@@ -112,7 +112,7 @@ def check_overdue_payments():
         # Faol obunalar, to'lov sanasi o'tib ketgan
         overdue_subs = db.query(InstitutionSubscription).filter(
             InstitutionSubscription.status == SubscriptionStatus.ACTIVE,
-            InstitutionSubscription.next_billing_date != None,
+            InstitutionSubscription.next_billing_date is not None,
             InstitutionSubscription.next_billing_date < now_utc,
         ).all()
 

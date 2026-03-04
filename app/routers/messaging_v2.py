@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import and_, or_, func, desc
+from sqlalchemy import or_, func
 from typing import List
 from datetime import datetime
 
@@ -18,6 +18,8 @@ from app.schemas.conversation_schemas import (
     UnreadCountResponse
 )
 from app.models.conversation import Conversation, ConversationParticipant, Message, ConversationType
+from app.models.group_students import GroupStudent
+
 
 router = APIRouter(prefix="/messaging", tags=["Messaging"])
 
@@ -90,7 +92,7 @@ def create_group_conversation(db: Session, group_id: int) -> Conversation:
     # Add all active students as participants
     students = db.query(GroupStudent).filter(
         GroupStudent.group_id == group_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
     
     for enrollment in students:
@@ -142,7 +144,7 @@ def get_unread_count(db: Session, conversation_id: int, user_id: int) -> int:
     query = db.query(Message).filter(
         Message.conversation_id == conversation_id,
         Message.sender_id != user_id,  # Don't count own messages
-        Message.is_deleted == False
+        ~Message.is_deleted
     )
     
     if participant.last_read_at:
@@ -169,9 +171,9 @@ def get_global_unread_count(
         .filter(
             ConversationParticipant.user_id == current_user.id,
             Message.sender_id != current_user.id,
-            Message.is_deleted == False,
+            ~Message.is_deleted,
             or_(
-                ConversationParticipant.last_read_at == None,
+                ConversationParticipant.last_read_at is None,
                 Message.created_at > ConversationParticipant.last_read_at
             )
         ).scalar() or 0
@@ -201,7 +203,7 @@ def get_conversations(
         # Students: find groups they are actively enrolled in
         enrollments = db.query(GroupStudent).filter(
             GroupStudent.student_id == current_user.id,
-            GroupStudent.is_active == True
+            GroupStudent.is_active
         ).all()
         user_group_ids = [e.group_id for e in enrollments]
 
@@ -260,7 +262,7 @@ def get_conversations(
         # Get last message
         last_message = db.query(Message).filter(
             Message.conversation_id == conv.id,
-            Message.is_deleted == False
+            ~Message.is_deleted
         ).order_by(Message.created_at.desc()).first()
         
         # Get unread count
@@ -392,7 +394,7 @@ def get_conversation(
     # Get last message
     last_message = db.query(Message).filter(
         Message.conversation_id == conversation_id,
-        Message.is_deleted == False
+        ~Message.is_deleted
     ).order_by(Message.created_at.desc()).first()
     
     # Get unread count
@@ -404,7 +406,7 @@ def get_conversation(
         group = conversation.group
         student_count = db.query(GroupStudent).filter(
             GroupStudent.group_id == group.id,
-            GroupStudent.is_active == True
+            GroupStudent.is_active
         ).count()
         
         group_info = GroupConversationInfo(
@@ -456,7 +458,7 @@ def get_messages(
     # Build query
     query = db.query(Message).filter(
         Message.conversation_id == conversation_id,
-        Message.is_deleted == False
+        ~Message.is_deleted
     )
     
     if before_id:

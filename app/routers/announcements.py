@@ -7,7 +7,6 @@ Announcements Router
 
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import text
 from typing import List, Optional
 from datetime import datetime, timezone
 from pydantic import BaseModel
@@ -84,7 +83,7 @@ class AnnouncementResponse(BaseModel):
 
     class Config:
         from_attributes = True
-        orm_mode = True
+
 
 
 # ==================== Routes ====================
@@ -110,7 +109,7 @@ def list_announcements(
                 q = q.filter(Announcement.institution_id == current_user.institution_id)
             else:
                 # No institution → only platform-wide (null institution_id)
-                q = q.filter(Announcement.institution_id == None)
+                q = q.filter(Announcement.institution_id.is_(None))
 
         announcements = q.offset(skip).limit(limit).all()
 

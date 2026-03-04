@@ -1,6 +1,6 @@
 import re
 import io
-from typing import List, Dict, Optional
+from typing import List, Dict
 from PyPDF2 import PdfReader
 
 def extract_questions_from_pdf(file_content: bytes) -> List[Dict[str, str]]:
@@ -8,7 +8,6 @@ def extract_questions_from_pdf(file_content: bytes) -> List[Dict[str, str]]:
     Extracts potential questions from a PDF file content.
     Looks for numbered lines or lines with underscores (blanks).
     """
-    questions = []
     
     try:
         reader = PdfReader(io.BytesIO(file_content))

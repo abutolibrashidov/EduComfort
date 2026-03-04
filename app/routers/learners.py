@@ -2,7 +2,7 @@
 Learner Registration and Public Browsing Endpoints
 Allows individual learners to register and browse available courses
 """
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from pydantic import BaseModel, EmailStr
@@ -138,7 +138,7 @@ def list_public_institutions(
     Public endpoint to browse all active institutions
     Learners can see what institutions are available on the platform
     """
-    query = db.query(Institution).filter(Institution.is_active == True)
+    query = db.query(Institution).filter(Institution.is_active)
     
     # Search by name
     if search:
@@ -163,7 +163,7 @@ def list_institution_courses(
     # Verify institution exists and is active
     institution = db.query(Institution).filter(
         Institution.id == institution_id,
-        Institution.is_active == True
+        Institution.is_active
     ).first()
     
     if not institution:
@@ -175,7 +175,7 @@ def list_institution_courses(
     # Get courses for this institution
     query = db.query(Course).filter(
         Course.institution_id == institution_id,
-        Course.is_active == True
+        Course.is_active
     )
     
     # Apply filters
@@ -211,8 +211,8 @@ def browse_all_courses(
     """
     # Get all active courses from active institutions
     query = db.query(Course).join(Institution).filter(
-        Course.is_active == True,
-        Institution.is_active == True
+        Course.is_active,
+        Institution.is_active
     )
     
     # Apply filters
@@ -252,7 +252,7 @@ def list_institution_groups(
     # Verify institution exists and is active
     institution = db.query(Institution).filter(
         Institution.id == institution_id,
-        Institution.is_active == True
+        Institution.is_active
     ).first()
     
     if not institution:
@@ -264,7 +264,7 @@ def list_institution_groups(
     # Get active groups with available spots
     groups = db.query(Group).filter(
         Group.institution_id == institution_id,
-        Group.is_active == True,
+        Group.is_active,
         Group.current_students < Group.max_students  # Only show groups with space
     ).offset(skip).limit(limit).all()
     
@@ -281,7 +281,7 @@ def get_institution_details(
     """
     institution = db.query(Institution).filter(
         Institution.id == institution_id,
-        Institution.is_active == True
+        Institution.is_active
     ).first()
     
     if not institution:

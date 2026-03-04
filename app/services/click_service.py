@@ -1,6 +1,5 @@
 import hashlib
 from app.core.config import settings
-from loguru import logger
 from fastapi import HTTPException
 from pydantic import BaseModel
 

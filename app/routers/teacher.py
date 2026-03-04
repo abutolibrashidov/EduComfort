@@ -4,9 +4,9 @@ from pydantic import BaseModel
 import os
 import shutil
 from pathlib import Path
-from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File, Form, status
+from fastapi import APIRouter, Depends, HTTPException, Query, UploadFile, File, Form
 from sqlalchemy.orm import Session
-from sqlalchemy import func, and_, or_
+from sqlalchemy import func
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
@@ -201,7 +201,7 @@ def get_teacher_groups(db: Session, teacher_id: int) -> List[Group]:
     """Get all groups assigned to a teacher"""
     return db.query(Group).filter(
         Group.teacher_id == teacher_id,
-        Group.is_active == True
+        Group.is_active
     ).all()
 
 
@@ -235,7 +235,7 @@ def get_teacher_dashboard(
     # Count total students across all groups
     total_students = db.query(func.count(GroupStudent.id)).filter(
         GroupStudent.group_id.in_(group_ids) if group_ids else False,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).scalar() or 0
     
     # Upcoming lessons
@@ -361,7 +361,7 @@ def get_teacher_groups_list(
         # Count students
         student_count = db.query(func.count(GroupStudent.id)).filter(
             GroupStudent.group_id == group.id,
-            GroupStudent.is_active == True
+            GroupStudent.is_active
         ).scalar() or 0
         
         # Check if group chat exists
@@ -421,7 +421,7 @@ def get_group_students(
     # Get students
     enrollments = db.query(GroupStudent).filter(
         GroupStudent.group_id == group_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
     
     result = []
@@ -470,7 +470,7 @@ def get_teacher_courses(
         
         student_count = db.query(func.count(GroupStudent.id)).filter(
             GroupStudent.group_id == group.id,
-            GroupStudent.is_active == True
+            GroupStudent.is_active
         ).scalar() or 0
         
         courses[subject_name]["groups"].append({
@@ -692,7 +692,7 @@ def get_group_attendance(
     # Get all students in group
     students = db.query(GroupStudent).filter(
         GroupStudent.group_id == group_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
     
     # Get existing attendance records
@@ -787,7 +787,7 @@ def get_group_attendance_history(
     # Get all active students in group
     students = db.query(GroupStudent).filter(
         GroupStudent.group_id == group_id,
-        GroupStudent.is_active == True
+        GroupStudent.is_active
     ).all()
 
     # Get the last 30 distinct dates with attendance for this group
@@ -984,7 +984,7 @@ def get_teacher_planner(
     verify_teacher(current_user)
     
     groups = get_teacher_groups(db, current_user.id)
-    group_ids = [g.id for g in groups]
+    [g.id for g in groups]
     
     # Fetch real lessons
     lessons = db.query(Lesson).filter(
@@ -1024,7 +1024,6 @@ def get_teacher_planner(
         "notes": [],
     }
     # Add these imports at the top of your file
-from pydantic import EmailStr
 from passlib.context import CryptContext
 
 # Add password context (if not already in your project)
@@ -1095,20 +1094,20 @@ def get_teacher_profile(
     # Calculate stats
     total_groups = db.query(func.count(Group.id)).filter(
         Group.teacher_id == teacher.id,
-        Group.is_active == True
+        Group.is_active
     ).scalar() or 0
     
     # Get group IDs for student count
     group_ids = [g.id for g in db.query(Group.id).filter(
         Group.teacher_id == teacher.id,
-        Group.is_active == True
+        Group.is_active
     ).all()]
     
     total_students = 0
     if group_ids:
         total_students = db.query(func.count(GroupStudent.id)).filter(
             GroupStudent.group_id.in_(group_ids),
-            GroupStudent.is_active == True
+            GroupStudent.is_active
         ).scalar() or 0
     
     # TODO: Implement actual rating system

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
@@ -28,7 +28,8 @@ class ExpenseRead(ExpenseBase):
     recipient_name: Optional[str]
 
     class Config:
-        orm_mode = True
+        from_attributes = True
+
 
 @router.post("/", response_model=ExpenseRead)
 @router.post("", response_model=ExpenseRead, include_in_schema=False)

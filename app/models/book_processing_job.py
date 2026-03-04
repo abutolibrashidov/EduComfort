@@ -2,7 +2,7 @@
 Book Processing Job Model
 Tracks async processing jobs for book uploads (text extraction, OCR, etc.)
 """
-from sqlalchemy import Column, Integer, String, DateTime, Boolean, Text, ForeignKey, JSON
+from sqlalchemy import Column, Integer, String, DateTime, Text, ForeignKey, JSON
 from sqlalchemy.orm import relationship
 from datetime import datetime
 

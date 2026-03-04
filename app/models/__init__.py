@@ -41,3 +41,27 @@ from .book_processing_job import BookProcessingJob
 from .gradebook import GradebookLevel, GradebookExam, GradebookScore
 from .feedback import Feedback
 from .platform_setting import PlatformSetting
+
+__all__ = [
+    "Base", "User", "Institution", "InstitutionSubscription", "SubscriptionPlan", "SubscriptionStatus",
+    "Branch", "Subject", "Group", "GroupLevel", "GroupStatus", "GroupStudent",
+    "Exam", "ExamQuestion", "ExamSubmission", "ExamAnswer", "ExamStatus", "QuestionType", "SubmissionStatus",
+    "Passage", "StudentBook", "BookContent", "StudentBookProgress", "StudentBookAnswer",
+    "Workbook", "WorkbookSubmission", "WorkbookStatus", "WorkbookSubmissionStatus",
+    "InteractiveWorkbook", "WorkbookExercise", "StudentExerciseSubmission", "WorkbookProgress",
+    "ExerciseTypeEnum", "InteractiveWorkbookStatus",
+    "StudentPerformance", "ExamPerformanceDetail", "WorkbookPerformanceDetail",
+    "UserAchievement", "Achievement", "TeacherRating", "RatingCycle", "TeacherAward",
+    "Material", "Lesson",
+    "IELTSExam", "IELTSReadingPassage", "IELTSReadingQuestion", "IELTSReadingAnswer",
+    "IELTSListeningSection", "IELTSListeningQuestion", "IELTSListeningAnswer",
+    "IELTSWritingTask", "IELTSWritingSubmission", "IELTSSubmission", "IELTSExamType", 
+    "IELTSQuestionType", "IELTSBandScore", "IELTSSubmissionStatus",
+    "OnlineCourse", "CourseModule", "CourseLesson", "LessonResource", "LiveClass", 
+    "LiveClassAttendance", "StudentEnrollment", "StudentCourseProgress", "StudentLessonProgress", 
+    "CourseAssignment", "AssignmentSubmission", "CourseType", "CourseStatus", 
+    "CourseDifficultyLevel", "EnrollmentStatus", "AssignmentStatus",
+    "Book", "Unit", "Exercise", "StudentAnswer", "UnitProgress", "BookProgress",
+    "AIProcessingLog", "TeacherReview", "BookProcessingJob",
+    "GradebookLevel", "GradebookExam", "GradebookScore", "Feedback", "PlatformSetting"
+]

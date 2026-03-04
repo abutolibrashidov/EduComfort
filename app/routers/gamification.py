@@ -1,6 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List, Dict, Any
 from datetime import datetime
 import os
 
@@ -55,7 +54,7 @@ async def get_user_stats(
     # Calculate level progress (mock logic: 1000 XP per level)
     xp_per_level = 1000
     current_level_xp = current_user.xp % xp_per_level
-    xp_to_next = xp_per_level - current_level_xp
+    xp_per_level - current_level_xp
     progress_percent = int((current_level_xp / xp_per_level) * 100)
     
     # Get earned achievements count

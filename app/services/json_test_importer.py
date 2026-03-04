@@ -1,10 +1,8 @@
 import json
 from typing import Dict, List, Optional
 from sqlalchemy.orm import Session
-from datetime import datetime
 
 from app.models.exam import Exam, ExamQuestion, ExamStatus, QuestionType
-from app.models.subject import Subject
 
 
 def import_json_test(
@@ -416,7 +414,6 @@ def batch_import_tests_from_directory(
     Returns:
         List of created Exam objects
     """
-    import os
     from pathlib import Path
     
     imported_exams = []

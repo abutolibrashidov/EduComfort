@@ -1,6 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from typing import List, Optional
 from datetime import datetime
 from pydantic import BaseModel
 
@@ -51,7 +50,7 @@ async def create_leaderboard_event(
     # Close any active events for this group
     active_events = db.query(LeaderboardEvent).filter(
         LeaderboardEvent.group_id == data.group_id,
-        LeaderboardEvent.is_active == True
+        LeaderboardEvent.is_active
     ).all()
     for event in active_events:
         event.is_active = False
@@ -77,7 +76,7 @@ async def get_active_event(
     """Get active event and current ranking for a group."""
     event = db.query(LeaderboardEvent).filter(
         LeaderboardEvent.group_id == group_id,
-        LeaderboardEvent.is_active == True
+        LeaderboardEvent.is_active
     ).first()
     
     if not event:
