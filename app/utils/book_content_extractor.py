@@ -5,7 +5,6 @@ Extracts structured content from PDF/DOCX books including chapters, pages, and e
 import re
 import json
 from typing import List, Dict, Any
-from pypdf import PdfReader
 import os
 
 
@@ -27,6 +26,10 @@ class BookContentExtractor:
     
     def _extract_from_pdf(self) -> Dict[str, Any]:
         """Extract content from PDF"""
+        try:
+            from pypdf import PdfReader
+        except ImportError:
+            raise ImportError("pypdf is required for PDF extraction. Run: pip install pypdf")
         reader = PdfReader(self.file_path)
         
         # Extract all text
