@@ -46,9 +46,9 @@ resend==2.4.0                   # Resend integration (alternative)
 openai==1.57.1
 
 # ── Celery & Redis (Phase 1) ──────────────────────────────────
-celery[redis]==5.3.4
+celery[redis]==5.4.0
 redis==5.0.1
-kombu==5.3.4
+kombu==5.3.7
 flower==2.0.1                   # Celery monitoring (optional)
 
 # ── OCR & Image Processing (Phase 2) ─────────────────────────
