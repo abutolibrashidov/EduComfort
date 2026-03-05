@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, Form, Input, Button, message, Divider, Tag, Upload, Avatar } from 'antd';
 import { UserOutlined, LockOutlined, SaveOutlined, SafetyCertificateOutlined, MailOutlined, UploadOutlined } from '@ant-design/icons';
 import { getCurrentUser } from '../../api/auth'; // Adjust path if needed
+import { API_BASE_URL } from '../../api/config';
 import { updateUser } from '../../services/users.service';
 import { useTranslation } from 'react-i18next'; // Assuming i18n is used
 import { theme } from '../../theme'; // Assuming theme is available
@@ -117,7 +118,7 @@ const AdminProfile = () => {
                             />
                             <Upload
                                 name="file"
-                                action="/api/upload/avatar"
+                                action={`${API_BASE_URL}/api/upload/avatar`}
                                 headers={{
                                     Authorization: `Bearer ${localStorage.getItem('sp_token')}`
                                 }}

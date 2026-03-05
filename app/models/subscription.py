@@ -22,8 +22,8 @@ class InstitutionSubscription(Base):
     id = Column(Integer, primary_key=True, index=True)
     institution_id = Column(Integer, ForeignKey("institutions.id", ondelete="CASCADE"), unique=True, nullable=False)
     
-    plan = Column(SqlEnum(SubscriptionPlan), default=SubscriptionPlan.SMALL)
-    status = Column(SqlEnum(SubscriptionStatus), default=SubscriptionStatus.ACTIVE)
+    plan = Column(SqlEnum(SubscriptionPlan, values_callable=lambda obj: [e.value for e in obj]), default=SubscriptionPlan.SMALL)
+    status = Column(SqlEnum(SubscriptionStatus, values_callable=lambda obj: [e.value for e in obj]), default=SubscriptionStatus.ACTIVE)
     
     start_date = Column(DateTime, default=datetime.utcnow)
     end_date = Column(DateTime, nullable=True)

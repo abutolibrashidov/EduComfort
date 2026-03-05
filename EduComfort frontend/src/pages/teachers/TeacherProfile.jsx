@@ -33,6 +33,7 @@ import {
 import axiosClient from "../../api/axiosClient";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import { API_BASE_URL } from "../../api/config";
 
 const { Title, Text } = Typography;
 
@@ -214,7 +215,7 @@ const TeacherProfile = () => {
                 />
                 <Upload
                   name="file"
-                  action="/api/upload/avatar"
+                  action={`${API_BASE_URL}/api/upload/avatar`}
                   headers={{
                     Authorization: `Bearer ${localStorage.getItem('sp_token')}`
                   }}

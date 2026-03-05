@@ -32,6 +32,7 @@ import {
 } from "@ant-design/icons";
 import axiosClient from "../../api/axiosClient";
 import PageHeader from "../../components/PageHeader";
+import { API_BASE_URL } from "../../api/config";
 
 const StudentProfile = () => {
   const [form] = Form.useForm();
@@ -155,7 +156,7 @@ const StudentProfile = () => {
               />
               <Upload
                 name="file"
-                action="/api/upload/avatar"
+                action={`${API_BASE_URL}/api/upload/avatar`}
                 headers={{
                   Authorization: `Bearer ${localStorage.getItem('sp_token')}`
                 }}

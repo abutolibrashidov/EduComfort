@@ -29,6 +29,7 @@ import {
 } from "@ant-design/icons";
 import axiosClient from "../../api/axiosClient";
 import PageHeader from "../../components/PageHeader";
+import { API_BASE_URL } from "../../api/config";
 
 const StaffProfile = () => {
   const [form] = Form.useForm();
@@ -134,7 +135,7 @@ const StaffProfile = () => {
               />
               <Upload
                 name="avatar"
-                action="/api/upload/avatar"
+                action={`${API_BASE_URL}/api/upload/avatar`}
                 showUploadList={false}
                 onChange={handleAvatarUpload}
               >

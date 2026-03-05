@@ -3,6 +3,7 @@ import { Card, Form, Input, Button, message, Divider, Avatar, Upload } from 'ant
 import { UserOutlined, LockOutlined, SaveOutlined, CrownOutlined, UploadOutlined } from '@ant-design/icons';
 import { getCurrentUser } from '../../api/auth';
 import { updatePlatformProfile } from '../../services/platformService';
+import { API_BASE_URL } from '../../api/config';
 
 const PlatformProfile = () => {
     const user = getCurrentUser();
@@ -83,7 +84,7 @@ const PlatformProfile = () => {
                         </Avatar>
                         <Upload
                             name="file"
-                            action="/api/upload/avatar"
+                            action={`${API_BASE_URL}/api/upload/avatar`}
                             headers={{
                                 Authorization: `Bearer ${localStorage.getItem('sp_token')}`
                             }}
