@@ -7,10 +7,10 @@ from typing import Optional, List
 from datetime import date
 from fastapi import HTTPException, status
 
-from app.models.attendance import Attendance, AttendanceStatus
-from app.models.user import User
-from app.models.group import Group  # adjust if your import path differs
-from app.schemas.attendance import (
+from app.academic.models.attendance import Attendance, AttendanceStatus
+from app.core.models.user import User
+from app.center.models.group import Group  # adjust if your import path differs
+from app.academic.schemas.attendance import (
     AttendanceCreate,
     AttendanceBulkCreate,
     AttendanceUpdate,

@@ -15,6 +15,12 @@ const DEFAULT_BRANDING = {
     primary_color: '#0050b3', // Deep Blue
     secondary_color: '#52c41a', // Green
     subdomain: 'educomfort',
+    institution_type: 'CENTER', // Default
+    customTerms: {
+        groups: 'Guruhlar',
+        teacher: 'O\'qituvchi',
+        students: 'O\'quvchilar'
+    }
 };
 
 export const BrandingProvider = ({ children }) => {
@@ -36,18 +42,34 @@ export const BrandingProvider = ({ children }) => {
             }
 
             const data = await institutionService.getCurrentInstitution();
+            // Set terms dynamically based on the tenant kind
+            const isSchool = data.institution_type === 'SCHOOL';
+            const customTerms = {
+                groups: isSchool ? "Sinf" : "Guruhlar",
+                teacher: isSchool ? "O'qituvchi" : "O'qituvchi", // Adjust as necessary
+                students: isSchool ? "O'quvchilar" : "O'quvchilar"
+            };
+
+            const primary = data.primary_color || '#1890ff';
+
             setBranding({
+                id: data.id,
                 name: data.name,
                 brand_name: data.brand_name || data.name,
                 logo_url: data.logo_url,
-                primary_color: data.primary_color || '#1890ff',
+                primary_color: primary,
                 secondary_color: data.secondary_color || '#52c41a',
                 subdomain: data.subdomain,
+                institution_type: data.institution_type || 'CENTER',
+                customTerms,
                 contact_email: data.contact_email,
                 contact_phone: data.contact_phone,
                 description: data.description,
                 subscription: data.subscription,
             });
+
+            // GLOBALLY INJECT BRAND COLOR TO CSS VARIABLES
+            document.documentElement.style.setProperty('--primary-color', primary);
         } catch (err) {
             console.error('Failed to fetch branding:', err);
             setError(err);

@@ -13,6 +13,7 @@ import dayjs from 'dayjs';
 import axiosClient from '../../api/axiosClient';
 import { AdminPage, B, Pill, statusTagStyle } from '../../components/AdminPage';
 import { Avatar, Typography } from 'antd';
+import { useBranding } from '../../contexts/BrandingContext';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -32,6 +33,13 @@ const daysOfWeek = [
 ];
 
 export default function Groups() {
+  // Detect if this is a SCHOOL institution — changes all terminology
+  const { branding } = useBranding();
+  const isSchool = branding?.institution_type === 'SCHOOL';
+  const T = isSchool
+    ? { page: 'Sinflar', item: 'Sinf', items: 'Sinflar', create: 'Sinf yaratish', search: 'Sinf qidirish...' }
+    : { page: 'Guruhlar', item: 'Guruh', items: 'Guruhlar', create: 'Guruh yaratish', search: 'Guruh qidirish...' };
+
   const [groups, setGroups] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [teachers, setTeachers] = useState([]);
@@ -189,7 +197,7 @@ export default function Groups() {
 
   const columns = [
     {
-      title: 'Guruh nomi', dataIndex: 'name', key: 'name',
+      title: `${T.item} nomi`, dataIndex: 'name', key: 'name',
       render: (n) => <span style={{ fontWeight: 700, color: '#0f172a' }}>{n}</span>,
     },
     {
@@ -200,10 +208,11 @@ export default function Groups() {
       title: "O'qituvchi", dataIndex: 'teacher', key: 'teacher',
       render: (t) => t ? <span><UserOutlined style={{ color: B.primary, marginRight: 5 }} />{t.first_name} {t.last_name}</span> : '—',
     },
-    {
+    // Only show Level column for learning centers (not schools)
+    ...(!isSchool ? [{
       title: 'Daraja', dataIndex: 'level', key: 'level',
       render: (l) => <Pill bg="#ede9fe" color="#6d28d9">{levelLabel[l] || l}</Pill>,
-    },
+    }] : []),
     {
       title: 'Jadval', key: 'schedule',
       render: (_, r) => (
@@ -251,13 +260,13 @@ export default function Groups() {
 
   return (
     <AdminPage
-      title="Guruhlar"
-      subtitle="Sinflar, jadvallar va o'quvchilarni boshqarish"
+      title={T.page}
+      subtitle={isSchool ? "Sinflar va o'quvchilarni boshqarish" : "Sinflar, jadvallar va o'quvchilarni boshqarish"}
       extra={
         <Button type="primary" icon={<PlusOutlined />} size="large"
           style={{ background: B.primary, borderColor: B.primary, borderRadius: 8, fontWeight: 600 }}
           onClick={() => { setModalMode('create'); setSelectedGroup(null); form.resetFields(); setIsModalVisible(true); }}>
-          Guruh yaratish
+          {T.create}
         </Button>
       }
     >
@@ -265,7 +274,7 @@ export default function Groups() {
       <Card style={{ marginBottom: 14, borderRadius: 12, border: `1px solid ${B.border}` }}>
         <Row gutter={[12, 12]}>
           <Col xs={24} sm={12} md={8}>
-            <Search placeholder="Guruh qidirish..." allowClear enterButton={<SearchOutlined />}
+            <Search placeholder={T.search} allowClear enterButton={<SearchOutlined />}
               onSearch={setSearchText} onChange={(e) => !e.target.value && setSearchText('')} />
           </Col>
           <Col xs={12} sm={6} md={4}>
@@ -285,20 +294,20 @@ export default function Groups() {
 
       <Card style={{ borderRadius: 12, border: `1px solid ${B.border}` }}>
         <Table columns={columns} dataSource={groups} rowKey="id" loading={loading}
-          pagination={{ pageSize: 10, showSizeChanger: true, showTotal: (t) => `Jami ${t} ta guruh` }}
+          pagination={{ pageSize: 10, showSizeChanger: true, showTotal: (t) => `Jami ${t} ta ${T.item.toLowerCase()}` }}
           scroll={{ x: 900 }}
         />
       </Card>
 
       {/* ── Create/Edit Modal ── */}
-      <Modal title={modalMode === 'create' ? "Yangi guruh" : "Guruhni tahrirlash"}
+      <Modal title={modalMode === 'create' ? `Yangi ${T.item}` : `${T.item}ni tahrirlash`}
         open={isModalVisible} onCancel={() => { setIsModalVisible(false); form.resetFields(); }}
         footer={null} width={680}>
         <Form form={form} layout="vertical" onFinish={handleSubmit}
           initialValues={{ max_students: 12, status: 'upcoming', level: 'beginner' }}
           style={{ paddingTop: 12 }}>
-          <Form.Item name="name" label="Guruh nomi" rules={[{ required: true, message: 'Nomni kiriting' }]}>
-            <Input placeholder="Ingliz tili · Ertalab · IELTS" />
+          <Form.Item name="name" label={`${T.item} nomi`} rules={[{ required: true, message: 'Nomni kiriting' }]}>
+            <Input placeholder={isSchool ? '1-A sinf, 2-B sinf...' : 'Ingliz tili · Ertalab · IELTS'} />
           </Form.Item>
           <Row gutter={14}>
             <Col span={12}>
@@ -326,11 +335,14 @@ export default function Groups() {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name="level" label="Daraja">
-                <Select>
-                  {Object.entries(levelLabel).map(([v, l]) => <Option key={v} value={v}>{l}</Option>)}
-                </Select>
-              </Form.Item>
+              {/* Only relevant for learning centers, not schools */}
+              {!isSchool && (
+                <Form.Item name="level" label="Daraja">
+                  <Select>
+                    {Object.entries(levelLabel).map(([v, l]) => <Option key={v} value={v}>{l}</Option>)}
+                  </Select>
+                </Form.Item>
+              )}
             </Col>
           </Row>
           <Form.Item name="days_of_week" label="Dars kunlari">
@@ -344,7 +356,7 @@ export default function Groups() {
             <RangePicker style={{ width: '100%' }} />
           </Form.Item>
           <Row gutter={14}>
-            <Col span={12}><Form.Item name="max_students" label="Max o'quvchi"><InputNumber min={1} max={50} style={{ width: '100%' }} /></Form.Item></Col>
+            <Col span={12}><Form.Item name="max_students" label={isSchool ? "Sinfdagi o'quvchi soni" : "Max o'quvchi"}><InputNumber min={1} max={60} style={{ width: '100%' }} /></Form.Item></Col>
             <Col span={12}>
               <Form.Item name="status" label="Holat">
                 <Select>
@@ -387,7 +399,7 @@ export default function Groups() {
       </Modal>
 
       {/* ── Students Modal ── */}
-      <Modal title={`O'quvchilar — ${selectedGroup?.name}`}
+      <Modal title={`${selectedGroup?.name} ${T.item.toLowerCase()}iga o'quvchi qo'shish`}
         open={isStudentsModalVisible} onCancel={() => setIsStudentsModalVisible(false)}
         footer={null} width={720}>
         <Card title="O'quvchi qo'shish" size="small" style={{ marginBottom: 14, borderRadius: 10, background: '#f8faff' }}>

@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from loguru import logger
-from app.models.institution import Institution
-from app.services.user_service import robust_cascade_delete_user
-from app.models.user import User
+from app.core.models.institution import Institution
+from app.shared.services.user_service import robust_cascade_delete_user
+from app.core.models.user import User
 
 def robust_cascade_delete_institution(db: Session, institution: Institution):
     """

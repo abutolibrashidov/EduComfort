@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from datetime import datetime
-from app.models.messaging import Message
+from app.engagement.models.messaging import Message
 
 
 def send_message(db: Session, sender_id: int, receiver_id: int, content: str) -> Message:

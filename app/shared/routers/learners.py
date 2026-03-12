@@ -8,10 +8,10 @@ from typing import List, Optional
 from pydantic import BaseModel, EmailStr
 
 from app.core.database import get_db
-from app.models.user import User
-from app.models.institution import Institution
-from app.models.course import Course
-from app.models.group import Group
+from app.core.models.user import User
+from app.core.models.institution import Institution
+from app.academic.models.course import Course
+from app.center.models.group import Group
 from app.constants.roles import Role
 from app.core.security import get_password_hash
 

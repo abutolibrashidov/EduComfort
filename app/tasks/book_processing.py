@@ -11,9 +11,9 @@ from sqlalchemy.orm import Session
 
 from app.core.celery_app import celery_app
 from app.core.database import SessionLocal
-from app.models.book_processing_job import BookProcessingJob
-from app.models.student_book import StudentBook
-from app.models.book_content import BookContent
+from app.academic.models.book_processing_job import BookProcessingJob
+from app.academic.models.student_book import StudentBook
+from app.academic.models.book_content import BookContent
 from app.utils.book_content_extractor import extract_book_content
 
 logger = logging.getLogger(__name__)

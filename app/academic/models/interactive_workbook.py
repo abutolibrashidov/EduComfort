@@ -8,7 +8,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from enum import Enum
 
-from app.models.base import Base
+from app.core.models.base import Base
 
 
 class ExerciseTypeEnum(str, Enum):

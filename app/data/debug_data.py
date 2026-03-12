@@ -1,6 +1,6 @@
 from app.core.database import SessionLocal
-from app.models.user import User
-from app.models.institution import Institution
+from app.core.models.user import User
+from app.core.models.institution import Institution
 from sqlalchemy import or_
 
 def debug_data():

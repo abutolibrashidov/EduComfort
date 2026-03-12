@@ -6,14 +6,14 @@ from pathlib import Path
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.onlinecourse import (
+from app.core.models.user import User
+from app.academic.models.onlinecourse import (
     OnlineCourse, CourseModule, CourseLesson, LiveClass, StudentEnrollment, StudentCourseProgress,
     CourseAssignment, AssignmentSubmission,
     CourseStatus, EnrollmentStatus, AssignmentStatus
 )
-from app.models.subject import Subject
-from app.schemas.onlinecourse import (
+from app.academic.models.subject import Subject
+from app.academic.schemas.onlinecourse import (
     OnlineCourseCreate, OnlineCourseUpdate, OnlineCourseResponse, OnlineCourseDetailResponse, OnlineCourseListResponse,
     CourseModuleCreate, CourseModuleResponse, CourseLessonCreate, CourseLessonResponse,
     LiveClassCreate, LiveClassResponse, CourseAssignmentCreate, CourseAssignmentResponse,

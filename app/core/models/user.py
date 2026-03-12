@@ -9,7 +9,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 
-from .base import Base
+from app.core.models.base import Base
 
 
 class User(Base):
@@ -36,6 +36,11 @@ class User(Base):
 
     parent_name = Column(
         String(100),
+        nullable=True
+    )
+
+    parent_telegram_chat_id = Column(
+        String(50),
         nullable=True
     )
 
@@ -144,6 +149,10 @@ class User(Base):
         onupdate=func.now()
     )
 
+    # 🔹 Billing (Students)
+    next_payment_date = Column(DateTime(timezone=True), nullable=True)
+    monthly_fee = Column(Integer, default=0) # Storing in UZS, float not strictly needed but matches other places
+
     # 🔹 Gamification
     xp = Column(Integer, default=0)
     level = Column(Integer, default=1)
@@ -154,8 +163,29 @@ class User(Base):
     profile_views = Column(Integer, default=0)
     avatar = Column(String(255), nullable=True)
     
+    # 🔹 Parent & Student Relationships
+    student_token = Column(String(20), unique=True, index=True, nullable=True)
+
+    # From Parent's perspective (a parent has many student links)
+    children_links = relationship(
+        "app.core.models.parent_student.ParentStudent",
+        foreign_keys="[app.core.models.parent_student.ParentStudent.parent_id]",
+        backref="parent",
+        cascade="all, delete-orphan",
+        overlaps="parent"
+    )
+
+    # From Student's perspective (a student has many parent links)
+    parent_links = relationship(
+        "app.core.models.parent_student.ParentStudent",
+        foreign_keys="[app.core.models.parent_student.ParentStudent.student_id]",
+        backref="student",
+        cascade="all, delete-orphan",
+        overlaps="parent"
+    )
+    
     # Relationships
-    achievements = relationship("app.models.achievement.UserAchievement", back_populates="user")
+    achievements = relationship("app.engagement.models.achievement.UserAchievement", back_populates="user")
 
     def __repr__(self):
         return f"<User {self.phone_number} ({self.role})>"

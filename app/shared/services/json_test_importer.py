@@ -2,7 +2,7 @@ import json
 from typing import Dict, List, Optional
 from sqlalchemy.orm import Session
 
-from app.models.exam import Exam, ExamQuestion, ExamStatus, QuestionType
+from app.academic.models.exam import Exam, ExamQuestion, ExamStatus, QuestionType
 
 
 def import_json_test(

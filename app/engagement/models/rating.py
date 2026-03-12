@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from .base import Base
+from app.core.models.base import Base
 
 class TeacherRating(Base):
     __tablename__ = "teacher_ratings"

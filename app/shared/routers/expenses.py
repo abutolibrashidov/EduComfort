@@ -6,8 +6,8 @@ from pydantic import BaseModel
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.expense import Expense
+from app.core.models.user import User
+from app.billing.models.expense import Expense
 
 router = APIRouter(prefix="/expenses", tags=["Expenses"])
 
@@ -63,7 +63,7 @@ def create_expense(
             
             # If this is a teacher salary, sync it to the teacher_payments table automatically
             if expense_data.get("category") == "salary" and recipient.role == "teacher":
-                from app.models.teacher_payment import TeacherPayment
+                from app.billing.models.teacher_payment import TeacherPayment
                 teacher_payment = TeacherPayment(
                     teacher_id=recipient.id,
                     amount=expense_data["amount"],

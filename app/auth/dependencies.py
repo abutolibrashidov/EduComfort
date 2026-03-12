@@ -1,10 +1,11 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
+from typing import Optional
 
 from app.core.dependencies import get_db
-from app.models.user import User
-from app.services.user_service import get_user_by_id
+from app.core.models.user import User
+from app.shared.services.user_service import get_user_by_id
 from app.core.security import decode_access_token  # ✅ CRITICAL: Use decode from security.py (uses jose library)
 
 # OAuth2 scheme for token extraction from Authorization header
@@ -94,3 +95,28 @@ def get_current_user(
         )
     
     return user
+
+
+def get_current_user_optional(
+    token: str = Depends(oauth2_scheme), 
+    db: Session = Depends(get_db)
+) -> Optional[User]:
+    """
+    Optional version of get_current_user. returns None instead of raising 401.
+    """
+    if not token:
+        return None
+        
+    try:
+        payload = decode_access_token(token)
+        if not payload:
+            return None
+            
+        user_id = payload.get("sub")
+        if user_id is None:
+            return None
+            
+        user = get_user_by_id(db, int(user_id))
+        return user if user and user.is_active else None
+    except Exception:
+        return None

@@ -11,8 +11,8 @@ import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from app.core.database import SessionLocal
-from app.models.institution import Institution
-from app.models.subscription import InstitutionSubscription, SubscriptionStatus
+from app.core.models.institution import Institution
+from app.core.models.subscription import InstitutionSubscription, SubscriptionStatus
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +26,7 @@ def check_upcoming_payments():
     last_notified_at tekshiriladi.
     """
     # Import lazily to avoid circular at module load time
-    from app.services.sms_service import send_payment_reminder
+    from app.shared.services.sms_service import send_payment_reminder
 
     db = SessionLocal()
     try:
@@ -103,7 +103,7 @@ def check_overdue_payments():
     Muddati o'tib ketgan va to'lov olmagan obunalarni bloklaydi.
     Bloklash = Institution.is_active = False
     """
-    from app.services.sms_service import send_blocked_notification
+    from app.shared.services.sms_service import send_blocked_notification
 
     db = SessionLocal()
     try:

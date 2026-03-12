@@ -5,7 +5,7 @@ Books assigned by teachers to students or groups
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.models.base import Base
+from app.core.models.base import Base
 
 
 class StudentBook(Base):

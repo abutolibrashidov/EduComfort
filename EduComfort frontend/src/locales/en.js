@@ -97,6 +97,20 @@ export const en = {
     "lp_inst3": "Attendance, exams and materials management",
     "lp_inst4": "Multi-branch and role-based access",
     "lp_register_center": "Register as a center",
+
+    // Centers
+    "lp_for_centers_tag": "For education centers",
+    "lp_for_centers_title": "LMS + CRM System",
+    "lp_register_center": "Register as a center",
+
+    // Schools
+    "lp_for_schools_tag": "For private schools",
+    "lp_for_schools_title": "School Management System",
+    "lp_school1": "Grades 1-11 and academic years",
+    "lp_school2": "Quarterly reports and Gradebook",
+    "lp_school3": "Parent portal and mobile app",
+    "lp_school4": "Student promotion between grades",
+    "lp_register_school": "Register as a school",
     "lp_for_learners_tag": "For individual learners",
     "lp_for_learners_title": "Learn & Grow",
     "lp_learn1": "Register on the platform and start learning",
@@ -132,6 +146,11 @@ export const en = {
     "reg.center_title": "Register Your Learning Center",
     "reg.center_sub": "Create your own white-label platform",
     "reg.inst_name": "Center / Academy Name",
+
+    // School Registration
+    "reg.school_title": "Register Your School",
+    "reg.school_sub": "Complete management system for your private school",
+    "reg.school_name": "School Name",
     "reg.inst_placeholder": "e.g. Seven Plus Academy",
     "reg.agreement": "You must accept the Terms of Service and Privacy Policy",
     "reg.i_agree": "I have read and agree to the",

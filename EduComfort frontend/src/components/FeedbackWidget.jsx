@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
-import { Button, Modal, Form, Input, Select, message } from 'antd';
+import { Button, Modal, Form, Input, Select, message, Grid } from 'antd';
 import { MessageOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import axiosClient from '../api/axiosClient';
+
+const { useBreakpoint } = Grid;
 
 const { TextArea } = Input;
 const { Option } = Select;
 
 const FeedbackWidget = () => {
     const { t } = useTranslation();
+    const screens = useBreakpoint();
+    const isMobile = !screens.md;
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
@@ -41,19 +45,24 @@ const FeedbackWidget = () => {
         <>
             <Button
                 type="primary"
-                shape="round"
+                shape={isMobile ? "circle" : "round"}
                 icon={<MessageOutlined />}
                 size="large"
                 style={{
                     position: 'fixed',
-                    bottom: '24px',
-                    right: '24px',
+                    bottom: isMobile ? '100px' : '24px',
+                    right: isMobile ? '16px' : '24px',
                     zIndex: 1000,
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)'
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                    width: isMobile ? '56px' : 'auto',
+                    height: isMobile ? '56px' : 'auto',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                 }}
                 onClick={showModal}
             >
-                {t('feedback.leave_feedback', 'Leave Feedback')}
+                {!isMobile && t('feedback.leave_feedback', 'Leave Feedback')}
             </Button>
 
             <Modal

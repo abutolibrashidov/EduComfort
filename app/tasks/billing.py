@@ -32,7 +32,7 @@ def run_billing_cycle(self):
     db = SessionLocal()
     try:
         # Import here to avoid circular imports at module load time
-        from app.services.billing_scheduler import _run_billing_logic
+        from app.shared.services.billing_scheduler import _run_billing_logic
         _run_billing_logic(db)
         logger.info("Billing cycle task completed successfully")
     except Exception as exc:

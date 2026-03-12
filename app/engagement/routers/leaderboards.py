@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner
+from app.core.models.user import User
+from app.engagement.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner
 from sqlalchemy import func, desc
 from app.utils.certificate import generate_certificate
 
@@ -36,7 +36,7 @@ async def create_leaderboard_event(
         raise HTTPException(status_code=403, detail="Siz bu amalni bajara olmaysiz.")
     
     # ✅ ISOLATION: Verify teacher belongs to the same institution as the group
-    from app.models.group import Group
+    from app.center.models.group import Group
     group = db.query(Group).filter(Group.id == data.group_id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Guruh topilmadi.")
@@ -65,7 +65,7 @@ async def create_leaderboard_event(
     db.refresh(new_event)
     return {"message": "Reyting taxtasi muvaffaqiyatli yaratildi", "event": new_event}
 
-from app.models.group_students import GroupStudent
+from app.center.models.group_students import GroupStudent
 
 @router.get("/events/active/{group_id}")
 async def get_active_event(
@@ -83,7 +83,7 @@ async def get_active_event(
         return {"event": None, "rankings": []}
 
     # ✅ ISOLATION: verify caller has access to this group's institution
-    from app.models.group import Group
+    from app.center.models.group import Group
     group = db.query(Group).filter(Group.id == group_id).first()
     if group and current_user.institution_id and group.institution_id != current_user.institution_id:
         raise HTTPException(status_code=403, detail="Bu guruhga ruxsatingiz yo'q.")

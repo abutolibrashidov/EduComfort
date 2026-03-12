@@ -107,6 +107,20 @@ export const uz = {
     "lp_inst3": "Davomat, imtihon va materiallarni boshqarish",
     "lp_inst4": "Ko'p filiallar va rol-asosli kirish",
     "lp_register_center": "Markaz sifatida ro'yxatdan o'ting",
+
+    // Centers
+    "lp_for_centers_tag": "O'quv markazlari uchun",
+    "lp_for_centers_title": "LMS + CRM tizimi",
+    "lp_register_center": "Markaz sifatida ro'yxatdan o'ting",
+
+    // Schools
+    "lp_for_schools_tag": "Xususiy maktablar uchun",
+    "lp_for_schools_title": "Maktab boshqaruv tizimi",
+    "lp_school1": "1-11 sinflar va akademik yillar",
+    "lp_school2": "Choraklik hisobotlar va Baholar jurnali",
+    "lp_school3": "Ota-onalar portali va mobil ilova",
+    "lp_school4": "O'quvchilarni sinfdan-sinfga o'tkazish",
+    "lp_register_school": "Maktab sifatida ro'yxatdan o'ting",
     "lp_for_learners_tag": "Individual o'quvchilar uchun",
     "lp_for_learners_title": "O'rganing & rivojlaning",
     "lp_learn1": "Platformada ro'yxatdan o'ting va o'qishni boshlang",
@@ -160,6 +174,11 @@ export const uz = {
     "reg.center_title": "O'quv markazingizni ro'yxatdan o'tkazing",
     "reg.center_sub": "O'z shaxsiy platformangizni yarating",
     "reg.inst_name": "Markaz / Akademiya nomi",
+
+    // School Registration
+    "reg.school_title": "Maktabingizni ro'yxatdan o'tkazing",
+    "reg.school_sub": "Maktabingiz uchun to'liq boshqaruv tizimi",
+    "reg.school_name": "Maktab nomi",
     "reg.inst_placeholder": "Masalan: Seven Plus Academy",
     "reg.agreement": "Siz Foydalanish shartlari va Maxfiylik siyosatiga rozi bo'lishingiz kerak",
     "reg.i_agree": "Men",

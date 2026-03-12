@@ -10,17 +10,17 @@ from datetime import date
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.attendance import Attendance, AttendanceStatus
-from app.models.group import Group  # adjust import path if different
-from app.schemas.attendance import (
+from app.core.models.user import User
+from app.academic.models.attendance import Attendance, AttendanceStatus
+from app.center.models.group import Group  # adjust import path if different
+from app.academic.schemas.attendance import (
     AttendanceCreate,
     AttendanceBulkCreate,
     AttendanceUpdate,
     AttendanceRead,
     AttendanceSummary,
 )
-from app.services.attendance_service import (
+from app.shared.services.attendance_service import (
     get_attendance_records,
     create_attendance_record,
     bulk_create_attendance,

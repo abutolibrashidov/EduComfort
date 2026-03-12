@@ -1,7 +1,7 @@
 from fastapi import HTTPException, status
 from typing import Iterable, Optional
 
-from app.models.user import User
+from app.core.models.user import User
 from app.constants.roles import Role
 
 
@@ -43,12 +43,21 @@ def is_super_admin(user: User) -> bool:
     if hasattr(user_role, "value"):
         user_role = user_role.value
         
-    return user_role in ["super_admin", Role.SUPER_ADMIN.value]
+    return user_role in [
+        "super_admin", Role.SUPER_ADMIN.value,
+        "school_owner", Role.SCHOOL_OWNER.value
+    ]
 
 
 def is_institution_admin(user: User) -> bool:
     """Check if user is an institution-level admin (manager within institution)"""
-    return user.role == Role.ADMIN or user.role == "admin"
+    user_role = getattr(user.role, "value", user.role)
+    return user_role in [
+        Role.ADMIN.value, "admin", 
+        Role.INSTITUTION_ADMIN.value, "institution_admin",
+        Role.SCHOOL_PRINCIPAL.value, "school_principal",
+        Role.SCHOOL_REGISTRAR.value, "school_registrar"
+    ]
 
 
 def is_admin_or_higher(user: User) -> bool:
@@ -58,12 +67,25 @@ def is_admin_or_higher(user: User) -> bool:
 
 def is_teacher(user: User) -> bool:
     """Check if user is a teacher"""
-    return user.role == Role.TEACHER or user.role == "teacher"
+    user_role = getattr(user.role, "value", user.role)
+    return user_role in [
+        Role.TEACHER.value, "teacher",
+        Role.SCHOOL_TEACHER.value, "school_teacher"
+    ]
 
 
 def is_student(user: User) -> bool:
     """Check if user is a student"""
     return user.role == Role.STUDENT or user.role == "student"
+
+
+def is_school_leadership(user: User) -> bool:
+    """Check if user is school owner or principal (authorized for high-level operations like Promotion)"""
+    user_role = getattr(user.role, "value", user.role)
+    return user_role in [
+        Role.SCHOOL_OWNER.value, "school_owner",
+        Role.SCHOOL_PRINCIPAL.value, "school_principal"
+    ]
 
 
 def require_platform_owner(user: User) -> None:

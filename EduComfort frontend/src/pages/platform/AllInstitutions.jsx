@@ -142,6 +142,15 @@ const AllInstitutions = () => {
             render: v => <Text type="secondary">{v}</Text>,
         },
         {
+            title: 'Type',
+            dataIndex: 'institution_type',
+            key: 'institution_type',
+            render: type => {
+                const color = type === 'SCHOOL' ? 'green' : 'blue';
+                return <Tag color={color}>{type || 'CENTER'}</Tag>;
+            },
+        },
+        {
             title: 'Plan',
             dataIndex: 'subscription_tier',
             key: 'subscription_tier',
@@ -295,7 +304,7 @@ const AllInstitutions = () => {
                     form={form}
                     layout="vertical"
                     onFinish={handleCreate}
-                    initialValues={{ subscription_plan: 'basic', ai_credits: 0 }}
+                    initialValues={{ subscription_plan: 'basic', ai_credits: 0, institution_type: 'CENTER' }}
                 >
                     <Form.Item
                         label="Institution Name"
@@ -321,6 +330,13 @@ const AllInstitutions = () => {
                             />
                             <Input placeholder="e.g. sevenplus" style={{ flex: 1 }} />
                         </Space.Compact>
+                    </Form.Item>
+
+                    <Form.Item label="Institution Type" name="institution_type">
+                        <Select>
+                            <Option value="CENTER">Center / Academy</Option>
+                            <Option value="SCHOOL">Private School</Option>
+                        </Select>
                     </Form.Item>
 
                     <Form.Item label="Subscription Plan" name="subscription_plan">

@@ -4,8 +4,8 @@ from datetime import datetime, timedelta
 from loguru import logger
 
 from app.core.database import get_db
-from app.models.user import User
-from app.schemas.auth import LoginRequest, ForgotPasswordRequest, ResetPasswordRequest
+from app.core.models.user import User
+from app.core.schemas.auth import LoginRequest, ForgotPasswordRequest, ResetPasswordRequest
 from app.core.security import verify_password, create_access_token, get_password_hash, SECRET_KEY, ALGORITHM
 from app.auth.dependencies import get_current_user
 from app.constants.roles import Role
@@ -58,6 +58,7 @@ def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
             "institution_id": user.institution_id,
             "institution_name": user.institution.name if user.institution else None,
             "institution_logo": user.institution.logo_url if user.institution else None,
+            "institution_type": user.institution.institution_type if user.institution else "CENTER",
             "is_super_admin": user.is_super_admin,
             "is_platform_admin": user.is_platform_admin,
             "is_active": user.is_active
@@ -78,6 +79,7 @@ def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
                 "institution_id": user.institution_id,
                 "institution_name": user.institution.name if user.institution else None,
                 "institution_logo": user.institution.logo_url if user.institution else None,
+                "institution_type": user.institution.institution_type if user.institution else "CENTER",
                 "is_super_admin": user.is_super_admin,
                 "is_active": user.is_active
             }
@@ -130,6 +132,7 @@ def impersonate_user(
         "institution_id": target_user.institution_id,
         "institution_name": target_user.institution.name if target_user.institution else None,
         "institution_logo": target_user.institution.logo_url if target_user.institution else None,
+        "institution_type": target_user.institution.institution_type if target_user.institution else "CENTER",
         "is_super_admin": target_user.is_super_admin,
         "is_platform_admin": target_user.is_platform_admin,
         "is_active": target_user.is_active
@@ -158,13 +161,19 @@ def register(request: Request, data: dict, db: Session = Depends(get_db)):
     - If role is 'student', registers as Individual Learner.
     """
     from app.core.security import get_password_hash
-    from app.models.institution import Institution
+    from app.core.models.institution import Institution
+    from app.school.models.academic_year import AcademicYear
+    from app.school.models.grade_level import GradeLevel
+    from app.school.models.term import Term
+    import secrets
+    import string
 
     role = data.get("role", "student")
     email = data.get("email")
     phone = data.get("phone_number")
     password = data.get("password")
     full_name = data.get("full_name", "")
+    institution_type = data.get("institution_type", "CENTER").upper() # "CENTER" or "SCHOOL"
 
     if not phone and not email:
         raise HTTPException(status_code=400, detail="Phone or Email required")
@@ -206,15 +215,70 @@ def register(request: Request, data: dict, db: Session = Depends(get_db)):
                 subdomain = f"{base_subdomain}{counter}"
                 counter += 1
 
-            new_inst = Institution(name=inst_name, brand_name=inst_name, subdomain=subdomain)
+            new_inst = Institution(
+                name=inst_name, 
+                brand_name=inst_name, 
+                subdomain=subdomain,
+                institution_type=institution_type
+            )
             db.add(new_inst)
             db.commit()
             db.refresh(new_inst)
             institution_id = new_inst.id
+            
+            # If it's a SCHOOL, seed default Academic Year and Grade Levels
+            if institution_type == "SCHOOL":
+                logger.info(f"Seeding Academic Year and Grade Levels for School {institution_id}")
+                
+                # Seed Academic Year
+                current_year = datetime.utcnow().year
+                new_academic_year = AcademicYear(
+                    institution_id=institution_id,
+                    name=f"{current_year}-{current_year + 1}",
+                    start_date=datetime(current_year, 9, 1).date(),
+                    end_date=datetime(current_year + 1, 6, 30).date(),
+                    is_active=True
+                )
+                db.add(new_academic_year)
+                db.flush()
+                
+                # Seed Grade Levels 1 through 11
+                for grade_num in range(1, 12):
+                    new_grade = GradeLevel(
+                        institution_id=institution_id,
+                        name=f"Level {grade_num}",
+                        sequence=grade_num
+                    )
+                    db.add(new_grade)
+                
+                # Seed 4 Terms (Quarters/Chorak)
+                term_data = [
+                    ("1-chorak", 1, datetime(current_year, 9, 1).date(), datetime(current_year, 10, 31).date()),
+                    ("2-chorak", 2, datetime(current_year, 11, 5).date(), datetime(current_year, 12, 28).date()),
+                    ("3-chorak", 3, datetime(current_year, 1, 10).date(), datetime(current_year, 3, 20).date()),
+                    ("4-chorak", 4, datetime(current_year, 4, 1).date(), datetime(current_year, 5, 25).date()),
+                ]
+                for name, seq, start, end in term_data:
+                    # Adjust years for term 3 & 4 (since they cross the calendar year)
+                    s_date = start if seq < 3 else start.replace(year=current_year + 1)
+                    e_date = end if seq < 3 else end.replace(year=current_year + 1)
+                    new_term = Term(
+                        institution_id=institution_id,
+                        academic_year_id=new_academic_year.id,
+                        name=name,
+                        sequence=seq,
+                        start_date=s_date,
+                        end_date=e_date,
+                        is_active=(seq == 1) # Set 1st chorak as active by default
+                    )
+                    db.add(new_term)
+                
+                db.commit()
+                
         except Exception as e:
             db.rollback()
             logger.exception(f"Error creating institution: {e}")
-            raise HTTPException(status_code=500, detail=f"Failed to register center: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Failed to register center/school: {str(e)}")
 
     if role in ["admin", "super_admin"] and not institution_id:
         logger.error(f"Registration Attempt Failed: Role={role} but institution_id={institution_id}")
@@ -233,6 +297,17 @@ def register(request: Request, data: dict, db: Session = Depends(get_db)):
             is_super_admin=(role == "super_admin"),
             is_platform_admin=False
         )
+
+        # Generate student_token for students to link with Parents
+        if role == "student":
+            # 6-character alphanumeric token
+            token_chars = string.ascii_uppercase + string.digits
+            while True:
+                token = ''.join(secrets.choice(token_chars) for _ in range(6))
+                if not db.query(User).filter(User.student_token == token).first():
+                    new_user.student_token = token
+                    break
+
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
@@ -270,6 +345,7 @@ def register(request: Request, data: dict, db: Session = Depends(get_db)):
         "institution_id": new_user.institution_id,
         "institution_name": new_user.institution.name if new_user.institution else None,
         "institution_logo": new_user.institution.logo_url if new_user.institution else None,
+        "institution_type": new_user.institution.institution_type if new_user.institution else "CENTER",
         "is_super_admin": new_user.is_super_admin,
         "is_platform_admin": new_user.is_platform_admin,
         "is_active": new_user.is_active
@@ -290,6 +366,7 @@ def register(request: Request, data: dict, db: Session = Depends(get_db)):
             "institution_id": new_user.institution_id,
             "institution_name": new_user.institution.name if new_user.institution else None,
             "institution_logo": new_user.institution.logo_url if new_user.institution else None,
+            "institution_type": new_user.institution.institution_type if new_user.institution else "CENTER",
             "is_super_admin": new_user.is_super_admin,
             "is_active": new_user.is_active
         }
@@ -312,10 +389,94 @@ def read_users_me(current_user: User = Depends(get_current_user)):
         "institution_id": current_user.institution_id,
         "institution_name": current_user.institution.name if current_user.institution else None,
         "institution_logo": current_user.institution.logo_url if current_user.institution else None,
+        "institution_type": current_user.institution.institution_type if current_user.institution else "CENTER",
         "is_super_admin": current_user.is_super_admin,
         "is_platform_admin": current_user.is_platform_admin,
-        "is_active": current_user.is_active
+        "is_active": current_user.is_active,
+        "student_token": current_user.student_token
     }
+
+
+@router.get("/me/children")
+def get_my_children(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """Fetch basic info, attendance, and grades for all children linked to this parent"""
+    from app.core.models.parent_student import ParentStudent
+    from app.academic.models.attendance import Attendance
+    from app.academic.models.grade import Grade
+    from app.school.models.academic_year import AcademicYear
+    from app.center.models.enrollment import Enrollment
+    role_str = getattr(current_user.role, 'value', current_user.role)
+    if role_str != "parent":
+        raise HTTPException(status_code=403, detail="Only parents can access this endpoint")
+
+    # Get all student links for this parent
+    links = db.query(ParentStudent).filter(ParentStudent.parent_id == current_user.id).all()
+    
+    results = []
+    for link in links:
+        student = link.student
+        if not student:
+            continue
+            
+        # Get active enrollment and current GradeLevel for Schools
+        current_grade = "N/A"
+        active_year = db.query(AcademicYear).filter(
+            AcademicYear.institution_id == student.institution_id,
+            AcademicYear.status == "active"
+        ).first()
+        
+        if active_year:
+            from app.center.models.enrollment import Enrollment
+            enrollment = db.query(Enrollment).filter(
+                Enrollment.student_id == student.id,
+                Enrollment.academic_year_id == active_year.id,
+                Enrollment.status == "active"
+            ).first()
+            if enrollment and enrollment.grade_level:
+                current_grade = enrollment.grade_level.name
+
+        # Get Recent Attendance (last 10 records)
+        recent_attendance = db.query(Attendance).filter(
+            Attendance.student_id == student.id
+        ).order_by(Attendance.date.desc()).limit(10).all()
+        
+        attendance_summary = []
+        for att in recent_attendance:
+            attendance_summary.append({
+                "date": att.date,
+                "status": att.status,
+                "group_name": att.group.name if att.group else "N/A"
+            })
+
+        # Get Recent Grades (last 10 records)
+        recent_grades = db.query(Grade).filter(
+            Grade.student_id == student.id
+        ).order_by(Grade.date.desc()).limit(10).all()
+        
+        grade_summary = []
+        for g in recent_grades:
+            grade_summary.append({
+                "date": g.date,
+                "value": g.value,
+                "weight": g.weight,
+                "group_name": g.group.name if g.group else "N/A"
+            })
+
+        results.append({
+            "id": student.id,
+            "first_name": student.first_name,
+            "last_name": student.last_name,
+            "avatar": student.avatar,
+            "relationship": link.relationship_type,
+            "current_grade_level": current_grade,
+            "attendance": attendance_summary,
+            "grades": grade_summary
+        })
+        
+    return results
 
 
 # ---------------------------------------------------------------------------
@@ -406,3 +567,81 @@ def reset_password(
     db.commit()
     logger.info(f"Password reset successful for user_id={user.id}")
     return {"message": "Password updated successfully. You can now log in."}
+
+
+@router.post("/register-parent")
+def register_parent(data: dict, db: Session = Depends(get_db)):
+    """
+    Register a PARENT and link them to a STUDENT via student_token.
+    """
+    from app.core.models.parent_student import ParentStudent
+    from app.core.security import get_password_hash
+
+    token = data.get("student_token")
+    email = data.get("email")
+    phone = data.get("phone_number")
+    password = data.get("password")
+    full_name = data.get("full_name", "")
+    relationship = data.get("relationship", "Parent")
+
+    if not token:
+        raise HTTPException(status_code=400, detail="Student Token is required")
+    if not phone and not email:
+        raise HTTPException(status_code=400, detail="Phone or Email required")
+    if not password:
+        raise HTTPException(status_code=400, detail="Password required")
+
+    # 1. Find Student
+    student = db.query(User).filter(User.student_token == token.upper()).first()
+    if not student:
+        raise HTTPException(status_code=404, detail="Invalid Student Token. Please check with the school.")
+
+    # 2. Check if Parent exists
+    filters = []
+    if phone: filters.append(User.phone_number == phone)
+    if email: filters.append(User.email == email)
+    
+    from sqlalchemy import or_
+    existing = db.query(User).filter(or_(*filters)).first()
+    if existing:
+        # If user exists, just ensure they are a parent or allow linking
+        # For simplicity in this phase, we require a new account or existing one must be 'parent'
+        if existing.role != Role.PARENT:
+            raise HTTPException(status_code=400, detail="User already exists with a different role.")
+        parent = existing
+    else:
+        # Create new Parent
+        parts = full_name.split(" ", 1)
+        first_name = parts[0]
+        last_name = parts[1] if len(parts) > 1 else ""
+
+        parent = User(
+            email=email,
+            phone_number=phone,
+            password_hash=get_password_hash(password),
+            first_name=first_name,
+            last_name=last_name,
+            role=Role.PARENT,
+            institution_id=student.institution_id,
+            is_active=True
+        )
+        db.add(parent)
+        db.commit()
+        db.refresh(parent)
+
+    # 3. Create Link
+    existing_link = db.query(ParentStudent).filter(
+        ParentStudent.parent_id == parent.id,
+        ParentStudent.student_id == student.id
+    ).first()
+
+    if not existing_link:
+        new_link = ParentStudent(
+            parent_id=parent.id,
+            student_id=student.id,
+            relationship_type=relationship
+        )
+        db.add(new_link)
+        db.commit()
+
+    return {"message": "Parent account registered and linked successfully"}

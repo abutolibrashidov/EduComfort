@@ -10,10 +10,10 @@ from datetime import datetime
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.student_book import StudentBook
-from app.models.group import Group
-from app.models.interactive_book import Book as InteractiveBook
+from app.core.models.user import User
+from app.academic.models.student_book import StudentBook
+from app.center.models.group import Group
+from app.academic.models.interactive_book import Book as InteractiveBook
 from app.tasks.ai_book_processing import process_book_with_ai_background
 from fastapi import BackgroundTasks
 from pydantic import BaseModel
@@ -153,7 +153,7 @@ async def upload_book(
     db.refresh(new_book)
     
     # Create processing job
-    from app.models.book_processing_job import BookProcessingJob
+    from app.academic.models.book_processing_job import BookProcessingJob
     from app.tasks.book_processing import process_text_extraction, process_ocr
     
     job = BookProcessingJob(

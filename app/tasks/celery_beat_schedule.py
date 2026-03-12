@@ -23,6 +23,14 @@ CELERY_BEAT_SCHEDULE = {
         "options": {"queue": "billing"},
     },
 
+    # ── Finance: Daily student billing cycle at 10:00 UTC ────────────────────
+    # Checks student payment expirations, sends SMS to parents, blocks expired students.
+    "student-billing-cycle-daily": {
+        "task": "app.tasks.student_billing.run_student_billing_cycle",
+        "schedule": crontab(hour=10, minute=0),
+        "options": {"queue": "billing"},
+    },
+
     # ── Gamification: Weekly rating cycle reset (Monday 00:00 UTC) ───────────
     # Closes expired LeaderboardEvents, archives winners, resets active states.
     "rating-cycle-weekly-reset": {

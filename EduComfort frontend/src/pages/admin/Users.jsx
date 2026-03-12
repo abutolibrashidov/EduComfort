@@ -26,6 +26,7 @@ export default function Users() {
   const [modalMode, setModalMode] = useState('create');
   const [selectedUser, setSelectedUser] = useState(null);
   const [form] = Form.useForm();
+  const selectedRole = Form.useWatch('role', form);
   const [searchText, setSearchText] = useState('');
   const [roleFilter, setRoleFilter] = useState(null);
   const [statusFilter, setStatusFilter] = useState(null);
@@ -79,7 +80,7 @@ export default function Users() {
       const err = e.response?.data?.detail;
       let errMsg = 'Xatolik';
       if (Array.isArray(err)) {
-        errMsg = err.map(x => `${x.loc ? x.loc.join('.') : 'Field'}: ${x.msg}`).join(', ');
+        errMsg = JSON.stringify(err);
       } else if (typeof err === 'string') {
         errMsg = err;
       }
@@ -209,7 +210,16 @@ export default function Users() {
             style={{ color: B.primary }}
             onClick={() => {
               setModalMode('edit'); setSelectedUser(r);
-              form.setFieldsValue({ first_name: r.first_name, last_name: r.last_name, phone_number: r.phone_number, email: r.email, role: r.role, is_active: r.is_active });
+              form.setFieldsValue({
+                first_name: r.first_name,
+                last_name: r.last_name,
+                phone_number: r.phone_number,
+                email: r.email,
+                role: r.role,
+                is_active: r.is_active,
+                parent_name: r.parent_name,
+                parent_phone_number: r.parent_phone_number
+              });
               setIsModalVisible(true);
             }}
           />
@@ -342,6 +352,23 @@ export default function Users() {
               </Form.Item>
             </Col>
           </Row>
+
+          {selectedRole === 'student' && (
+            <Row gutter={14} style={{ background: '#f8fafc', padding: '12px 12px 0', borderRadius: 8, marginBottom: 16, border: `1px solid ${B.border}` }}>
+              <Col span={12}>
+                <Form.Item name="parent_name" label="Ota-ona (F.I.SH)">
+                  <Input prefix={<UserOutlined style={{ color: '#94a3b8' }} />} placeholder="Ota-ona ismini kiriting" />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name="parent_phone_number" label="Ota-ona telefon raqami"
+                  rules={[{ pattern: /^\+?[\d\s-]+$/, message: "Noto'g'ri format" }]}
+                >
+                  <Input prefix={<PhoneOutlined style={{ color: '#94a3b8' }} />} placeholder="+998 90 123 45 67" />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
           <Form.Item style={{ marginBottom: 0 }}>
             <Space style={{ width: '100%', justifyContent: 'flex-end' }}>
               <Button onClick={() => setIsModalVisible(false)}>Bekor qilish</Button>
@@ -451,6 +478,12 @@ export default function Users() {
                   ))}
                 </div>
               </Descriptions.Item>
+            )}
+            {viewUser.role === 'student' && viewUser.parent_name && (
+              <Descriptions.Item label="Ota-ona">{viewUser.parent_name}</Descriptions.Item>
+            )}
+            {viewUser.role === 'student' && viewUser.parent_phone_number && (
+              <Descriptions.Item label="Ota-ona telfoni">{viewUser.parent_phone_number}</Descriptions.Item>
             )}
           </Descriptions>
         )}

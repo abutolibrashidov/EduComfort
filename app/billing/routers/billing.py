@@ -10,9 +10,9 @@ from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.institution import Institution
-from app.models.subscription import InstitutionSubscription, SubscriptionPlan, SubscriptionStatus
+from app.core.models.user import User
+from app.core.models.institution import Institution
+from app.core.models.subscription import InstitutionSubscription, SubscriptionPlan, SubscriptionStatus
 from app.constants.roles import Role
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
@@ -211,7 +211,7 @@ def record_payment(
     To'lov qabul qilindi deb belgilash.
     Keyingi to'lov sanasi +30 kun bo'ladi, muassasa faollashtiriladi.
     """
-    from app.services.sms_service import send_payment_confirmed
+    from app.shared.services.sms_service import send_payment_confirmed
 
     sub = db.query(InstitutionSubscription).filter(
         InstitutionSubscription.institution_id == institution_id
@@ -262,7 +262,7 @@ def unblock_institution(
     Muassasani qo'lda faollashtirish (blokni olib tashlash).
     To'lov shart emas — platforma egasi qaror qiladi.
     """
-    from app.services.sms_service import send_unblocked_notification
+    from app.shared.services.sms_service import send_unblocked_notification
 
     inst = db.query(Institution).filter(Institution.id == institution_id).first()
     if not inst:
@@ -300,7 +300,7 @@ def manual_block_institution(
     current_user: User = Depends(verify_platform_owner),
 ):
     """Muassasani qo'lda bloklash"""
-    from app.services.sms_service import send_blocked_notification
+    from app.shared.services.sms_service import send_blocked_notification
 
     inst = db.query(Institution).filter(Institution.id == institution_id).first()
     if not inst:
@@ -379,7 +379,7 @@ def send_test_sms(
     current_user: User = Depends(verify_platform_owner),
 ):
     """Test SMS yuborish (Eskiz integratsiyasini tekshirish uchun)"""
-    from app.services.sms_service import send_sms
+    from app.shared.services.sms_service import send_sms
 
     sub = db.query(InstitutionSubscription).filter(
         InstitutionSubscription.institution_id == institution_id
@@ -412,7 +412,7 @@ def send_test_sms(
 # ──────────────────────────────────────────────────────────
 
 from fastapi import Request
-from app.services.click_service import generate_click_url, check_click_signature
+from app.shared.services.click_service import generate_click_url, check_click_signature
 
 @router.post("/institutions/{institution_id}/create-click-link")
 def create_click_link(
@@ -518,7 +518,7 @@ async def click_webhook(request: Request, db: Session = Depends(get_db)):
         db.commit()
 
         # SMS yuborish
-        from app.services.sms_service import send_payment_confirmed
+        from app.shared.services.sms_service import send_payment_confirmed
         if sub.contact_phone:
             send_payment_confirmed(
                 phone=sub.contact_phone,
@@ -542,7 +542,7 @@ async def click_webhook(request: Request, db: Session = Depends(get_db)):
 # UZUM PAY INTEGRATION
 # ──────────────────────────────────────────────────────────
 
-from app.services.uzum_service import generate_uzum_url, check_uzum_signature
+from app.shared.services.uzum_service import generate_uzum_url, check_uzum_signature
 
 @router.post("/institutions/{institution_id}/create-uzum-link")
 def create_uzum_link(
@@ -620,7 +620,7 @@ async def uzum_webhook(request: Request, db: Session = Depends(get_db)):
         db.commit()
 
         # O'zbekistonda SMS jo'natish
-        from app.services.sms_service import send_payment_confirmed
+        from app.shared.services.sms_service import send_payment_confirmed
         if sub.contact_phone:
             send_payment_confirmed(
                 phone=sub.contact_phone,

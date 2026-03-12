@@ -33,9 +33,11 @@ const Login = () => {
       await new Promise(r => setTimeout(r, 100));
       const routes = {
         admin: "/admin", super_admin: "/admin", platform_owner: "/platform",
-        teacher: "/teacher", student: "/student", staff: "/staff", guest: "/public"
+        teacher: "/teacher", student: "/student", staff: "/staff", guest: "/public",
+        parent: "/parent"
       };
-      navigate(routes[role] || "/", { replace: true });
+      // Hard redirect ensures global BrandingContext mounts and injects theme CSS correctly
+      window.location.href = routes[role] || "/";
     } catch (err) {
       let msg = t('login_failed') || "Kirish amalga oshmadi";
       if (err?.response?.data?.detail) {

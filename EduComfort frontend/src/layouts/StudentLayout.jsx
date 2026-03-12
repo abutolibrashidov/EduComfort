@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { logout, getCurrentUser } from '../api/auth';
-import { Layout, Menu, Button, Grid, Avatar, Badge, Typography, Select, Dropdown } from 'antd';
+import { Layout, Menu, Button, Grid, Avatar, Badge, Typography, Select, Dropdown, Spin } from 'antd';
 import {
   DashboardOutlined,
   BookOutlined,
@@ -49,10 +49,11 @@ const StudentLayout = () => {
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchUnreadCount = async () => {
       try {
         const { data } = await axiosClient.get('/messaging/unread-count');
-        setUnreadCount(data.unread_count);
+        if (isMounted) setUnreadCount(data.unread_count);
       } catch (error) {
         console.error("Failed to fetch unread count:", error);
       }
@@ -60,7 +61,10 @@ const StudentLayout = () => {
 
     fetchUnreadCount();
     const interval = setInterval(fetchUnreadCount, 30000);
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const changeLanguage = (lng) => {
@@ -155,10 +159,10 @@ const StudentLayout = () => {
         }}
       >
         <div style={{
-          width: collapsed ? 48 : 208,
-          height: 56,
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: 16,
+          width: collapsed ? 40 : 160,
+          height: 40,
+          borderRadius: 12,
+          background: 'rgba(255, 255, 255, 0.1)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -178,13 +182,17 @@ const StudentLayout = () => {
               }}
               onError={(e) => {
                 e.target.style.display = 'none';
-                if (!e.target.parentNode.innerHTML.includes('📚')) {
-                  e.target.parentNode.innerHTML += '<span style="font-size: 24px;">📚</span>';
+                // Fallback to EduLogo if image fails
+                const parent = e.target.parentNode;
+                if (parent && !parent.querySelector('.edu-logo-svg')) {
+                  // We can't easily inject a React component here via innerHTML,
+                  // but we can at least show a better icon or handle it in state.
+                  // For simplicity, let's just make the condition stronger below.
                 }
               }}
             />
           ) : (
-            <span style={{ fontSize: collapsed ? 24 : 28 }}>📚</span>
+            <EduLogo size={collapsed ? 24 : 32} />
           )}
         </div>
         {!collapsed && (
@@ -386,18 +394,24 @@ const StudentLayout = () => {
             background: 'transparent',
           }}
         >
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: "easeOut" }}
-            style={{
-              padding: screens.xs ? '16px 16px' : 24,
-              background: 'transparent', // Make background transparent to show page bg
-              minHeight: '100%',
-            }}
-          >
-            <Outlet />
-          </motion.div>
+          <Suspense fallback={
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
+              <Spin size="large" />
+            </div>
+          }>
+            <motion.div
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              style={{
+                padding: screens.xs ? '16px 16px' : 24,
+                background: 'transparent', // Make background transparent to show page bg
+                minHeight: '100%',
+              }}
+            >
+              <Outlet />
+            </motion.div>
+          </Suspense>
         </Content>
       </Layout>
 

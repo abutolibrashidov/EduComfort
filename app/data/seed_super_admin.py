@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models.user import User
+from app.core.models.user import User
 from app.constants.roles import Role
 from app.core.security import get_password_hash  # ✅ Import from security
 

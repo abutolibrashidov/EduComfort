@@ -7,7 +7,7 @@ based on User.user_type at runtime.
 """
 from abc import ABC, abstractmethod
 from sqlalchemy.orm import Session
-from app.models.user import User
+from app.core.models.user import User
 
 
 class GamificationEngine(ABC):

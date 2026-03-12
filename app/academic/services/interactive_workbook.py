@@ -8,14 +8,14 @@ from typing import List, Dict, Optional
 
 from sqlalchemy.orm import Session
 
-from app.models.interactive_workbook import (
+from app.academic.models.interactive_workbook import (
     InteractiveWorkbook,
     WorkbookExercise,
     StudentExerciseSubmission,
     WorkbookProgress,
 )
-from app.models.user import User
-from app.schemas.interactive_workbook import (
+from app.core.models.user import User
+from app.academic.schemas.interactive_workbook import (
     InteractiveWorkbookCreate,
     InteractiveWorkbookUpdate,
     WorkbookExerciseCreate,

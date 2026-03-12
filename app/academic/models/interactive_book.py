@@ -9,7 +9,7 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship
 # from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime
-from app.models.base import Base
+from app.core.models.base import Base
 
 
 class Book(Base):

@@ -7,21 +7,13 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from app.core.config import settings
-from app.models.base import Base
+from app.core.models.base import Base
 # Import all models to ensure they are registered with Base.metadata before autogenerating
-from app.models.user import User
-from app.models.subject import Subject
-from app.models.group_students import GroupStudent
-from app.models.conversation import Conversation, ConversationParticipant, Message
-from app.models.achievement import Achievement, UserAchievement
-from app.models.subscription import InstitutionSubscription
-from app.models.announcement import Announcement
-from app.models.teacher_payment import TeacherPayment
-from app.models.leaderboard import LeaderboardEvent, StudentRatingLog, LeaderboardWinner
-from app.models.expense import Expense
-from app.models.payment import Payment
-from app.models.attendance import Attendance
-from app.models.platform_setting import PlatformSetting
+import app.models
+
+# Learning Engine models
+import app.learning_engine.models
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config

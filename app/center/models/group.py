@@ -7,13 +7,14 @@ from sqlalchemy import (
     DateTime,
     Date,
     Time,
+    Float,
     Enum as SQLEnum
 )
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
 from enum import Enum
 
-from .base import Base
+from app.core.models.base import Base
 
 
 class GroupLevel(str, Enum):
@@ -48,18 +49,21 @@ class Group(Base):
     # Basic Info
     name = Column(String(150), nullable=False)  # e.g., "John's IELTS Morning"
     
-    # Relations
-    subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=False)
-    teacher_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    branch_id = Column(Integer, ForeignKey("branches.id"), nullable=False)
+    # Relations — all optional so SCHOOL institutions can create classes (sinf)
+    # without learning-center-specific fields like subject or IELTS level
+    subject_id = Column(Integer, ForeignKey("subjects.id"), nullable=True)
+    teacher_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    branch_id = Column(Integer, ForeignKey("branches.id"), nullable=True)
 
-    # Level & Status
-    level = Column(SQLEnum(GroupLevel), nullable=False, default=GroupLevel.BEGINNER)
-    status = Column(SQLEnum(GroupStatus), nullable=False, default=GroupStatus.UPCOMING)
+    # Level & Status — level is optional for schools
+    level = Column(SQLEnum(GroupLevel), nullable=True, default=None)
+    status = Column(SQLEnum(GroupStatus), nullable=False, default=GroupStatus.ACTIVE)
 
     # Capacity
-    max_students = Column(Integer, default=12)
     current_students = Column(Integer, default=0)
+    max_students = Column(Integer, default=30)
+    monthly_fee = Column(Float, nullable=True)
+    academic_year_id = Column(Integer, ForeignKey("academic_years.id"), nullable=True)
 
     # Schedule
     days_of_week = Column(String(50), nullable=True)  # e.g., "Mon,Wed,Fri"

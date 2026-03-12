@@ -6,9 +6,9 @@ from datetime import datetime
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
+from app.core.models.user import User
 # Moved other imports inside functions to avoid circular dependencies
-from app.schemas.conversation_schemas import (
+from app.shared.schemas.conversation_schemas import (
     ConversationCreate,
     ConversationResponse,
     ConversationListItem,
@@ -17,8 +17,8 @@ from app.schemas.conversation_schemas import (
     GroupConversationInfo,
     UnreadCountResponse
 )
-from app.models.conversation import Conversation, ConversationParticipant, Message, ConversationType
-from app.models.group_students import GroupStudent
+from app.engagement.models.conversation import Conversation, ConversationParticipant, Message, ConversationType
+from app.center.models.group_students import GroupStudent
 
 
 router = APIRouter(prefix="/messaging", tags=["Messaging"])
@@ -66,8 +66,8 @@ def create_group_conversation(db: Session, group_id: int) -> Conversation:
     """Create a conversation for a group and add all members"""
     
     # Local imports to avoid circular dependency
-    from app.models.group import Group
-    from app.models.group_students import GroupStudent
+    from app.center.models.group import Group
+    from app.center.models.group_students import GroupStudent
 
     # Get group
     group = db.query(Group).filter(Group.id == group_id).first()
@@ -192,8 +192,8 @@ def get_conversations(
     """
     # --- AUTO-SYNC START ---
     # Local imports
-    from app.models.group import Group
-    from app.models.group_students import GroupStudent
+    from app.center.models.group import Group
+    from app.center.models.group_students import GroupStudent
     from app.security.permissions import is_teacher, is_admin_or_higher
 
     # Find all groups user belongs to (scoped to their institution)
@@ -536,7 +536,7 @@ def create_group_chat(
     """Create a group conversation for a group (Admin/Teacher only)"""
     
     # Verify user is admin or teacher of the group
-    from app.models.group import Group
+    from app.center.models.group import Group
     group = db.query(Group).filter(Group.id == group_id).first()
     if not group:
         raise HTTPException(status_code=404, detail="Group not found")

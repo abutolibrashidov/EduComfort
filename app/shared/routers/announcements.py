@@ -13,8 +13,8 @@ from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.announcement import Announcement
+from app.core.models.user import User
+from app.engagement.models.announcement import Announcement
 
 router = APIRouter(tags=["Announcements"])
 # NOTE: prefix="/announcements" is set in main.py
@@ -31,7 +31,7 @@ def _is_platform_owner(user: User) -> bool:
 
 
 def _is_admin(user: User) -> bool:
-    return _role_str(user) in ("admin", "super_admin", "platform_owner")
+    return _role_str(user) in ("admin", "super_admin", "platform_owner", "teacher")
 
 
 def _now() -> datetime:

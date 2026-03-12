@@ -5,13 +5,13 @@ from datetime import datetime
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.ielts import (
+from app.core.models.user import User
+from app.academic.models.ielts import (
     IELTSExam, IELTSReadingPassage, IELTSReadingQuestion, IELTSReadingAnswer,
     IELTSListeningSection, IELTSListeningQuestion, IELTSWritingTask, IELTSWritingSubmission, IELTSSubmission, IELTSSubmissionStatus
 )
-from app.models.subject import Subject
-from app.schemas.ielts import (
+from app.academic.models.subject import Subject
+from app.academic.schemas.ielts import (
     IELTSExamCreate, IELTSExamResponse, IELTSExamDetailResponse,
     IELTSReadingPassageCreate, IELTSReadingPassageResponse,
     IELTSReadingQuestionCreate, IELTSReadingQuestionResponse, IELTSReadingAnswerSubmit,

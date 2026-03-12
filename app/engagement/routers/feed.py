@@ -8,10 +8,10 @@ from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
+from app.core.models.user import User
 
 from app.security.permissions import is_admin_or_higher, is_teacher
-from app.models.feed import Post, PostLike, UserFollow, Comment
+from app.engagement.models.feed import Post, PostLike, UserFollow, Comment
 
 
 router = APIRouter(prefix="/feed", tags=["News Feed"])
@@ -148,13 +148,25 @@ def get_feed(
 ):
     """
     Get the news feed.
-    Returns empty list gracefully if the posts table doesn't exist yet (migration pending).
+    Institution-isolated: Platform owners see all, others only their own.
     """
     try:
         query = db.query(Post)
 
-        if institution_id:
-            query = query.filter(Post.institution_id == institution_id)
+        # Enforce isolation
+        from app.security.permissions import is_platform_owner
+        if not is_platform_owner(current_user):
+            # Non-platform owners are pinned to their own institution
+            target_inst = current_user.institution_id
+            if target_inst:
+                query = query.filter(Post.institution_id == target_inst)
+            else:
+                # No institution -> see platform-wide only (null institution_id)
+                query = query.filter(Post.institution_id.is_(None))
+        else:
+            # Platform owner can filter by institution if provided
+            if institution_id:
+                query = query.filter(Post.institution_id == institution_id)
 
         if user_id:
             query = query.filter(Post.author_id == user_id)

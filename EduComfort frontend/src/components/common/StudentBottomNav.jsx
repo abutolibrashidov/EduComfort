@@ -130,7 +130,6 @@ const StudentBottomNav = ({ menuItems = [] }) => {
                 placement="bottom"
                 onClose={() => setDrawerVisible(false)}
                 open={drawerVisible}
-                height="auto"
                 styles={{ body: { padding: 0 } }}
                 style={{ borderTopLeftRadius: 20, borderTopRightRadius: 20 }}
             >

@@ -8,9 +8,9 @@ import json
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.student_book import StudentBook
-from app.models.book_content import BookContent, StudentBookProgress, StudentBookAnswer
+from app.core.models.user import User
+from app.academic.models.student_book import StudentBook
+from app.academic.models.book_content import BookContent, StudentBookProgress, StudentBookAnswer
 from app.utils.book_content_extractor import extract_book_content
 from pydantic import BaseModel
 from datetime import datetime

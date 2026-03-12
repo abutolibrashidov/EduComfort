@@ -15,7 +15,6 @@ const RequireAuth = ({ allowedRoles = [] }) => {
   const user = getCurrentUser();
   const role = typeof user?.role === 'object' ? user.role.value : user?.role;
 
-  console.log(`[RequireAuth] Path: ${location.pathname}, User: ${user?.first_name}, Role: ${role}, Allowed: ${allowedRoles}`);
 
   if (!user || !role) {
     console.error("Token exists but user data is invalid or role missing");

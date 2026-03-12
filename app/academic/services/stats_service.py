@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import func, case
-from app.models.user import User
-from app.models.payment import Payment
-from app.models.attendance import Attendance, AttendanceStatus
+from app.core.models.user import User
+from app.billing.models.payment import Payment
+from app.academic.models.attendance import Attendance, AttendanceStatus
 
 def calculate_payment_collection_rate(db: Session, institution_id: int = None, student_id: int = None) -> int:
     """
@@ -36,7 +36,7 @@ def calculate_attendance_rate(db: Session, institution_id: int = None, student_i
     Calculate attendance rate: (Present + Late) / Total Records
     """
     try:
-        from app.models.group import Group
+        from app.center.models.group import Group
         
         # Base queries
         total_query = db.query(func.count(Attendance.id))
@@ -78,8 +78,8 @@ def calculate_course_completion_rate(db: Session, institution_id: int = None, st
     Returns integer percentage (0-100).
     """
     try:
-        from app.models.group import Group, GroupStatus
-        from app.models.user import User
+        from app.center.models.group import Group, GroupStatus
+        from app.core.models.user import User
 
         # Calculate based on group status
         total_groups_query = db.query(func.count(Group.id)).filter(

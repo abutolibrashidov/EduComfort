@@ -6,15 +6,15 @@ from typing import Optional, List
 from passlib.context import CryptContext
 
 from app.core.dependencies import get_db
-from app.models.user import User
-from app.schemas.user import UserCreate, UserRead, UserUpdate
+from app.core.models.user import User
+from app.core.schemas.user import UserCreate, UserRead, UserUpdate
 from app.auth.dependencies import get_current_user
 from app.constants.roles import Role
 from app.security.permissions import require_super_admin, can_view_user, is_platform_owner
-from app.models.rating import TeacherRating
+from app.engagement.models.rating import TeacherRating
 from datetime import datetime
 from pydantic import BaseModel
-from app.services.user_service import robust_cascade_delete_user
+from app.shared.services.user_service import robust_cascade_delete_user
 
 class TeacherRatingCreate(BaseModel):
     teacher_id: int

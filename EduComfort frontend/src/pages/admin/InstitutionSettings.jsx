@@ -265,6 +265,28 @@ export default function InstitutionSettings() {
                             )}
                         </Card>
 
+                        <Card title="Telegram Bot (Ota-onalar xabarnomasi)" style={{ marginBottom: 24, border: '1px solid #1890ff' }}>
+                            <Text>Ota-onalarni botga ulash uchun quyidagi maxsus havolani yuboring. Ushbu havola orqali profil avtomatik sizning o'quv markazingizga biriktiriladi:</Text>
+                            <div style={{ marginTop: 12, padding: 12, background: '#f0f5ff', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                <Input
+                                  value={`https://t.me/Ogohlanirgich_bot?start=inst_${branding?.id}`}
+                                  readOnly
+                                  addonAfter={
+                                    <Button
+                                      type="primary"
+                                      style={{ margin: -1, borderRadius: 0 }}
+                                      onClick={() => {
+                                        navigator.clipboard.writeText(`https://t.me/Ogohlanirgich_bot?start=inst_${branding?.id}`);
+                                        message.success("Nusxa olindi!");
+                                      }}
+                                    >
+                                      Nusxa olish
+                                    </Button>
+                                  }
+                                />
+                            </div>
+                        </Card>
+
                         <Card title="Contact Information" style={{ marginBottom: 24 }}>
                             <Form.Item
                                 label="Email"

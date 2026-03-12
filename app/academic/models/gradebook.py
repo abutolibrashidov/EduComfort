@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKe
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from app.models.base import Base
+from app.core.models.base import Base
 
 class GradebookLevel(Base):
     """A collection of manual exams for a specific group (e.g., 'Level 1')"""

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from app.core.database import SessionLocal
-from app.models.institution import Institution
-from app.models.subscription import InstitutionSubscription, SubscriptionPlan, SubscriptionStatus
+from app.core.models.institution import Institution
+from app.core.models.subscription import InstitutionSubscription, SubscriptionPlan, SubscriptionStatus
 
 def seed_subscriptions():
     db = SessionLocal()

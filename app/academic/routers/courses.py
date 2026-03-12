@@ -4,10 +4,10 @@ from typing import List, Optional
 from pydantic import BaseModel 
 
 from app.core.database import get_db
-from app.models.group import Group
-from app.models.institution import Institution
-from app.models.subject import Subject
-from app.models.user import User
+from app.center.models.group import Group
+from app.core.models.institution import Institution
+from app.academic.models.subject import Subject
+from app.core.models.user import User
 
 router = APIRouter(prefix="/courses", tags=["Courses (Marketplace)"])
 

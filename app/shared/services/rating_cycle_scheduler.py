@@ -4,8 +4,8 @@ from pytz import utc
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy import func
 from app.core.database import SessionLocal
-from app.models.rating import TeacherRating, RatingCycle, TeacherAward
-from app.models.user import User
+from app.engagement.models.rating import TeacherRating, RatingCycle, TeacherAward
+from app.core.models.user import User
 
 logger = logging.getLogger(__name__)
 

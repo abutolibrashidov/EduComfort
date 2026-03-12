@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Layout, Menu, Typography, Avatar, Dropdown, Badge, Tag, Select, Button, Drawer } from "antd";
+import React, { useState, useEffect, Suspense } from "react";
+import { Layout, Menu, Typography, Avatar, Dropdown, Badge, Tag, Select, Button, Drawer, Spin } from "antd";
 import {
   DashboardOutlined,
   UserOutlined,
@@ -19,6 +19,8 @@ import {
   ShopOutlined,
   WalletOutlined,
   NotificationOutlined,
+  CalendarOutlined,
+  SwapOutlined,
 } from "@ant-design/icons";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -51,10 +53,11 @@ export default function AdminLayout() {
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchUnreadCount = async () => {
       try {
         const { data } = await axiosClient.get("/messaging/unread-count");
-        setUnreadCount(data.unread_count);
+        if (isMounted) setUnreadCount(data.unread_count);
       } catch (error) {
         // Silently fail — unread count is non-critical
       }
@@ -62,7 +65,10 @@ export default function AdminLayout() {
 
     fetchUnreadCount();
     const interval = setInterval(fetchUnreadCount, 30000);
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const toggleSidebar = () => {
@@ -97,10 +103,28 @@ export default function AdminLayout() {
   const isImpersonating = !!localStorage.getItem("sp_platform_token");
 
   const getMenuItems = () => {
+    // Parent Role specific items
+    if (user?.role === "parent" || user?.role === "PARENT") {
+      return [
+        { key: "/parent/dashboard", icon: <DashboardOutlined />, label: t("dashboard", "Boshqaruv Paneli") },
+        { key: "/parent/messages", icon: <MessageOutlined />, label: t("messages", "Xabarlar") },
+      ];
+    }
+
+    const isSchool = branding?.institution_type === "SCHOOL";
+
     const baseItems = [
       { key: "/admin", icon: <DashboardOutlined />, label: t("dashboard", "Boshqaruv Paneli") },
-      { key: "/admin/users", icon: <UserOutlined />, label: t("users", "Foydalanuvchilar") },
-      { key: "/admin/groups", icon: <TeamOutlined />, label: t("groups", "Guruhlar") },
+      { key: "/admin/users", icon: <UserOutlined />, label: branding?.customTerms?.students || (isSchool ? "O'quvchilar" : t("users", "Foydalanuvchilar")) },
+      { key: isSchool ? "/admin/sinflar" : "/admin/groups", icon: <TeamOutlined />, label: branding?.customTerms?.groups || (isSchool ? "Sinflar" : t("groups", "Guruhlar")) },
+
+      // School Specifics — maktab uchun qo'shimcha menyular
+      ...(isSchool ? [
+        { key: "/admin/academic-years", icon: <CalendarOutlined />, label: "O'quv yillari" },
+        { key: "/admin/promotions", icon: <SwapOutlined />, label: "Sinf ko'tarish" },
+        { key: "/admin/school-staff", icon: <TeamOutlined />, label: "Xodimlar" },
+      ] : []),
+
       { key: "/admin/subjects", icon: <BookOutlined />, label: t("subjects", "Fanlar") },
       { key: "/admin/payments", icon: <DollarOutlined />, label: t("payments", "To'lovlar") },
       { key: "/admin/messages", icon: <MessageOutlined />, label: t("messages", "Xabarlar") },
@@ -460,9 +484,15 @@ export default function AdminLayout() {
           overflowX: "hidden",
           wordBreak: "break-word",
         }}>
-          <motion.div {...fadeInUp}>
-            <Outlet />
-          </motion.div>
+          <Suspense fallback={
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
+              <Spin size="large" />
+            </div>
+          }>
+            <motion.div {...fadeInUp}>
+              <Outlet />
+            </motion.div>
+          </Suspense>
         </Content>
       </Layout>
       <FeedbackWidget />

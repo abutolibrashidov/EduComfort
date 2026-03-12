@@ -7,9 +7,9 @@ from pydantic import BaseModel
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.institution import Institution
-from app.models.interactive_book import AIProcessingLog, Book
+from app.core.models.user import User
+from app.core.models.institution import Institution
+from app.academic.models.interactive_book import AIProcessingLog, Book
 from app.security.permissions import is_platform_owner
 
 router = APIRouter(prefix="/ai-billing", tags=["AI Billing"])

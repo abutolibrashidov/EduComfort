@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, DateTim
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
-from app.models.base import Base
+from app.core.models.base import Base
 
 
 class Payment(Base):

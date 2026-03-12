@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Row, Col, Typography, Input, Avatar, Spin, Empty, Button, Tag, Space, message, Modal, Rate, Form } from 'antd';
-import { SearchOutlined, UserOutlined, ArrowRightOutlined, TeamOutlined, PhoneOutlined, StarOutlined } from '@ant-design/icons';
+import { SearchOutlined, UserOutlined, ArrowRightOutlined, TeamOutlined, PhoneOutlined, StarOutlined, MessageOutlined, CheckOutlined, UserAddOutlined } from '@ant-design/icons';
 import axiosClient from '../../api/axiosClient';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,6 +19,7 @@ const StudentTeachers = () => {
     const [ratingValue, setRatingValue] = useState(0);
     const [ratingComment, setRatingComment] = useState("");
     const [submittingRating, setSubmittingRating] = useState(false);
+    const [followingLoading, setFollowingLoading] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -45,6 +46,19 @@ const StudentTeachers = () => {
         setRatingValue(0);
         setRatingComment("");
         setRatingModalVisible(true);
+    };
+
+    const handleToggleFollow = async (teacherId) => {
+        try {
+            await axiosClient.post(`/feed/users/${teacherId}/follow`);
+            setTeachers(prev => prev.map(t =>
+                t.id === teacherId ? { ...t, is_following: !t.is_following } : t
+            ));
+            message.success("Muvaffaqiyatli!");
+        } catch (error) {
+            console.error("Follow error:", error);
+            message.error("Xatolik yuz berdi");
+        }
     };
 
     const submitRating = async () => {
@@ -95,20 +109,26 @@ const StudentTeachers = () => {
                                 bordered={false}
                                 style={{ borderRadius: 16, overflow: 'hidden', height: '100%', textAlign: 'center', background: '#fff' }}
                             >
-                                <Avatar
-                                    size={100}
-                                    icon={<UserOutlined />}
-                                    style={{
-                                        marginBottom: 16,
-                                        border: '4px solid #fff',
-                                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                        background: 'linear-gradient(135deg, #0061f2 0%, #00c6f9 100%)',
-                                        color: '#fff'
-                                    }}
+                                <div
+                                    onClick={() => navigate(`/profile/${teacher.id}`)}
+                                    style={{ cursor: 'pointer' }}
                                 >
-                                    {teacher.first_name?.[0]}
-                                </Avatar>
-                                <Title level={4} style={{ marginBottom: 4 }}>{teacher.first_name} {teacher.last_name}</Title>
+                                    <Avatar
+                                        size={100}
+                                        src={teacher.avatar}
+                                        icon={<UserOutlined />}
+                                        style={{
+                                            marginBottom: 16,
+                                            border: '4px solid #fff',
+                                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                                            background: 'linear-gradient(135deg, #0061f2 0%, #00c6f9 100%)',
+                                            color: '#fff'
+                                        }}
+                                    >
+                                        {teacher.first_name?.[0]}
+                                    </Avatar>
+                                    <Title level={4} style={{ marginBottom: 4 }}>{teacher.first_name} {teacher.last_name}</Title>
+                                </div>
 
                                 <div style={{ margin: '12px 0' }}>
                                     <Text type="secondary">
@@ -118,7 +138,11 @@ const StudentTeachers = () => {
                                 </div>
 
                                 {teacher.stats && (
-                                    <div style={{ textAlign: 'left', background: '#f5f5f5', padding: '12px', borderRadius: '8px', marginBottom: '16px' }}>
+                                    <div style={{ textAlign: 'left', background: '#f9fafb', padding: '16px', borderRadius: '12px', marginBottom: '16px', border: '1px solid #f0f0f0' }}>
+                                        <Row justify="space-between" style={{ marginBottom: 8 }}>
+                                            <Col><Text type="secondary"><StarOutlined style={{ color: '#faad14' }} /> Reyting:</Text></Col>
+                                            <Col><Rate disabled defaultValue={teacher.stats.average_rating} style={{ fontSize: 12 }} /> <Text strong>{teacher.stats.average_rating}</Text></Col>
+                                        </Row>
                                         <Row justify="space-between" style={{ marginBottom: 8 }}>
                                             <Col><Text type="secondary"><TeamOutlined /> Guruhlar:</Text></Col>
                                             <Col><Text strong>{teacher.stats.group_count}</Text></Col>
@@ -127,32 +151,62 @@ const StudentTeachers = () => {
                                             <Col><Text type="secondary"><UserOutlined /> O'quvchilar:</Text></Col>
                                             <Col><Text strong>{teacher.stats.student_count}</Text></Col>
                                         </Row>
-                                        {teacher.stats.levels?.length > 0 && (
-                                            <div style={{ marginTop: 8 }}>
-                                                <Text type="secondary" style={{ display: 'block', marginBottom: 4 }}>Darajalar:</Text>
-                                                {teacher.stats.levels.map(lvl => <Tag color="blue" key={lvl}>{lvl}</Tag>)}
-                                            </div>
-                                        )}
                                         {teacher.stats.subjects?.length > 0 && (
                                             <div style={{ marginTop: 8 }}>
                                                 <Text type="secondary" style={{ display: 'block', marginBottom: 4 }}>Fanlar:</Text>
-                                                {teacher.stats.subjects.map(sub => <Tag color="cyan" key={sub}>{sub}</Tag>)}
+                                                {teacher.stats.subjects.map(sub => <Tag color="cyan" key={sub} style={{ borderRadius: 4 }}>{sub}</Tag>)}
                                             </div>
                                         )}
                                     </div>
                                 )}
 
-                                <div style={{ marginTop: 20 }}>
-                                    <Button
-                                        type="primary"
-                                        icon={<StarOutlined />}
-                                        block
-                                        onClick={() => handleRateClick(teacher)}
-                                        style={{ borderRadius: 8, height: 40 }}
-                                    >
-                                        O'qituvchini Baholash
-                                    </Button>
-                                </div>
+                                <Space direction="vertical" style={{ width: '100%' }} size="small">
+                                    <Row gutter={8}>
+                                        <Col span={12}>
+                                            <Button
+                                                block
+                                                icon={<MessageOutlined />}
+                                                onClick={() => navigate(`/student/chat?chatUser=${teacher.id}`)}
+                                                style={{ borderRadius: 8 }}
+                                            >
+                                                Xabar
+                                            </Button>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Button
+                                                block
+                                                type={teacher.is_following ? "default" : "primary"}
+                                                icon={teacher.is_following ? <CheckOutlined /> : <UserAddOutlined />}
+                                                onClick={() => handleToggleFollow(teacher.id)}
+                                                style={{ borderRadius: 8 }}
+                                            >
+                                                {teacher.is_following ? "Bog'langan" : "Bog'lanish"}
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                    <Row gutter={8}>
+                                        <Col span={12}>
+                                            <Button
+                                                type="link"
+                                                icon={<StarOutlined />}
+                                                block
+                                                onClick={() => handleRateClick(teacher)}
+                                            >
+                                                Baho berish
+                                            </Button>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Button
+                                                type="link"
+                                                icon={<ArrowRightOutlined />}
+                                                block
+                                                onClick={() => navigate(`/profile/${teacher.id}`)}
+                                            >
+                                                Batafsil
+                                            </Button>
+                                        </Col>
+                                    </Row>
+                                </Space>
                             </Card>
                         </Col>
                     )) : <Empty description="Guruhlaringizda o'qituvchilar topilmadi" />}

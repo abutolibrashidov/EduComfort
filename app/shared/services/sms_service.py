@@ -3,7 +3,7 @@ Eskiz SMS Service — O'zbekiston uchun SMS yuborish xizmati
 https://notify.eskiz.uz
 
 Ishlatish:
-    from app.services.sms_service import send_sms
+    from app.shared.services.sms_service import send_sms
     success = send_sms("+998901234567", "Xabar matni")
 """
 import httpx
@@ -169,4 +169,61 @@ def send_payment_confirmed(phone: str, institution_name: str, amount: float, nex
         f"{int(amount):,} so'mlik to'lovingiz qabul qilindi. "
         f"Keyingi to'lov sanasi: {next_date}. Rahmat!"
     )
+    return send_sms(phone, message)
+
+
+import os
+
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_API_URL = f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}"
+
+def send_telegram_message_sync(chat_id: str, text: str) -> bool:
+    if not TELEGRAM_BOT_TOKEN or not chat_id:
+        return False
+    url = f"{TELEGRAM_API_URL}/sendMessage"
+    try:
+        resp = httpx.post(url, json={"chat_id": chat_id, "text": text}, timeout=10.0)
+        resp.raise_for_status()
+        return True
+    except Exception as e:
+        logger.error(f"Telegram yuborishda xato: {e}")
+        return False
+
+def send_parent_payment_reminder(phone: str, student_name: str, amount: float, days_left: int, institution_name: str, telegram_chat_id: str = None) -> bool:
+    """Ota-onalarga eslatma (oyning 5-sanasigacha va hkz). Prioritet: Telegram -> SMS"""
+    if days_left > 0:
+        time_text = f"bu oyning 10-sanasigacha ({days_left} kun qoldi)"
+    elif days_left == 0:
+        time_text = "bugun"
+    else:
+        time_text = "zudlik bilan"
+
+    message = (
+        f"🏛 [{institution_name}]\n"
+        f"Hurmatli ota-ona, farzandingiz {student_name} uchun "
+        f"oylik to'lovni {time_text} amalga oshirishingizni so'raymiz. "
+        f"To'lov miqdori: {int(amount):,} so'm. Aks holda 10-sanada tizim bloklanadi."
+    )
+    
+    if telegram_chat_id:
+        if send_telegram_message_sync(telegram_chat_id, message):
+            return True
+        logger.warning(f"Telegram yuborish imkoni bo'lmadi (chat_id: {telegram_chat_id}). SMS ga o'tilmoqda.")
+
+    return send_sms(phone, message)
+
+
+def send_parent_blocked_notification(phone: str, student_name: str, institution_name: str, telegram_chat_id: str = None) -> bool:
+    """Ota-onalarga farzandi bloklangani haqida (Telegram orqali birlamchi)"""
+    message = (
+        f"🏛 [{institution_name}]\n"
+        f"Diqqat! Oylik to'lov amalga oshirilmaganligi sababli "
+        f"farzandingiz {student_name}ning tizimdagi hisobi vaqtincha bloklandi. "
+        f"Iltimos, o'quv markaziga murojaat qiling."
+    )
+    if telegram_chat_id:
+        if send_telegram_message_sync(telegram_chat_id, message):
+            return True
+        logger.warning(f"Telegram yuborish imkoni bo'lmadi (chat_id: {telegram_chat_id}). SMS ga o'tilmoqda.")
+
     return send_sms(phone, message)

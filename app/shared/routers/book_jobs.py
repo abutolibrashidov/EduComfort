@@ -10,9 +10,9 @@ from datetime import datetime
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.book_processing_job import BookProcessingJob
-from app.models.student_book import StudentBook
+from app.core.models.user import User
+from app.academic.models.book_processing_job import BookProcessingJob
+from app.academic.models.student_book import StudentBook
 from app.tasks.book_processing import process_text_extraction, process_ocr
 
 router = APIRouter(prefix="/book-jobs", tags=["Book Processing Jobs"])

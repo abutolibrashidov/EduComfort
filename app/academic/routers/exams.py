@@ -9,10 +9,10 @@ from pathlib import Path
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.exam import Exam, ExamQuestion, ExamSubmission, ExamAnswer, ExamStatus, SubmissionStatus
-from app.models.subject import Subject
-from app.schemas.exam import (
+from app.core.models.user import User
+from app.academic.models.exam import Exam, ExamQuestion, ExamSubmission, ExamAnswer, ExamStatus, SubmissionStatus
+from app.academic.models.subject import Subject
+from app.academic.schemas.exam import (
     ExamCreate, ExamUpdate, ExamResponse, ExamDetailResponse, ExamListResponse,
     ExamAnswerSubmit, ExamSubmissionResponse, ExamSubmissionUpdate, ExamQuestionCreate, ExamSecurityEvent,
     ExamHierarchyUnit, ExamHierarchySet, ExamHierarchyVariant
@@ -739,7 +739,7 @@ async def import_json_test_endpoint(
             tmp_file_path = tmp_file.name
         
         # Import the test
-        from app.services.json_test_importer import import_json_test
+        from app.shared.services.json_test_importer import import_json_test
         
         exam = import_json_test(
             json_file_path=tmp_file_path,

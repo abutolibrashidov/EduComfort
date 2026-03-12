@@ -9,13 +9,13 @@ from passlib.context import CryptContext
 
 from app.core.database import get_db, SessionLocal
 from app.auth.dependencies import get_current_user
-from app.models.institution import Institution
-from app.models.subscription import InstitutionSubscription, SubscriptionPlan
-from app.models.user import User
-from app.services.user_service import robust_cascade_delete_user
-from app.services.institution_service import robust_cascade_delete_institution
+from app.core.models.institution import Institution
+from app.core.models.subscription import InstitutionSubscription, SubscriptionPlan
+from app.core.models.user import User
+from app.shared.services.user_service import robust_cascade_delete_user
+from app.shared.services.institution_service import robust_cascade_delete_institution
 from app.constants.roles import Role
-from app.models.platform_setting import PlatformSetting
+from app.core.models.platform_setting import PlatformSetting
 
 _pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -31,6 +31,7 @@ class CreateInstitutionRequest(BaseModel):
     admin_password: str
     subscription_plan: Optional[str] = "basic"
     ai_credits: Optional[float] = 0.0
+    institution_type: Optional[str] = "CENTER"
 
 
 class UpdateCreditsRequest(BaseModel):
@@ -260,6 +261,7 @@ def get_all_institutions(
                 "id": inst.id,
                 "name": inst.name,
                 "subdomain": inst.subdomain,
+                "institution_type": inst.institution_type.value if hasattr(inst.institution_type, "value") else inst.institution_type,
                 "is_active": inst.is_active,
                 "created_at": inst.created_at,
                 "user_count": user_count,
@@ -476,7 +478,7 @@ def create_institution(
     db: Session = Depends(get_db),
     current_user: User = Depends(verify_platform_owner),
 ):
-    from app.models.platform_notification import PlatformNotification
+    from app.engagement.models.platform_notification import PlatformNotification
 
     existing = db.query(Institution).filter(
         Institution.subdomain == data.subdomain,
@@ -492,6 +494,7 @@ def create_institution(
     institution = Institution(
         name=data.name,
         subdomain=data.subdomain,
+        institution_type=data.institution_type,
         subscription_tier=data.subscription_plan or "basic",
         ai_credits_balance=data.ai_credits or 0.0,
         is_active=True,
@@ -605,7 +608,7 @@ def get_platform_notifications(
     current_user: User = Depends(verify_platform_owner),
 ):
     """Get platform-level notifications (new institutions, warnings, etc.)"""
-    from app.models.platform_notification import PlatformNotification
+    from app.engagement.models.platform_notification import PlatformNotification
     q = db.query(PlatformNotification).order_by(PlatformNotification.created_at.desc())
     if unread_only:
         q = q.filter(~PlatformNotification.is_read)
@@ -631,7 +634,7 @@ def mark_notification_read(
     current_user: User = Depends(verify_platform_owner),
 ):
     """Mark a platform notification as read."""
-    from app.models.platform_notification import PlatformNotification
+    from app.engagement.models.platform_notification import PlatformNotification
     n = db.query(PlatformNotification).filter(PlatformNotification.id == notification_id).first()
     if not n:
         raise HTTPException(status_code=404, detail="Notification not found")
@@ -646,7 +649,7 @@ def mark_all_notifications_read(
     current_user: User = Depends(verify_platform_owner),
 ):
     """Mark all platform notifications as read."""
-    from app.models.platform_notification import PlatformNotification
+    from app.engagement.models.platform_notification import PlatformNotification
     db.query(PlatformNotification).filter(~PlatformNotification.is_read).update({"is_read": True})
     db.commit()
     return {"message": "All notifications marked as read"}

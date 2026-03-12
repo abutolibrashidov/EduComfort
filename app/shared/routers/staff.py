@@ -8,12 +8,12 @@ from passlib.context import CryptContext
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.branch import Branch
-from app.models.institution import Institution
-from app.models.payment import Payment
+from app.core.models.user import User
+from app.core.models.branch import Branch
+from app.core.models.institution import Institution
+from app.billing.models.payment import Payment
 from sqlalchemy import extract
-from app.services.stats_service import (
+from app.academic.services.stats_service import (
     calculate_attendance_rate,
     calculate_payment_collection_rate,
     calculate_course_completion_rate

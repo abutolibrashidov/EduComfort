@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, Text, ForeignKey
 from sqlalchemy.orm import relationship
-from .base import Base
+from app.core.models.base import Base
 
 class Subject(Base):
     __tablename__ = "subjects"

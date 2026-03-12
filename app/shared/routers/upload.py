@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
+from app.core.models.user import User
 from app.utils.storage import upload_file, delete_file
 
 router = APIRouter(prefix="/upload", tags=["Upload"])

@@ -12,7 +12,7 @@ import sentry_sdk
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 import os
 
-from app.models.subject import Subject
+from app.academic.models.subject import Subject
 from app.core.config import settings
 from app.core.database import SessionLocal
 
@@ -46,59 +46,62 @@ from app.data.seed_super_admin import seed_super_admin
 
 # ========================= Router Imports =========================
 # ✅ FIX 1: Removed duplicate imports of `public` and `messaging_v2`.
-#    They were imported BOTH in the bulk `from app.routers import (...)` block
-#    AND again individually with try/except below — causing double registration.
-#    Now ALL optional routers use try/except only. Guaranteed-present routers use direct import.
+#    They were imported BOTH in the bulk `from app.academic.routers import attendance
+from app.academic.routers import books
+from app.academic.routers import courses
+from app.academic.routers import exams
+from app.academic.routers import gradebook
+from app.academic.routers import ielts
+from app.academic.routers import interactive_workbook
+from app.academic.routers import onlinecourse
+from app.academic.routers import student
+from app.academic.routers import subject
+from app.academic.routers import teacher
+from app.billing.routers import billing
+from app.billing.routers import monthly_fees
+from app.billing.routers import payments
+from app.center.routers import enrollments
+from app.center.routers import groups
+from app.core.routers import admin
+from app.core.routers import auth
+from app.core.routers import institutions
+from app.core.routers import users
+from app.engagement.routers import feed
+from app.engagement.routers import gamification
+from app.engagement.routers import leaderboards
+from app.engagement.routers import telegram
+from app.school.routers import academic_years
+from app.school.routers import grade_levels
+from app.school.routers import school_classes
+from app.school.routers import timetables
+from app.shared.routers import ai_billing
+from app.shared.routers import announcements
+from app.shared.routers import book_jobs
+from app.shared.routers import book_reader
+from app.shared.routers import book_review
+from app.shared.routers import branches
+from app.shared.routers import distractors
+from app.shared.routers import expenses
+from app.shared.routers import feedbacks
+from app.shared.routers import interactive_books
+from app.shared.routers import learners
+from app.shared.routers import platform
+from app.shared.routers import staff
+from app.shared.routers import upload
+from app.shared.routers import workbooks
 
-from app.routers import (
-    admin,
-    platform,
-    billing,
-    announcements,
-    attendance,
-    distractors,
-    books,
-    book_reader,
-    book_jobs,
-    book_review,
-    auth,
-    institutions,
-    learners,
-    teacher,
-    student,
-    staff,
-    exams,
-    subject,
-    groups,
-    branches,
-    onlinecourse,
-    ielts,
-    workbooks,
-    courses,
-    users,
-    payments,
-    interactive_workbook,
-    interactive_books,
-    gamification,
-    feed,
-    ai_billing,
-    leaderboards,
-    expenses,
-    upload,
-    gradebook,
-    feedbacks,
-)
+from app.learning_engine import routers as learning_engine_routers
 
 # Optional routers — loaded with fallback
 try:
-    from app.routers import public
+    from app.shared.routers import public
     logger.info("Public router loaded")
 except ImportError:
     logger.warning("public.py not found — public routes not available")
     public = None
 
 try:
-    from app.routers import messaging_v2
+    from app.shared.routers import messaging_v2
     logger.info("Messaging router loaded")
 except Exception as e:
     logger.warning(f"Could not load messaging_v2: {e}")
@@ -130,8 +133,6 @@ async def lifespan(app: FastAPI):
         logger.error(f"Seeding error: {e}")
     finally:
         db.close()
-
-
 
     logger.info("Backend initialization completed")
 
@@ -317,6 +318,30 @@ app.include_router(payments.router, prefix="/payments", tags=["Payments"])
 # Subjects
 app.include_router(subject.router, prefix="/subjects", tags=["Subjects"])
 
+# Enrollments
+app.include_router(enrollments.router)
+logger.info("Enrollments routes registered")
+
+# Academic Years (School)
+app.include_router(academic_years.router)
+logger.info("Academic Years routes registered")
+
+# Grade Levels (School)
+app.include_router(grade_levels.router)
+logger.info("Grade Levels routes registered")
+
+# School Classes (Sinflar)
+app.include_router(school_classes.router)
+logger.info("School Classes routes registered")
+
+# Timetables (Dars jadvali)
+app.include_router(timetables.router)
+logger.info("Timetables routes registered")
+
+# Monthly Fees (Payment Obligation System)
+app.include_router(monthly_fees.router)
+logger.info("Monthly Fees routes registered")
+
 # Exams
 app.include_router(exams.router, prefix="/exams", tags=["Exams"])
 
@@ -396,12 +421,19 @@ app.include_router(feedbacks.router, prefix="/feedbacks", tags=["Feedback"])
 logger.info("Feedback routes registered")
 
 # Attendance
+from app.academic.routers import attendance
 app.include_router(attendance.router)
 logger.info("Attendance routes registered")
 
 # Misc
 app.include_router(distractors.router)
 
+# Learning Engine
+app.include_router(learning_engine_routers.router)
+
+# Telegram Webhook
+from app.engagement.routers import telegram
+app.include_router(telegram.router, prefix="/telegram", tags=["Telegram"])
 
 # =========================
 # Root & Health Endpoints

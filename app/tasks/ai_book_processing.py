@@ -8,10 +8,10 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from app.core.database import SessionLocal
-from app.models.interactive_book import (
+from app.academic.models.interactive_book import (
     Book, Unit, Exercise, AIProcessingLog
 )
-from app.services.ai_service import create_ai_service
+from app.shared.services.ai_service import create_ai_service
 from app.utils.book_content_extractor import BookContentExtractor
 # from app.utils.ocr_processor import OCRProcessor
 
@@ -292,7 +292,7 @@ def _check_and_deduct_credits(db: Session, institution_id: int, estimated_cost: 
     Check if institution has enough credits. 
     Note: Real deduction happens after processing to be accurate.
     """
-    from app.models.institution import Institution
+    from app.core.models.institution import Institution
     inst = db.query(Institution).filter(Institution.id == institution_id).first()
     if not inst:
         return False
@@ -302,7 +302,7 @@ def _check_and_deduct_credits(db: Session, institution_id: int, estimated_cost: 
 
 def _deduct_final_cost(db: Session, institution_id: int, cost: float):
     """Deduct final cost from institution balance."""
-    from app.models.institution import Institution
+    from app.core.models.institution import Institution
     inst = db.query(Institution).filter(Institution.id == institution_id).first()
     if inst and cost > 0:
         inst.ai_credits_balance -= cost

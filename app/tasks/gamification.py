@@ -26,7 +26,7 @@ def reset_rating_cycles(self):
     logger.info("Rating cycle reset task started")
     db = SessionLocal()
     try:
-        from app.services.rating_cycle_scheduler import _run_rating_cycle_logic
+        from app.shared.services.rating_cycle_scheduler import _run_rating_cycle_logic
         _run_rating_cycle_logic(db)
         logger.info("Rating cycle reset completed")
     except Exception as exc:
@@ -53,7 +53,7 @@ def snapshot_leaderboards(self):
     logger.debug("Leaderboard snapshot task started")
     db = SessionLocal()
     try:
-        from app.models.institution import Institution
+        from app.core.models.institution import Institution
         from app.gamification.service import GamificationService
 
         active_institutions = db.query(Institution.id).filter(

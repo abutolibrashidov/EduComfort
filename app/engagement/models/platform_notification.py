@@ -8,7 +8,7 @@ Examples:
 """
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Boolean, Text
 from datetime import datetime
-from app.models.base import Base
+from app.core.models.base import Base
 
 
 class PlatformNotification(Base):

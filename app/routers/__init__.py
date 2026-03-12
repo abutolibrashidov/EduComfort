@@ -2,7 +2,7 @@
 Routers for the Learning Center Backend
 """
 
-from . import interactive_workbook
+from app.academic.routers import interactive_workbook
 
 __all__ = ["interactive_workbook"]
 

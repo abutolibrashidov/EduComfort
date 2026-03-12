@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, Boolean
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, Boolean, Float
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.sql import func
-from .base import Base
+from app.core.models.base import Base
 
 
 class GroupStudent(Base):
@@ -19,6 +19,10 @@ class GroupStudent(Base):
     # Metadata
     enrolled_at = Column(DateTime(timezone=True), server_default=func.now())
     is_active = Column(Boolean, default=True)
+    # Day of month for recurring payment (derived from enrolled_at day, can be overridden)
+    payment_day = Column(Integer, nullable=True)  # 1-28
+    # Custom fee override for this student in this group (overrides group/institution default)
+    custom_monthly_fee = Column(Float, nullable=True)
     
     # Relationships
     group = relationship("Group", backref=backref("student_enrollments", overlaps="student_groups,students"), overlaps="student_groups,students")

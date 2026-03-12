@@ -4,11 +4,12 @@ from typing import List, Optional
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
+from app.core.models.user import User
 from app.security.permissions import is_platform_owner, is_admin_or_higher
-from app.models.group import Group
-from app.schemas.group import GroupCreate, GroupUpdate, GroupRead
+from app.center.models.group import Group
+from app.center.schemas.group import GroupCreate, GroupUpdate, GroupRead
 from pydantic import BaseModel
+from app.utils.invoicing import create_student_invoice
 
 router = APIRouter(prefix="/admin/groups", tags=["Groups"])
 
@@ -126,25 +127,29 @@ def create_group(
 
     target_institution_id = current_user.institution_id
 
-    # Verify subject
-    from app.models.subject import Subject
-    if not db.query(Subject).filter(Subject.id == group_data.subject_id).first():
-        raise HTTPException(status_code=404, detail="Subject not found")
+    # Verify subject only if provided (schools don't have single subject per class)
+    from app.academic.models.subject import Subject
+    if group_data.subject_id is not None:
+        if not db.query(Subject).filter(Subject.id == group_data.subject_id).first():
+            raise HTTPException(status_code=404, detail="Subject not found")
 
-    # Verify teacher belongs to the same institution
-    teacher_query = db.query(User).filter(User.id == group_data.teacher_id)
-    if not is_platform_owner(current_user) and target_institution_id:
-        teacher_query = teacher_query.filter(User.institution_id == target_institution_id)
-    if not teacher_query.first():
-        raise HTTPException(status_code=404, detail="Teacher not found or belongs to a different institution")
+    # Verify teacher only if provided
+    if group_data.teacher_id is not None:
+        teacher_query = db.query(User).filter(User.id == group_data.teacher_id)
+        if not is_platform_owner(current_user) and target_institution_id:
+            teacher_query = teacher_query.filter(User.institution_id == target_institution_id)
+        if not teacher_query.first():
+            raise HTTPException(status_code=404, detail="Teacher not found or belongs to a different institution")
 
-    # Verify branch belongs to the same institution
-    from app.models.branch import Branch
-    branch_query = db.query(Branch).filter(Branch.id == group_data.branch_id)
-    if not is_platform_owner(current_user) and target_institution_id:
-        branch_query = branch_query.filter(Branch.institution_id == target_institution_id)
-    if not branch_query.first():
-        raise HTTPException(status_code=404, detail="Branch not found or belongs to a different institution")
+    # Verify branch only if provided (school classes may not have branches)
+    from app.core.models.branch import Branch
+    if group_data.branch_id is not None:
+        branch_query = db.query(Branch).filter(Branch.id == group_data.branch_id)
+        if not is_platform_owner(current_user) and target_institution_id:
+            branch_query = branch_query.filter(Branch.institution_id == target_institution_id)
+        if not branch_query.first():
+            raise HTTPException(status_code=404, detail="Branch not found or belongs to a different institution")
+
 
     # ✅ FIX: Pydantic v2 compat — model_dump() replaces dict()
     group_dict = (
@@ -307,7 +312,78 @@ def add_student_to_group(
     group.students.append(student)
     group.current_students = len(group.students)
     db.commit()
-    return {"message": "Student added successfully"}
+
+    # ── Set payment_day on the GroupStudent enrollment record ──
+    # payment_day = day of month when the student enrolled (becomes their monthly due day)
+    from datetime import datetime, date
+    from app.center.models.group_students import GroupStudent
+    from app.billing.models.monthly_fee import MonthlyFee
+    from app.core.models.institution import Institution
+
+    enrollment = db.query(GroupStudent).filter(
+        GroupStudent.group_id == group_id,
+        GroupStudent.student_id == data.student_id
+    ).first()
+
+    today = datetime.utcnow()
+    payment_day = today.day  # e.g. 15 → pay on 15th of each month
+    # Clamp to 28 to handle February
+    payment_day = min(payment_day, 28)
+
+    if enrollment:
+        enrollment.payment_day = payment_day
+        db.commit()
+
+    # ── Auto-create MonthlyFee for the current month ──
+    inst = db.query(Institution).filter(Institution.id == group.institution_id).first()
+
+    # Get fee amount: custom → group → institution default
+    fee_amount = 0.0
+    if enrollment and enrollment.custom_monthly_fee:
+        fee_amount = enrollment.custom_monthly_fee
+    elif inst:
+        fee_amount = getattr(inst, 'monthly_fee', 0.0) or getattr(inst, 'default_monthly_fee', 0.0) or 0.0
+
+    # due_date: payment_day of the current month
+    current_year = today.year
+    current_month = today.month
+    try:
+        due_date = date(current_year, current_month, payment_day)
+    except ValueError:
+        due_date = date(current_year, current_month, 28)
+
+    # Check if a MonthlyFee already exists for this student/group/month/year
+    existing_fee = db.query(MonthlyFee).filter(
+        MonthlyFee.student_id == data.student_id,
+        MonthlyFee.group_id == group_id,
+        MonthlyFee.month == current_month,
+        MonthlyFee.year == current_year,
+    ).first()
+
+    if not existing_fee:
+        fee = MonthlyFee(
+            student_id=data.student_id,
+            institution_id=group.institution_id,
+            group_id=group_id,
+            amount=fee_amount,
+            month=current_month,
+            year=current_year,
+            due_date=due_date,
+            status="pending",
+        )
+        db.add(fee)
+        db.commit()
+
+    # Also trigger legacy invoicing for centers
+    if inst and getattr(inst, 'institution_type', None) == "CENTER":
+        create_student_invoice(db, student.id, group.institution_id, group_id=group.id)
+
+    return {
+        "message": "Student added successfully",
+        "payment_day": payment_day,
+        "monthly_fee_created": not existing_fee,
+        "due_date": str(due_date),
+    }
 
 
 @router.delete("/{group_id}/students/{student_id}")
@@ -367,3 +443,51 @@ def get_group_students(
             raise HTTPException(status_code=403, detail="Access denied")
 
     return group.students
+
+
+@router.get("/{group_id}/fees")
+def get_group_fees(
+    group_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Get all monthly fee obligations for every student in a group.
+    Returns a flat list enriched with student info.
+    """
+    if not is_admin_or_higher(current_user) and not is_platform_owner(current_user):
+        raise HTTPException(status_code=403, detail="Not enough permissions")
+
+    group = db.query(Group).filter(Group.id == group_id).first()
+    if not group:
+        raise HTTPException(status_code=404, detail="Group not found")
+
+    if not is_platform_owner(current_user) and current_user.institution_id:
+        if group.institution_id != current_user.institution_id:
+            raise HTTPException(status_code=403, detail="Access denied")
+
+    from app.billing.models.monthly_fee import MonthlyFee
+    fees = db.query(MonthlyFee).filter(MonthlyFee.group_id == group_id).all()
+
+    result = []
+    for fee in fees:
+        student = db.query(User).filter(User.id == fee.student_id).first()
+        result.append({
+            "id": fee.id,
+            "student_id": fee.student_id,
+            "student": {
+                "id": student.id,
+                "first_name": student.first_name,
+                "last_name": student.last_name,
+                "phone_number": getattr(student, 'phone_number', ''),
+            } if student else None,
+            "amount": fee.amount,
+            "month": fee.month,
+            "year": fee.year,
+            "status": fee.status,
+            "due_date": str(fee.due_date) if fee.due_date else None,
+            "paid_at": str(fee.paid_at) if fee.paid_at else None,
+            "payment_id": fee.payment_id,
+            "notes": fee.notes,
+        })
+    return result

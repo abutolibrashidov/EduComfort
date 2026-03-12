@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, JSON
-from .base import Base
+from app.core.models.base import Base
 
 class PlatformSetting(Base):
     __tablename__ = "platform_settings"

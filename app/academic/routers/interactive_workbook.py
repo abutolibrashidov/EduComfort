@@ -10,15 +10,15 @@ from typing import List
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.interactive_workbook import (
+from app.core.models.user import User
+from app.academic.models.interactive_workbook import (
     InteractiveWorkbook,
     WorkbookExercise,
     StudentExerciseSubmission,
     WorkbookProgress,
 )
 from app.constants.roles import Role
-from app.schemas.interactive_workbook import (
+from app.academic.schemas.interactive_workbook import (
     InteractiveWorkbookCreate,
     InteractiveWorkbookResponse,
     InteractiveWorkbookDetailResponse,

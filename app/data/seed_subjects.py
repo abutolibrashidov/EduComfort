@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from app.models.subject import Subject
+from app.academic.models.subject import Subject
 
 
 def seed_subjects(db: Session, institution_id: int = None):

@@ -3,7 +3,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 import enum
 
-from .base import Base
+from app.core.models.base import Base
 
 class AttendanceStatus(str, enum.Enum):
     PRESENT = "present"

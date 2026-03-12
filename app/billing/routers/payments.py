@@ -5,13 +5,13 @@ from datetime import datetime
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.payment import Payment
-from app.models.user import User
-from app.models.teacher_payment import TeacherPayment
-from app.models.group import Group
-from app.models.group_students import GroupStudent
+from app.billing.models.payment import Payment
+from app.core.models.user import User
+from app.billing.models.teacher_payment import TeacherPayment
+from app.center.models.group import Group
+from app.center.models.group_students import GroupStudent
 from pydantic import BaseModel
-from app.schemas.payment import PaymentCreate, PaymentRead, PaymentUpdate, TeacherPaymentRead
+from app.billing.schemas.payment import PaymentCreate, PaymentRead, PaymentUpdate, TeacherPaymentRead
 
 router = APIRouter()
 
@@ -46,7 +46,7 @@ def create_payment(
     # Calculate Commission based on Institution
     commission_amount = 0.0
     if student.institution_id:
-        from app.models.institution import Institution
+        from app.core.models.institution import Institution
         institution = db.query(Institution).filter(Institution.id == student.institution_id).first()
         if institution:
             rate = institution.commission_rate if institution.commission_rate is not None else 0.10
@@ -56,6 +56,31 @@ def create_payment(
 
     db_payment = Payment(**payment_data)
     db.add(db_payment)
+
+    # ✅ Update student billing fields
+    import calendar
+    def add_one_month(dt):
+        month = dt.month
+        year = dt.year + month // 12
+        month = month % 12 + 1
+        day = min(dt.day, calendar.monthrange(year, month)[1])
+        return dt.replace(year=year, month=month, day=day)
+
+    student.is_active = True
+    if student.next_payment_date:
+        student.next_payment_date = add_one_month(student.next_payment_date)
+    else:
+        # If no previous date, set to the 10th of the current or next month
+        now = datetime.utcnow()
+        if now.day <= 10:
+            student.next_payment_date = now.replace(day=10, hour=0, minute=0, second=0, microsecond=0)
+        else:
+            student.next_payment_date = add_one_month(now.replace(day=10, hour=0, minute=0, second=0, microsecond=0))
+    
+    # Save the payment amount as their monthly fee if not set (or optionally overwrite)
+    if not student.monthly_fee or student.monthly_fee == 0:
+        student.monthly_fee = payment.amount
+
     db.commit()
     db.refresh(db_payment)
 
@@ -309,7 +334,7 @@ def create_teacher_salary(
 
     # ✅ FIX Bug #2: Also write to Expenses so Finance panel totals stay accurate.
     # Without this, salary paid here was invisible to the Finance Management stats.
-    from app.models.expense import Expense
+    from app.billing.models.expense import Expense
     teacher = db.query(User).filter(User.id == payment.teacher_id).first()
     expense = Expense(
         category="salary",

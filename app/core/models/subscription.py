@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey, F
 from sqlalchemy.orm import relationship
 from datetime import datetime
 import enum
-from app.models.base import Base
+from app.core.models.base import Base
 
 class SubscriptionPlan(str, enum.Enum):
     SMALL = "small"           # Up to 50 students

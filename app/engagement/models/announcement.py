@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.models.base import Base
+from app.core.models.base import Base
 
 class Announcement(Base):
     __tablename__ = "announcements"
@@ -15,4 +15,4 @@ class Announcement(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     author = relationship("User", backref="authored_announcements")
-    institution = relationship("app.models.institution.Institution")
+    institution = relationship("app.core.models.institution.Institution")

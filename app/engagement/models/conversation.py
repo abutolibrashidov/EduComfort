@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Text, Boolean, DateTime, ForeignKey, Enu
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from enum import Enum
-from .base import Base
+from app.core.models.base import Base
 
 
 class ConversationType(str, Enum):

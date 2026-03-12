@@ -49,6 +49,8 @@ const PlatformMessaging = React.lazy(() => import('./pages/platform/PlatformMess
 const Dashboard = React.lazy(() => import("./pages/admin/Dashboard"));
 const Users = React.lazy(() => import("./pages/admin/Users"));
 const Groups = React.lazy(() => import("./pages/admin/Groups"));
+const Sinflar = React.lazy(() => import("./pages/admin/Sinflar"));
+const SinfPayments = React.lazy(() => import("./pages/admin/SinfPayments"));
 const Branches = React.lazy(() => import("./pages/admin/Branches"));
 const Payments = React.lazy(() => import("./pages/admin/Payments"));
 const Messaging = React.lazy(() => import("./pages/admin/Messaging"));
@@ -60,6 +62,11 @@ const Marketplace = React.lazy(() => import("./pages/Marketplace"));
 const AdminAnnouncements = React.lazy(() => import("./pages/admin/AdminAnnouncements"));
 const AdminTeacherPayments = React.lazy(() => import("./pages/admin/AdminTeacherPayments"));
 const FinanceManagement = React.lazy(() => import("./pages/admin/FinanceManagement"));
+const RegistrarDashboard = React.lazy(() => import("./pages/admin/RegistrarDashboard"));
+const FamilyDashboard = React.lazy(() => import("./pages/admin/FamilyDashboard"));
+const AcademicYears = React.lazy(() => import("./pages/admin/AcademicYears"));
+const GradeLevels = React.lazy(() => import("./pages/admin/GradeLevels"));
+const SchoolStaff = React.lazy(() => import("./pages/admin/SchoolStaff"));
 
 // STUDENT PAGES
 const StudentDashboard = React.lazy(() => import("./pages/students/StudentDashboard"));
@@ -104,6 +111,8 @@ const TeacherGradebookExam = React.lazy(() => import("./pages/teachers/TeacherGr
 const TeacherReviewPage = React.lazy(() => import("./pages/teacher/TeacherReviewPage"));
 const TeacherLeaderboards = React.lazy(() => import("./pages/teachers/TeacherLeaderboards"));
 
+
+
 // STAFF PAGES
 const StaffDashboard = React.lazy(() => import("./pages/staff/StaffDashboard"));
 const StaffBranches = React.lazy(() => import("./pages/staff/StaffBranches"));
@@ -131,152 +140,159 @@ function App() {
   return (
     <LanguageProvider>
       <BrandingProvider>
-        <Suspense fallback={
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-            <Spin size="large" tip="Loading EduComfort...">
-              <div style={{ height: 100 }} />
-            </Spin>
-          </div>
-        }>
-          <CookieConsent />
-          <RouteTracker />
-          <Routes>
-            {/* STANDALONE PUBLIC ROUTES - own layout/navbar */}
-            <Route path="/" element={
-              <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}><Spin size="large" /></div>}>
-                <LandingPage />
-              </Suspense>
-            } />
-            <Route path="/login" element={<Login />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
+        <CookieConsent />
+        <RouteTracker />
+        <Routes>
+          {/* STANDALONE PUBLIC ROUTES - own layout/navbar */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
 
-            {/* OTHER PUBLIC ROUTES - Wrapped in PublicLayout */}
-            <Route element={<PublicLayout />}>
-              <Route path="/home" element={<ProtectedHome />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicyLazy />} />
-              <Route path="/terms-of-service" element={<TermsOfServiceLazy />} />
-              <Route path="/register" element={<LearnerRegistration />} />
-              <Route path="/register-center" element={<CenterRegistration />} />
-              <Route path="/profile-setup" element={<ProfileSetup />} />
-              <Route path="/institutions/:id" element={<InstitutionProfile />} />
-              <Route path="/profile/:id" element={<PublicProfile />} />
-              <Route path="/unauthorized" element={<Unauthorized />} />
+          {/* OTHER PUBLIC ROUTES - Wrapped in PublicLayout */}
+          <Route element={<PublicLayout />}>
+            <Route path="/home" element={<ProtectedHome />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicyLazy />} />
+            <Route path="/terms-of-service" element={<TermsOfServiceLazy />} />
+            <Route path="/register" element={<LearnerRegistration />} />
+            <Route path="/register-center" element={<CenterRegistration />} />
+            <Route path="/profile-setup" element={<ProfileSetup />} />
+            <Route path="/institutions/:id" element={<InstitutionProfile />} />
+            <Route path="/profile/:id" element={<PublicProfile />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
+          </Route>
+
+          {/* PLATFORM OWNER ROUTES - Only YOU can access */}
+          <Route element={<RequireAuth allowedRoles={["platform_owner"]} />}>
+            <Route path="/platform" element={<PlatformOwnerLayout />}>
+              <Route index element={<PlatformDashboard />} />
+              <Route path="institutions" element={<AllInstitutions />} />
+              <Route path="learners" element={<AllLearners />} />
+              <Route path="health" element={<SystemHealth />} />
+              <Route path="analytics" element={<PlatformAnalytics />} />
+              <Route path="settings" element={<PlatformSettings />} />
+              <Route path="profile" element={<PlatformProfile />} />
+              <Route path="billing" element={<BillingManagement />} />
+              <Route path="subscriptions" element={<PlatformSubscriptions />} />
+              <Route path="messaging" element={<PlatformMessaging />} />
             </Route>
+          </Route>
 
-            {/* PLATFORM OWNER ROUTES - Only YOU can access */}
-            <Route element={<RequireAuth allowedRoles={["platform_owner"]} />}>
-              <Route path="/platform" element={<PlatformOwnerLayout />}>
-                <Route index element={<PlatformDashboard />} />
-                <Route path="institutions" element={<AllInstitutions />} />
-                <Route path="learners" element={<AllLearners />} />
-                <Route path="health" element={<SystemHealth />} />
-                <Route path="analytics" element={<PlatformAnalytics />} />
-                <Route path="settings" element={<PlatformSettings />} />
-                <Route path="profile" element={<PlatformProfile />} />
-                <Route path="billing" element={<BillingManagement />} />
-                <Route path="subscriptions" element={<PlatformSubscriptions />} />
-                <Route path="messaging" element={<PlatformMessaging />} />
-              </Route>
-            </Route>
+          {/* INSTITUTION SUPER ADMIN ROUTES - Institution owners */}
+          <Route element={<RequireAuth allowedRoles={["admin", "super_admin"]} />}>
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="users" element={<Users />} />
+              <Route path="groups" element={<Groups />} />
+              <Route path="sinflar" element={<Sinflar />} />
+              <Route path="sinf-payments/:groupId" element={<SinfPayments />} />
+              <Route path="subjects" element={<Subjects />} />
+              <Route path="payments" element={<Payments />} />
+              <Route path="messages" element={<Messaging />} />
+              <Route path="messages" element={<Messaging />} />
+              <Route path="profile" element={<AdminProfile />} />
+              <Route path="announcements" element={<AdminAnnouncements />} />
+              <Route path="teacher-payments" element={<AdminTeacherPayments />} />
+              <Route path="finance" element={<FinanceManagement />} />
+              <Route path="my-salary" element={<StaffPayments />} />
+              <Route path="registrar" element={<RegistrarDashboard />} />
+              <Route path="academic-years" element={<AcademicYears />} />
+              <Route path="grade-levels" element={<GradeLevels />} />
+              <Route path="promotions" element={<RegistrarDashboard />} />
+              <Route path="school-staff" element={<SchoolStaff />} />
 
-            {/* INSTITUTION SUPER ADMIN ROUTES - Institution owners */}
-            <Route element={<RequireAuth allowedRoles={["admin", "super_admin"]} />}>
-              <Route path="/admin" element={<AdminLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="users" element={<Users />} />
-                <Route path="groups" element={<Groups />} />
-                <Route path="subjects" element={<Subjects />} />
-                <Route path="payments" element={<Payments />} />
-                <Route path="messages" element={<Messaging />} />
-                <Route path="messages" element={<Messaging />} />
-                <Route path="profile" element={<AdminProfile />} />
-                <Route path="announcements" element={<AdminAnnouncements />} />
-                <Route path="teacher-payments" element={<AdminTeacherPayments />} />
-                <Route path="finance" element={<FinanceManagement />} />
-                <Route path="my-salary" element={<StaffPayments />} />
-
-                {/* SUPER ADMIN ONLY ROUTES */}
-                <Route element={<RequireAuth allowedRoles={["super_admin"]} />}>
-                  <Route path="branches" element={<Branches />} />
-                  <Route path="marketplace" element={<Marketplace />} />
-                  <Route path="settings/institution" element={<InstitutionSettings />} />
-                  <Route path="settings/billing" element={<BillingSettings />} />
-                </Route>
-              </Route>
-            </Route>
-
-            {/* STUDENT ROUTES */}
-            <Route element={<RequireAuth allowedRoles={["student", "super_admin", "teacher"]} />}>
-              <Route path="/student" element={<StudentLayout />}>
-                <Route index element={<Navigate to="dashboard" replace />} />
-                <Route path="feed" element={<NewsFeed />} />
-                <Route path="dashboard" element={<StudentDashboard />} />
-                <Route path="catalog" element={<CourseCatalog />} />
-                <Route path="institutions" element={<StudentInstitutions />} />
-                <Route path="teachers" element={<StudentTeachers />} />
-                <Route path="courses" element={<StudentCourses />} />
-                <Route path="achievements" element={<Achievements />} />
-                <Route path="payments" element={<StudentPayments />} />
-                <Route path="chat" element={<StudentChat />} />
-                <Route path="rating" element={<StudentRating />} />
-                <Route path="profile" element={<StudentProfile />} />
-                <Route path="workbooks" element={<StudentWorkbooks />} />
-                <Route path="workbooks/:id" element={<WorkbookRunner />} />
-                <Route path="exams" element={<ExamDashboard />} />
-                <Route path="exams/:examId/runner" element={<ExamRunner />} />
-                <Route path="books/:bookId/read" element={<BookReader />} />
-                <Route path="games" element={<GamesHub />} />
-                <Route path="games/word-match/:levelId" element={<WordMatchGame />} />
-              </Route>
-            </Route>
-
-            {/* TEACHER ROUTES */}
-            <Route element={<RequireAuth allowedRoles={["teacher", "super_admin"]} />}>
-              <Route path="/teacher" element={<TeacherLayout />}>
-                <Route index element={<TeacherDashboard />} />
-                <Route path="groups" element={<TeacherGroups />} />
-                <Route path="courses" element={<TeacherCourses />} />
-                <Route path="planner" element={<TeacherPlanner />} />
-                {/* EXAM SYSTEM - NOW UNLOCKED */}
-                <Route path="exams" element={<TeacherExams />} />
-                <Route path="exams/create" element={<TeacherExamCreator />} />
-                <Route path="exams/:id" element={<TeacherExamDetails />} />
-                <Route path="exams/:id/preview" element={<ExamRunner />} />
-                <Route path="exams/:id/results" element={<TeacherExamResults />} />
-                <Route path="gradebook/exams/:examId" element={<TeacherGradebookExam />} />
-                <Route path="workbooks" element={<TeacherWorkbooks />} />
-                <Route path="books" element={<TeacherBooks />} />
-                <Route path="books/:bookId/review" element={<TeacherReviewPage />} />
-                <Route path="workbooks/:id" element={<TeacherWorkbookDetail />} />
-                <Route path="materials" element={<TeacherMaterials />} />
-                <Route path="attendance" element={<TeacherAttendance />} />
-                <Route path="payments" element={<TeacherPayments />} />
-                <Route path="chat" element={<TeacherChat />} />
-                <Route path="announcements" element={<TeacherAnnouncements />} />
-                <Route path="rating" element={<TeacherRating />} />
-                <Route path="leaderboards" element={<TeacherLeaderboards />} />
-                <Route path="profile" element={<TeacherProfile />} />
+              {/* SUPER ADMIN ONLY ROUTES */}
+              <Route element={<RequireAuth allowedRoles={["super_admin"]} />}>
+                <Route path="branches" element={<Branches />} />
                 <Route path="marketplace" element={<Marketplace />} />
+                <Route path="settings/institution" element={<InstitutionSettings />} />
+                <Route path="settings/billing" element={<BillingSettings />} />
               </Route>
             </Route>
+          </Route>
 
-            {/* STAFF ROUTES */}
-            <Route element={<RequireAuth allowedRoles={["staff", "super_admin"]} />}>
-              <Route path="/staff" element={<StaffLayout />}>
-                <Route index element={<StaffDashboard />} />
-                <Route path="branches" element={<StaffBranches />} />
-                <Route path="users" element={<StaffUsers />} />
-                <Route path="messages" element={<StaffMessaging />} />
-                <Route path="profile" element={<StaffProfile />} />
-                <Route path="payments" element={<StaffPayments />} />
-              </Route>
+          {/* PARENT ROUTES */}
+          <Route element={<RequireAuth allowedRoles={["parent"]} />}>
+            <Route path="/parent" element={<AdminLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="dashboard" element={<FamilyDashboard />} />
+              <Route path="messages" element={<Messaging />} />
+              <Route path="profile" element={<AdminProfile />} />
             </Route>
+          </Route>
 
-            {/* Catch all */}
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Routes>
-        </Suspense>
+          {/* STUDENT ROUTES */}
+          <Route element={<RequireAuth allowedRoles={["student", "super_admin", "teacher"]} />}>
+            <Route path="/student" element={<StudentLayout />}>
+              <Route index element={<Navigate to="dashboard" replace />} />
+              <Route path="feed" element={<NewsFeed />} />
+              <Route path="dashboard" element={<StudentDashboard />} />
+              <Route path="catalog" element={<CourseCatalog />} />
+              <Route path="institutions" element={<StudentInstitutions />} />
+              <Route path="teachers" element={<StudentTeachers />} />
+              <Route path="courses" element={<StudentCourses />} />
+              <Route path="achievements" element={<Achievements />} />
+              <Route path="payments" element={<StudentPayments />} />
+              <Route path="chat" element={<StudentChat />} />
+              <Route path="rating" element={<StudentRating />} />
+              <Route path="profile" element={<StudentProfile />} />
+              <Route path="workbooks" element={<StudentWorkbooks />} />
+              <Route path="workbooks/:id" element={<WorkbookRunner />} />
+              <Route path="exams" element={<ExamDashboard />} />
+              <Route path="exams/:examId/runner" element={<ExamRunner />} />
+              <Route path="books/:bookId/read" element={<BookReader />} />
+              <Route path="games" element={<GamesHub />} />
+              <Route path="games/word-match/:levelId" element={<WordMatchGame />} />
+            </Route>
+          </Route>
+
+          {/* TEACHER ROUTES */}
+          <Route element={<RequireAuth allowedRoles={["teacher", "super_admin"]} />}>
+            <Route path="/teacher" element={<TeacherLayout />}>
+              <Route index element={<TeacherDashboard />} />
+              <Route path="groups" element={<TeacherGroups />} />
+              <Route path="courses" element={<TeacherCourses />} />
+
+
+              <Route path="planner" element={<TeacherPlanner />} />
+              {/* EXAM SYSTEM - NOW UNLOCKED */}
+              <Route path="exams" element={<TeacherExams />} />
+              <Route path="exams/create" element={<TeacherExamCreator />} />
+              <Route path="exams/:id" element={<TeacherExamDetails />} />
+              <Route path="exams/:id/preview" element={<ExamRunner />} />
+              <Route path="exams/:id/results" element={<TeacherExamResults />} />
+              <Route path="gradebook/exams/:examId" element={<TeacherGradebookExam />} />
+              <Route path="workbooks" element={<TeacherWorkbooks />} />
+              <Route path="books" element={<TeacherBooks />} />
+              <Route path="books/:bookId/review" element={<TeacherReviewPage />} />
+              <Route path="workbooks/:id" element={<TeacherWorkbookDetail />} />
+              <Route path="materials" element={<TeacherMaterials />} />
+              <Route path="attendance" element={<TeacherAttendance />} />
+              <Route path="payments" element={<TeacherPayments />} />
+              <Route path="chat" element={<TeacherChat />} />
+              <Route path="announcements" element={<TeacherAnnouncements />} />
+              <Route path="rating" element={<TeacherRating />} />
+              <Route path="leaderboards" element={<TeacherLeaderboards />} />
+              <Route path="profile" element={<TeacherProfile />} />
+              <Route path="marketplace" element={<Marketplace />} />
+            </Route>
+          </Route>
+
+          {/* STAFF ROUTES */}
+          <Route element={<RequireAuth allowedRoles={["staff", "super_admin"]} />}>
+            <Route path="/staff" element={<StaffLayout />}>
+              <Route index element={<StaffDashboard />} />
+              <Route path="branches" element={<StaffBranches />} />
+              <Route path="users" element={<StaffUsers />} />
+              <Route path="messages" element={<StaffMessaging />} />
+              <Route path="profile" element={<StaffProfile />} />
+              <Route path="payments" element={<StaffPayments />} />
+            </Route>
+          </Route>
+
+          {/* Catch all */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </BrandingProvider>
     </LanguageProvider>
   );

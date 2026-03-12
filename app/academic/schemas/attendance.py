@@ -4,7 +4,7 @@ app/schemas/attendance.py
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date, datetime
-from app.models.attendance import AttendanceStatus
+from app.academic.models.attendance import AttendanceStatus
 
 
 # ── Single record input ───────────────────────────────────────────────────────

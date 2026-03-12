@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { Layout, Menu, Button, Select, Drawer, Typography, Badge, ConfigProvider, Avatar } from "antd";
+import { useState, useEffect, Suspense } from "react";
+import { Layout, Menu, Button, Select, Drawer, Typography, Badge, ConfigProvider, Avatar, Spin } from "antd";
 import {
   DashboardOutlined,
   TeamOutlined,
@@ -79,7 +79,7 @@ const SidebarContent = ({
         }}>
           {branding?.logo_url ? (
             <img
-              src={`${ASSET_BASE_URL}${branding.logo_url}`}
+              src={branding.logo_url.startsWith('http') ? branding.logo_url : `${ASSET_BASE_URL}${branding.logo_url}`}
               alt={branding.brand_name}
               style={{
                 maxHeight: collapsed && !isDrawer ? 32 : 40,
@@ -89,8 +89,9 @@ const SidebarContent = ({
               }}
               onError={(e) => {
                 e.target.style.display = 'none';
-                if (!e.target.parentNode.innerHTML.includes('AppstoreOutlined')) {
-                  e.target.parentNode.innerHTML += '<span style="font-size: 24px; color: white;" class="anticon"><svg viewBox="64 64 896 896" focusable="false" data-icon="appstore" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M464 144H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H212V212h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V160c0-8.8-7.2-16-16-16zm-52 268H612V212h200v200zM464 544H160c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H212V612h200v200zm452-268H560c-8.8 0-16 7.2-16 16v304c0 8.8 7.2 16 16 16h304c8.8 0 16-7.2 16-16V560c0-8.8-7.2-16-16-16zm-52 268H612V612h200v200z"></path></svg></span>';
+                const parent = e.target.parentNode;
+                if (parent && !parent.querySelector('.anticon-appstore')) {
+                  // Fallback handled by parent style usually
                 }
               }}
             />
@@ -199,18 +200,22 @@ function TeacherLayout() {
   const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
+    let isMounted = true;
     const fetchUnreadCount = async () => {
       try {
         const { data } = await axiosClient.get('/messaging/unread-count');
-        setUnreadCount(data.unread_count);
+        if (isMounted) setUnreadCount(data.unread_count);
       } catch (error) {
-        console.error("Failed to fetch unread count:", error);
+        // Silently fail — unread count is non-critical
       }
     };
 
     fetchUnreadCount();
     const interval = setInterval(fetchUnreadCount, 30000);
-    return () => clearInterval(interval);
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const changeLanguage = (lng) => {
@@ -242,6 +247,8 @@ function TeacherLayout() {
     { key: "/teacher/planner", icon: <CalendarOutlined />, label: t('menu.planner') },
     { key: "/teacher/exams", icon: <FileTextOutlined />, label: t('menu.exams') },
     { key: "/teacher/books", icon: <BookOutlined />, label: t('menu.books') },
+
+
     { key: "/teacher/materials", icon: <BookOutlined />, label: t('menu.materials') },
     { key: "/teacher/attendance", icon: <ClockCircleOutlined />, label: t('menu.attendance') },
     { key: "/teacher/payments", icon: <DollarCircleOutlined />, label: t('menu.payments') },
@@ -406,7 +413,13 @@ function TeacherLayout() {
         </Header>
 
         <Content style={{ margin: isMobile ? 16 : 24, paddingBottom: 24, minHeight: 280 }}>
-          <Outlet />
+          <Suspense fallback={
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100px' }}>
+              <Spin size="large" />
+            </div>
+          }>
+            <Outlet />
+          </Suspense>
         </Content>
       </Layout>
       <FeedbackWidget />

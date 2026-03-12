@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.models.base import Base
+from app.core.models.base import Base
 
 class TeacherPayment(Base):
     __tablename__ = "teacher_payments"

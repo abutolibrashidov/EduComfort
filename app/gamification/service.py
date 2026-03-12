@@ -21,7 +21,7 @@ from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 
-from app.models.user import User
+from app.core.models.user import User
 from app.gamification.engine_base import GamificationEngine
 from app.gamification.institution_engine import InstitutionGamificationEngine
 from app.gamification.individual_engine import IndividualGamificationEngine

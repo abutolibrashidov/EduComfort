@@ -47,19 +47,34 @@ const LandingPage = () => {
     const audiences = [
         {
             icon: "🏫",
-            tag: t('lp_for_institutions_tag') || "Ta'lim markazlari uchun",
-            title: t('lp_for_institutions_title') || "LMS + CRM tizimi",
+            tag: t('lp_for_centers_tag') || "O'quv markazlari uchun",
+            title: t('lp_for_centers_title') || "LMS + CRM tizimi",
             items: [
-                t('lp_inst1') || "O'quvchilar, o'qituvchilar va guruhllarni boshqarish",
-                t('lp_inst2') || "Moliyaviy nazorat: to'lovlar va maosh hisob-kitobi",
-                t('lp_inst3') || "Davomat, imtihon va materiallarni boshqarish",
-                t('lp_inst4') || "Ko'p filiallar va rol-asosli kirish",
+                t('lp_inst1') || "O'quvchilar, o'qituvchilar va guruhlarni boshqarish",
+                t('lp_inst2') || "Moliyaviy nazorat: to'lovlar va maosh",
+                t('lp_inst3') || "Davomat va imtihonlarni boshqarish",
+                t('lp_inst4') || "Telegram/SMS xabarnomalar",
             ],
             cta: t('lp_register_center') || "Markaz sifatida ro'yxatdan o'ting",
-            route: '/register-center',
+            route: '/register-center?type=CENTER',
             accent: '#0061f2',
             bg: '#f0f6ff',
         },
+        /* {
+            icon: "🏛️",
+            tag: t('lp_for_schools_tag') || "Xususiy maktablar uchun",
+            title: t('lp_for_schools_title') || "Maktab boshqaruv tizimi",
+            items: [
+                t('lp_school1') || "1-11 sinflar va akademik yillar",
+                t('lp_school2') || "Choraklik hisobotlar va Baholar jurnali",
+                t('lp_school3') || "Ota-onalar portali va mobil ilova",
+                t('lp_school4') || "O'quvchilarni sinfdan-sinfga o'tkazish",
+            ],
+            cta: t('lp_register_school') || "Maktab sifatida ro'yxatdan o'ting",
+            route: '/register-center?type=SCHOOL',
+            accent: '#f59e0b',
+            bg: '#fffbeb',
+        }, */
         {
             icon: "👤",
             tag: t('lp_for_learners_tag') || "Individual o'quvchilar uchun",
@@ -333,8 +348,9 @@ const LandingPage = () => {
                     <h2 className="lp-cta-h2">{t('lp_cta_title') || "Bugun boshlang – bepul!"}</h2>
                     <p className="lp-cta-p">{t('lp_cta_sub') || "Ta'lim markazingizni raqamli dunyoga olib chiqing. Hisob yarating va 14 kun bepul sinab ko'ring."}</p>
                     <div className="lp-cta-row">
-                        <button className="lp-cta-white" onClick={() => navigate('/register')}>{t('lp_register_center') || "Markaz sifatida ro'yxatdan o'ting"} →</button>
-                        <button className="lp-cta-outline" onClick={() => navigate('/register')}>{t('lp_register_learner') || "O'quvchi sifatida qo'shiling"}</button>
+                        <button className="lp-cta-white" onClick={() => navigate('/register-center?type=CENTER')}>{t('lp_register_center') || "Markaz sifatida ro'yxatdan o'ting"} →</button>
+                        <button className="lp-cta-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: 'rgba(255,255,255,0.5)', cursor: 'not-allowed' }} disabled>{t('lp_register_school') || "Maktab (Tez orada)"}</button>
+
                     </div>
                 </motion.div>
             </section>

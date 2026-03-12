@@ -64,6 +64,9 @@ class Settings(BaseSettings):
     UZUM_TERMINAL_ID: Optional[str] = None
     UZUM_SECRET_KEY: Optional[str] = None
 
+    # Telegram
+    TELEGRAM_BOT_TOKEN: Optional[str] = None
+
     model_config = ConfigDict(
         env_file=".env",
         extra="ignore"

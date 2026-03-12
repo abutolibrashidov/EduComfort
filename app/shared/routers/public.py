@@ -5,8 +5,9 @@ from datetime import date
 from pydantic import BaseModel, EmailStr
 
 from app.core.database import get_db
-from app.models.user import User
-from app.models.institution import Institution
+from app.auth.dependencies import get_current_user_optional
+from app.core.models.user import User
+from app.core.models.institution import Institution
 
 
 router = APIRouter(prefix="/public", tags=["Public"])
@@ -40,6 +41,8 @@ class PublicProfileResponse(BaseModel):
     institution_logo: Optional[str] = None
     institution_description: Optional[str] = None
     contact_email: Optional[str] = None
+    is_following: bool = False
+    stats: Optional[dict] = None
 
     class Config:
         from_attributes = True
@@ -251,17 +254,23 @@ def get_public_stats(db: Session = Depends(get_db)):
 @router.get("/profile/{user_id}", response_model=PublicProfileResponse)
 def get_public_profile(
     user_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
     Get public profile of a user (Teacher, Institution Admin, etc.)
     """
+    from sqlalchemy import func
+    from app.center.models.group import Group
+    from app.engagement.models.rating import TeacherRating
+    from app.engagement.models.feed import UserFollow
+
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
     # Determine Bio and Institution info
-    bio = None
+    bio = user.bio
     inst_name = None
     inst_logo = None
     inst_desc = None
@@ -271,22 +280,52 @@ def get_public_profile(
         inst_logo = user.institution.logo_url
         inst_desc = user.institution.description
         
-        # If user is admin/super_admin, their bio IS the institution description
+        # If user is admin/super_admin, their bio IS the institution description if not set
         from app.security.permissions import is_admin_or_higher
-        if is_admin_or_higher(user):
+        if is_admin_or_higher(user) and not bio:
             bio = user.institution.description
+
+    # Teacher Stats
+    stats = None
+    if user.role == "teacher":
+        teacher_groups = db.query(Group).filter(
+            Group.teacher_id == user.id,
+            Group.status == "active"
+        ).all()
+        
+        group_count = len(teacher_groups)
+        student_count = sum([g.current_students for g in teacher_groups])
+        avg_rating = db.query(func.avg(TeacherRating.rating)).filter(
+            TeacherRating.teacher_id == user.id
+        ).scalar() or 0.0
+
+        stats = {
+            "group_count": group_count,
+            "student_count": student_count,
+            "average_rating": round(float(avg_rating), 1),
+            "subjects": list(set([g.subject.name for g in teacher_groups if g.subject]))
+        }
+
+    is_following = False
+    if current_user:
+        is_following = db.query(UserFollow).filter(
+            UserFollow.follower_id == current_user.id,
+            UserFollow.followed_id == user.id
+        ).first() is not None
 
     return PublicProfileResponse(
         id=user.id,
         first_name=user.first_name,
         last_name=user.last_name,
         role=user.role,
-        avatar_url=None, # User model defaults?
+        avatar_url=getattr(user, 'avatar', None),
         bio=bio,
         institution_name=inst_name,
         institution_logo=inst_logo,
         institution_description=inst_desc,
-        contact_email=user.email
+        contact_email=user.email,
+        is_following=is_following,
+        stats=stats
     )
 
 

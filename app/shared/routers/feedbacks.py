@@ -6,8 +6,8 @@ from pydantic import BaseModel
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.feedback import Feedback
+from app.core.models.user import User
+from app.engagement.models.feedback import Feedback
 
 router = APIRouter()
 # NOTE: prefix="/feedbacks" is set in main.py — do NOT add it here

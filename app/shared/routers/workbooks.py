@@ -6,10 +6,10 @@ from pathlib import Path
 
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.workbook import Workbook, WorkbookSubmission
-from app.models.subject import Subject
-from app.schemas.workbook import (
+from app.core.models.user import User
+from app.academic.models.workbook import Workbook, WorkbookSubmission
+from app.academic.models.subject import Subject
+from app.academic.schemas.workbook import (
     WorkbookUpdate,
     WorkbookResponse,
     WorkbookListResponse,

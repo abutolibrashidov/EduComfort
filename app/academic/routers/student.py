@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from typing import List, Optional, Dict
@@ -8,17 +8,17 @@ from passlib.context import CryptContext
 
 from app.core.database import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
-from app.models.group import Group
-from app.models.group_students import GroupStudent
-from app.models.payment import Payment
-from app.models.conversation import Conversation, ConversationType
-from app.models.material import Material
-from app.models.gradebook import GradebookLevel, GradebookExam, GradebookScore
-from app.models.lesson import Lesson
-from app.models.exam import Exam, ExamStatus
-from app.models.attendance import Attendance
-from app.services.stats_service import (
+from app.core.models.user import User
+from app.center.models.group import Group
+from app.center.models.group_students import GroupStudent
+from app.billing.models.payment import Payment
+from app.engagement.models.conversation import Conversation, ConversationType
+from app.academic.models.material import Material
+from app.academic.models.gradebook import GradebookLevel, GradebookExam, GradebookScore
+from app.academic.models.lesson import Lesson
+from app.academic.models.exam import Exam, ExamStatus
+from app.academic.models.attendance import Attendance
+from app.academic.services.stats_service import (
     calculate_attendance_rate,
     calculate_course_completion_rate
 )
@@ -50,19 +50,20 @@ def verify_student(current_user: User):
         )
 
 
-def get_target_student_id(current_user: User, student_id: Optional[int] = None) -> int:
+def get_target_student_id(db: Session, current_user: User, student_id: Optional[int] = None) -> int:
     """Determine which student's data to show, handling admin impersonation"""
     if not student_id:
         return current_user.id
         
-    role_str = getattr(current_user.role, 'value', current_user.role)
-    if role_str in ["admin", "super_admin"] or getattr(current_user, 'is_platform_admin', False):
-        return student_id
+    from app.security.permissions import can_view_user
+    target_student = db.query(User).filter(User.id == student_id).first()
+    if not target_student:
+        raise HTTPException(status_code=404, detail="Student not found")
         
-    if student_id != current_user.id:
-        raise HTTPException(status_code=403, detail="Cannot view other students' data")
+    if not can_view_user(current_user, target_student):
+        raise HTTPException(status_code=403, detail="Access denied: Cannot view this student's data")
         
-    return current_user.id
+    return target_student.id
 
 
 # ============================================
@@ -242,217 +243,10 @@ def get_student_dashboard(
     verify_student(current_user)
     
     # Determine which student's data to show
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
     
-    # Get enrolled groups
-    enrollments = db.query(GroupStudent).filter(
-        GroupStudent.student_id == target_student_id,
-        GroupStudent.is_active
-    ).all()
-    
-    group_ids = [e.group_id for e in enrollments]
-    
-    groups = db.query(Group).filter(
-        Group.id.in_(group_ids) if group_ids else False
-    ).all()
-    
-    # Build group info
-    enrolled_groups = []
-    active_groups = 0
-    
-    for group in groups:
-        if group.status == "active":
-            active_groups += 1
-        
-        enrolled_groups.append(GroupInfo(
-            id=group.id,
-            name=group.name,
-            subject_name=group.subject.name,
-            teacher_name=f"{group.teacher.first_name} {group.teacher.last_name}",
-            level=group.level.value if group.level else "N/A",
-            days_of_week=group.days_of_week,
-            start_time=str(group.start_time) if group.start_time else None,
-            end_time=str(group.end_time) if group.end_time else None,
-            start_date=str(group.start_date) if group.start_date else None,
-            end_date=str(group.end_date) if group.end_date else None,
-            current_students=group.current_students,
-            max_students=group.max_students
-        ))
-    
-    # Get payments
-    payments = db.query(Payment).filter(
-        Payment.student_id == target_student_id
-    ).order_by(Payment.payment_date.desc()).limit(5).all()
-    
-    total_payments = db.query(func.sum(Payment.amount)).filter(
-        Payment.student_id == target_student_id,
-        Payment.status == "completed"
-    ).scalar() or 0.0
-    
-    pending_payments = db.query(func.sum(Payment.amount)).filter(
-        Payment.student_id == target_student_id,
-        Payment.status == "pending"
-    ).scalar() or 0.0
-    
-    recent_payments = [
-        PaymentInfo(
-            id=p.id,
-            amount=p.amount,
-            payment_method=p.payment_method,
-            payment_date=str(p.payment_date),
-            status=p.status,
-            description=p.description
-        )
-        for p in payments
-    ]
-    
-    # Count group chats available
-    group_chats = db.query(Conversation).filter(
-        Conversation.type == ConversationType.GROUP,
-        Conversation.group_id.in_(group_ids) if group_ids else False
-    ).count()
-
-    # Get upcoming lessons for student's groups
-    upcoming_lessons_query = db.query(Lesson).filter(
-        Lesson.group_id.in_(group_ids) if group_ids else False,
-        Lesson.lesson_date >= date.today()
-    ).order_by(Lesson.lesson_date.asc()).limit(5).all()
-
-    upcoming_lessons = [
-        LessonInfo(
-            id=l.id,
-            title=l.title,
-            description=l.description,
-            lesson_date=str(l.lesson_date),
-            group_name=l.group.name,
-            teacher_name=f"{l.teacher.first_name} {l.teacher.last_name}"
-        )
-        for l in upcoming_lessons_query
-    ]
-
-    # Get recent materials for student's groups
-    # Get recent materials for student's groups or from their teachers
-    # Find all teachers for the student's groups
-    teacher_ids = [g.teacher_id for g in groups]
-    
-    recent_materials_query = db.query(Material).filter(
-        or_(
-            Material.group_id.in_(group_ids) if group_ids else False,
-            Material.teacher_id.in_(teacher_ids) if teacher_ids else False
-        )
-    ).order_by(Material.created_at.desc()).limit(10).all()
-
-    recent_materials = [
-        MaterialInfo(
-            id=m.id,
-            title=m.title,
-            description=m.description,
-            file_path=m.file_path,
-            file_name=m.file_name,
-            file_type=m.file_type,
-            created_at=m.created_at,
-            group_name=m.group.name if m.group else "Global"
-        )
-        for m in recent_materials_query
-    ]
-
-    # Get upcoming exams for student's groups
-    upcoming_exams_query = db.query(Exam).filter(
-        Exam.group_id.in_(group_ids) if group_ids else False,
-        Exam.status == ExamStatus.published,
-        or_(Exam.end_date >= datetime.utcnow(), Exam.end_date.is_(None))
-    ).order_by(Exam.start_date.asc()).limit(5).all()
-
-    upcoming_exams = [
-        ExamDashboardInfo(
-            id=e.id,
-            title=e.title,
-            subject_name=e.subject.name,
-            total_points=e.total_points,
-            duration_minutes=e.duration_minutes,
-            start_date=e.start_date,
-            end_date=e.end_date
-        )
-        for e in upcoming_exams_query
-    ]
-    
-    # Get Gradebook data for the student
-    gradebook_data = []
-    if group_ids:
-        # Fetch all levels for student's groups
-        levels = db.query(GradebookLevel).filter(
-            GradebookLevel.group_id.in_(group_ids),
-            GradebookLevel.is_active
-        ).all()
-        
-        for lvl in levels:
-            exams_in_level = db.query(GradebookExam).filter(GradebookExam.level_id == lvl.id).all()
-            
-            level_exams = []
-            total_earned = 0.0
-            total_possible = 0.0
-            
-            for ex in exams_in_level:
-                # Find student score
-                score = db.query(GradebookScore).filter(
-                    GradebookScore.exam_id == ex.id,
-                    GradebookScore.student_id == target_student_id
-                ).first()
-                
-                if score:
-                    total_earned += score.score
-                    total_possible += ex.max_score
-                    
-                level_exams.append(GradebookScoreDashboardInfo(
-                    exam_title=ex.title,
-                    max_score=ex.max_score,
-                    score=score.score if score else None,
-                    comment=score.comment if score else None,
-                    date=ex.exam_date.strftime("%Y-%m-%d") if ex.exam_date else ""
-                ))
-            
-            # Use max(1) to avoid division by zero if total_possible is 0
-            student_percentage = (total_earned / max(total_possible, 1.0)) * 100 if total_possible > 0 else 0
-            is_passing = student_percentage >= lvl.passing_percentage
-            
-            # If no exams graded yet, we don't strictly say failing, but by default it is what it is.
-            if total_possible == 0:
-                is_passing = True # Or None
-                
-            gradebook_data.append(GradebookLevelDashboardInfo(
-                level_id=lvl.id,
-                level_title=lvl.title,
-                group_name=lvl.group.name if lvl.group else "Unknown Group",
-                passing_percentage=lvl.passing_percentage,
-                total_exams=len(exams_in_level),
-                student_score_percentage=round(student_percentage, 1),
-                is_passing=is_passing,
-                exams=level_exams
-            ))
-    
-    # Calculate completion rate (dummy for now)
-    completion_rate = calculate_course_completion_rate(db, student_id=target_student_id)
-    attendance_rate = calculate_attendance_rate(db, student_id=target_student_id)
-    
-    stats = DashboardStats(
-        total_groups=len(groups),
-        active_groups=active_groups,
-        total_payments=total_payments,
-        pending_payments=pending_payments,
-        completion_rate=completion_rate,
-        attendance_rate=attendance_rate
-    )
-    
-    return StudentDashboardResponse(
-        stats=stats,
-        enrolled_groups=enrolled_groups,
-        recent_payments=recent_payments,
-        upcoming_lessons=upcoming_lessons,
-        recent_materials=recent_materials,
-        upcoming_exams=upcoming_exams,
-        gradebooks=gradebook_data,
-        group_chats_available=group_chats
-    )
+    from app.academic.services.student_service import get_student_dashboard_data
+    return get_student_dashboard_data(db, target_student_id)
 
 
 @router.get("/courses", response_model=List[GroupInfo])
@@ -464,7 +258,7 @@ def get_student_courses(
     """Get all courses/groups the student is enrolled in"""
     verify_student(current_user)
     
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
         
     enrollments = db.query(GroupStudent).filter(
         GroupStudent.student_id == target_student_id,
@@ -505,7 +299,7 @@ def get_student_payments(
     """Get all payments for the student"""
     verify_student(current_user)
     
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
         
     payments = db.query(Payment).filter(
         Payment.student_id == target_student_id
@@ -546,7 +340,7 @@ def get_student_teachers(
 ):
     """Get all teachers in the student's institution along with their group stats"""
     verify_student(current_user)
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
     
     # Check if student belongs to an institution
     target_student = db.query(User).filter(User.id == target_student_id).first()
@@ -564,6 +358,9 @@ def get_student_teachers(
         User.is_active
     ).all()
     
+    from app.engagement.models.rating import TeacherRating
+    from app.engagement.models.feed import UserFollow
+
     teachers_list = []
     for teacher in teachers:
         # Get active groups for this teacher
@@ -574,9 +371,20 @@ def get_student_teachers(
         
         # Calculate stats
         group_count = len(teacher_groups)
-        levels = list(set([g.level.value for g in teacher_groups if g.level]))
+        levels = list(set([str(getattr(g.level, 'value', g.level)) for g in teacher_groups if g.level]))
         subjects = list(set([g.subject.name for g in teacher_groups if g.subject]))
-        student_count = sum([g.current_students for g in teacher_groups])
+        student_count = sum([getattr(g, 'current_students', 0) or 0 for g in teacher_groups])
+        
+        # Get Average Rating
+        avg_rating = db.query(func.avg(TeacherRating.rating)).filter(
+            TeacherRating.teacher_id == teacher.id
+        ).scalar() or 0.0
+
+        # Check if following
+        is_following = db.query(UserFollow).filter(
+            UserFollow.follower_id == current_user.id,
+            UserFollow.followed_id == teacher.id
+        ).first() is not None
         
         teachers_list.append({
             "id": teacher.id,
@@ -584,11 +392,14 @@ def get_student_teachers(
             "last_name": teacher.last_name,
             "role": "teacher",
             "phone": getattr(teacher, 'phone_number', None),
+            "avatar": getattr(teacher, 'avatar', None),
+            "is_following": is_following,
             "stats": {
                 "group_count": group_count,
                 "student_count": student_count,
                 "levels": levels,
-                "subjects": subjects
+                "subjects": subjects,
+                "average_rating": round(float(avg_rating), 1)
             }
         })
             
@@ -608,7 +419,7 @@ def get_student_profile(
 ):
     """Get current student's profile with stats"""
     verify_student(current_user)
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
     
     student = db.query(User).filter(User.id == target_student_id).first()
     
@@ -666,7 +477,7 @@ def update_student_profile(
 ):
     """Update current student's profile"""
     verify_student(current_user)
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
     
     student = db.query(User).filter(User.id == target_student_id).first()
     
@@ -713,7 +524,7 @@ def change_student_password(
 ):
     """Change student's password"""
     verify_student(current_user)
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
     
     student = db.query(User).filter(User.id == target_student_id).first()
     
@@ -757,7 +568,7 @@ def get_student_attendance_history(
     """Get the student's attendance history for their enrolled groups for the last 30 distinct dates."""
     verify_student(current_user)
     
-    target_student_id = get_target_student_id(current_user, student_id)
+    target_student_id = get_target_student_id(db, current_user, student_id)
         
     # Get all active enrollments
     enrollments = db.query(GroupStudent).filter(

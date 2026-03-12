@@ -24,7 +24,7 @@ from datetime import date
 
 
 from app.gamification.engine_base import GamificationEngine
-from app.models.user import User
+from app.core.models.user import User
 
 # ── Configurable XP constants ─────────────────────────────────────────────────
 

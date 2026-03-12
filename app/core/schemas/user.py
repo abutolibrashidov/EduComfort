@@ -8,9 +8,11 @@ from app.constants.roles import Role
 class UserBase(BaseModel):
     first_name: str = Field(..., min_length=1, max_length=100)
     last_name: Optional[str] = Field(None, max_length=100)
-    phone_number: str = Field(..., min_length=9, max_length=20)
+    phone_number: str = Field(..., min_length=7, max_length=20)
     email: Optional[EmailStr] = None
     parent_phone_number: Optional[str] = Field(None, max_length=20)
+    parent_name: Optional[str] = Field(None, max_length=100)
+    parent_telegram_chat_id: Optional[str] = Field(None, max_length=50)
     branch_id: Optional[int] = None
 
 
@@ -28,6 +30,8 @@ class UserUpdate(BaseModel):
     phone_number: Optional[str] = Field(None, max_length=20)
     email: Optional[EmailStr] = None
     parent_phone_number: Optional[str] = Field(None, max_length=20)
+    parent_name: Optional[str] = Field(None, max_length=100)
+    parent_telegram_chat_id: Optional[str] = Field(None, max_length=50)
     branch_id: Optional[int] = None
     role: Optional[Role] = None
     is_active: Optional[bool] = None
@@ -51,6 +55,8 @@ class UserRead(BaseModel):
     phone_number: str
     email: Optional[str]
     parent_phone_number: Optional[str]
+    parent_name: Optional[str]
+    parent_telegram_chat_id: Optional[str]
     role: Role
     is_active: bool
     is_super_admin: bool
@@ -65,7 +71,7 @@ class UserRead(BaseModel):
 
 
 # Import at the end to avoid circular dependency
-from app.schemas.group import GroupMini
+from app.center.schemas.group import GroupMini
 UserRead.model_rebuild()
 
 

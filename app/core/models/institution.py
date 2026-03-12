@@ -5,7 +5,7 @@ Each institution is a separate entity (like Seven Plus Academy) that uses the Ed
 from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime, Float
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
-from .base import Base
+from app.core.models.base import Base
 
 
 class Institution(Base):
@@ -23,17 +23,25 @@ class Institution(Base):
     address = Column(Text, nullable=True)
     description = Column(Text, nullable=True)
     
+    # Platform Type
+    institution_type = Column(String(50), nullable=False, default="CENTER") # "CENTER" or "SCHOOL"
+    grading_system = Column(String(20), default="5-point") # "5-point" or "100-point"
+    
     # Branding
     logo_url = Column(String(500), nullable=True)  # Path to uploaded logo
     brand_name = Column(String(200), nullable=True) # Display name if different from 'name'
     primary_color = Column(String(7), default="#1890ff")  # Hex color code
     secondary_color = Column(String(7), default="#52c41a")  # Hex color code
+    slogan = Column(String(255), nullable=True) # Tagline/slogan for the institution
     
     # Subscription & Status
     subscription_tier = Column(String(50), default="basic")  # basic, premium, enterprise
     commission_rate = Column(Float, default=0.10) # Platform commission rate (e.g., 0.10 = 10%)
     ai_credits_balance = Column(Float, default=0.0) # Available credits for AI processing
     is_active = Column(Boolean, default=True, index=True)
+    
+    # Billing Defaults
+    default_monthly_fee = Column(Float, default=0.0) # Default fee if not overridden by grade/group
     
     # Timestamps
     created_at = Column(DateTime(timezone=True), server_default=func.now())

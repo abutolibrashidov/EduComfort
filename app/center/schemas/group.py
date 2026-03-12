@@ -7,20 +7,21 @@ __all__ = ['GroupMini', 'GroupCreate', 'GroupUpdate', 'GroupRead']
 
 class GroupBase(BaseModel):
     name: str = Field(..., min_length=1, max_length=150)
-    subject_id: int
-    teacher_id: int
-    branch_id: int
-    level: str  # beginner, elementary, etc.
-    days_of_week: Optional[str] = None  # "Mon,Wed,Fri"
+    subject_id: Optional[int] = None       # Optional for schools (sinf teaches all subjects)
+    teacher_id: Optional[int] = None       # Optional - can assign later
+    branch_id: Optional[int] = None        # Optional for schools (no branches)
+    level: Optional[str] = None            # Optional for schools (no IELTS levels)
+    days_of_week: Optional[str] = None     # "Mon,Wed,Fri"
     start_time: Optional[time] = None
     end_time: Optional[time] = None
     start_date: Optional[date] = None
     end_date: Optional[date] = None
-    max_students: int = 12
+    max_students: int = 30
+    academic_year_id: Optional[int] = None  # For schools: link to academic year
 
 
 class GroupCreate(GroupBase):
-    status: str = "upcoming"
+    status: str = "active"
     is_active: bool = True
 
 
@@ -38,6 +39,7 @@ class GroupUpdate(BaseModel):
     end_date: Optional[date] = None
     max_students: Optional[int] = None
     is_active: Optional[bool] = None
+    academic_year_id: Optional[int] = None
 
 
 # Mini schemas for relations
@@ -69,8 +71,8 @@ class BranchMini(BaseModel):
 class GroupMini(BaseModel):
     id: int
     name: str
-    subject_id: int
-    level: str
+    subject_id: Optional[int] = None
+    level: Optional[str] = None
     status: str
 
     class Config:
@@ -81,10 +83,10 @@ class GroupMini(BaseModel):
 class GroupRead(BaseModel):
     id: int
     name: str
-    subject_id: int
-    teacher_id: int
-    branch_id: int
-    level: str
+    subject_id: Optional[int] = None
+    teacher_id: Optional[int] = None
+    branch_id: Optional[int] = None
+    level: Optional[str] = None
     status: str
     max_students: int
     current_students: int
@@ -95,6 +97,7 @@ class GroupRead(BaseModel):
     end_date: Optional[date]
     is_active: bool
     created_at: datetime
+    academic_year_id: Optional[int] = None
     
     # Relations
     subject: Optional[SubjectMini] = None
@@ -109,10 +112,10 @@ class GroupRead(BaseModel):
 class GroupListItem(BaseModel):
     id: int
     name: str
-    subject_id: int
-    teacher_id: int
-    branch_id: int
-    level: str
+    subject_id: Optional[int] = None
+    teacher_id: Optional[int] = None
+    branch_id: Optional[int] = None
+    level: Optional[str] = None
     status: str
     current_students: int
     max_students: int

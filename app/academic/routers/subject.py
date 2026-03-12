@@ -3,11 +3,11 @@ from sqlalchemy.orm import Session
 # from sqlalchemy import or_  <-- Removed unused import
 
 from typing import List, Optional
-from app.models.subject import Subject
-from app.schemas.subject import SubjectCreate, SubjectRead, SubjectUpdate
+from app.academic.models.subject import Subject
+from app.academic.schemas.subject import SubjectCreate, SubjectRead, SubjectUpdate
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
-from app.models.user import User
+from app.core.models.user import User
 from app.security.permissions import (
     is_admin_or_higher,
     is_super_admin
@@ -67,7 +67,8 @@ def create_subject(
     return new_subject
 
 # ---------------- GET ALL SUBJECTS ----------------
-@router.get("/", response_model=List[SubjectRead])
+@router.get("", response_model=List[SubjectRead])
+@router.get("/", response_model=List[SubjectRead], include_in_schema=False)
 def get_subjects(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),

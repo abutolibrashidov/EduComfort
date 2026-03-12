@@ -11,12 +11,12 @@ import shutil
 from datetime import datetime
 
 from app.core.database import get_db
-from app.models.interactive_book import (
+from app.academic.models.interactive_book import (
     Book, Unit, Exercise, StudentAnswer, UnitProgress, BookProgress,
     AIProcessingLog, TeacherReview
 )
-from app.models.user import User
-from app.schemas.interactive_book import (
+from app.core.models.user import User
+from app.academic.schemas.interactive_book import (
     BookUpdate, BookResponse, BookWithUnits,
     UnitUpdate, UnitResponse, UnitWithExercises,
     ExerciseUpdate, ExerciseResponse,

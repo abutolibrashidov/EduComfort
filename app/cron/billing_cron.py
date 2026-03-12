@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from app.core.database import SessionLocal
-from app.models.subscription import InstitutionSubscription, SubscriptionStatus
+from app.core.models.subscription import InstitutionSubscription, SubscriptionStatus
 
 def check_subscriptions():
     db = SessionLocal()

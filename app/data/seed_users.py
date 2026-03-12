@@ -1,4 +1,4 @@
-from app.models.user import User
+from app.core.models.user import User
 from app.core.database import SessionLocal
 from app.services.users import hash_password
 from app.constants.roles import Role

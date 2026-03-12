@@ -5,9 +5,9 @@ from pydantic import BaseModel
 from typing import List
 import traceback
 
-from app.models.branch import Branch
-from app.models.user import User
-from app.schemas.branch import BranchCreate, BranchRead
+from app.core.models.branch import Branch
+from app.core.models.user import User
+from app.core.schemas.branch import BranchCreate, BranchRead
 from app.core.dependencies import get_db
 from app.auth.dependencies import get_current_user
 

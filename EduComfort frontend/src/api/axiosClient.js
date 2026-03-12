@@ -74,6 +74,11 @@ axiosClient.interceptors.response.use(
 
     // ✅ FIX 5: Log errors only in development — don't expose internal errors in production console
     if (import.meta.env.DEV) {
+      if (axios.isCancel(error)) {
+        // Silently ignore canceled requests during navigation
+        return Promise.reject(error);
+      }
+
       console.error(
         `❌ API Error: ${error.config?.method?.toUpperCase()} ${error.config?.url}`,
         `Status: ${status}`,

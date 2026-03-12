@@ -4,7 +4,7 @@ Course Model - Represents subjects/courses offered by the learning center
 from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from .base import Base
+from app.core.models.base import Base
 
 
 class Course(Base):

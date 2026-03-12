@@ -11,8 +11,8 @@ import shutil
 from datetime import datetime, timezone
 
 from app.core.database import get_db
-from app.models.institution import Institution
-from app.models.user import User
+from app.core.models.institution import Institution
+from app.core.models.user import User
 from app.auth.dependencies import get_current_user
 from app.security.permissions import is_admin_or_higher
 from pydantic import BaseModel, Field
@@ -38,6 +38,7 @@ class InstitutionBase(BaseModel):
     brand_name: Optional[str] = None
     primary_color: str = Field(default="#1890ff", pattern="^#[0-9A-Fa-f]{6}$")
     secondary_color: str = Field(default="#52c41a", pattern="^#[0-9A-Fa-f]{6}$")
+    slogan: Optional[str] = None
 
 
 class InstitutionUpdate(BaseModel):
@@ -49,6 +50,7 @@ class InstitutionUpdate(BaseModel):
     brand_name: Optional[str] = None
     primary_color: Optional[str] = Field(None, pattern="^#[0-9A-Fa-f]{6}$")
     secondary_color: Optional[str] = Field(None, pattern="^#[0-9A-Fa-f]{6}$")
+    slogan: Optional[str] = None
 
 
 class SubscriptionResponse(BaseModel):
@@ -66,6 +68,7 @@ class InstitutionResponse(BaseModel):
     id: int
     name: str
     subdomain: str
+    institution_type: str
     contact_email: Optional[str] = None
     contact_phone: Optional[str] = None
     address: Optional[str] = None
@@ -74,6 +77,7 @@ class InstitutionResponse(BaseModel):
     brand_name: Optional[str] = None
     primary_color: str
     secondary_color: str
+    slogan: Optional[str] = None
     subscription_tier: str
     is_active: bool
     subscription: Optional[SubscriptionResponse] = None
@@ -182,6 +186,7 @@ def get_current_institution(
             "id": 0,
             "name": "Platform Administration",
             "subdomain": "platform",
+            "institution_type": "platform",
             "contact_email": current_user.email,
             "contact_phone": None,
             "address": None,
@@ -239,7 +244,7 @@ def update_current_institution(
     return institution
 
 
-@router.post("/current/logo", response_model=InstitutionResponse)
+@router.post("/upload-logo", response_model=InstitutionResponse)
 async def upload_institution_logo(
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),
