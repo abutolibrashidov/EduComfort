@@ -37,6 +37,7 @@ const statusLabels = {
 const PlatformSubscriptions = () => {
     const [subscriptions, setSubscriptions] = useState([]);
     const [institutions, setInstitutions] = useState([]);
+    const [plans, setPlans] = useState([]);
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState({});
     const [subscribeModal, setSubscribeModal] = useState({ open: false, institution: null });
@@ -45,12 +46,14 @@ const PlatformSubscriptions = () => {
     const fetchData = useCallback(async () => {
         setLoading(true);
         try {
-            const [subsRes, instRes] = await Promise.allSettled([
+            const [subsRes, instRes, plansRes] = await Promise.allSettled([
                 axiosClient.get('/billing/subscriptions'),
                 axiosClient.get('/platform/institutions'),
+                axiosClient.get('/billing/plans'),
             ]);
             if (subsRes.status === 'fulfilled') setSubscriptions(subsRes.value.data || []);
             if (instRes.status === 'fulfilled') setInstitutions(instRes.value.data || []);
+            if (plansRes.status === 'fulfilled') setPlans(plansRes.value.data || []);
         } catch (err) {
             message.error('Ma\'lumotlar yuklanishda xato');
         } finally {
@@ -465,11 +468,20 @@ const PlatformSubscriptions = () => {
                         label="Obuna rejasi"
                         rules={[{ required: true, message: 'Rejani tanlang' }]}
                     >
-                        <Select placeholder="Rejani tanlang">
-                            <Option value="small">🌱 Kichik Markaz (200,000 UZS)</Option>
-                            <Option value="medium">🌿 O'rta Markaz (400,000 UZS)</Option>
-                            <Option value="large">🌳 Yirik Markaz (700,000 UZS)</Option>
-                            <Option value="enterprise">🏢 Korporativ (1,000,000 UZS)</Option>
+                        <Select
+                            placeholder="Rejani tanlang"
+                            onChange={(planId) => {
+                                const p = plans.find(x => x.id === planId);
+                                if (p) {
+                                    form.setFieldsValue({ monthly_price: p.price });
+                                }
+                            }}
+                        >
+                            {plans.map(p => (
+                                <Option key={p.id} value={p.id}>
+                                    {p.name} ({p.price.toLocaleString('uz')} UZS)
+                                </Option>
+                            ))}
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -477,14 +489,15 @@ const PlatformSubscriptions = () => {
                         label="Oylik to'lov miqdori (so'm)"
                         rules={[{ required: true, message: 'Narxni kiriting' }]}
                     >
-                        <InputNumber
-                            style={{ width: '100%' }}
-                            min={0}
-                            step={10000}
-                            formatter={v => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                            placeholder="200,000"
-                            addonAfter="so'm"
-                        />
+                        <Space.Compact style={{ width: '100%' }}>
+                            <InputNumber
+                                style={{ flex: 1 }}
+                                min={0}
+                                step={10000}
+                                formatter={v => `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                            />
+                            <div style={{ background: '#fafafa', border: '1px solid #d9d9d9', borderLeft: 0, padding: '0 11px', lineHeight: '30px', color: 'rgba(0, 0, 0, 0.45)' }}>so'm</div>
+                        </Space.Compact>
                     </Form.Item>
                     <Form.Item
                         name="contact_phone"

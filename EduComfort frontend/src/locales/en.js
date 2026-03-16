@@ -227,10 +227,10 @@ export const en = {
     "billing.payment_methods": "Payment Methods",
 
     // Plans
-    "plan.small": "Small (Up to 50)",
-    "plan.medium": "Medium (51-150)",
-    "plan.large": "Large (151-300)",
-    "plan.enterprise": "Enterprise (300+)",
+    "plan.small": "Small",
+    "plan.medium": "Medium",
+    "plan.large": "Large",
+    "plan.enterprise": "Enterprise",
 
     // Layout
     "super_admin": "Super Admin",

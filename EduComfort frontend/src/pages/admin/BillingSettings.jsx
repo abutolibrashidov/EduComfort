@@ -13,12 +13,30 @@ const BillingSettings = () => {
     const { branding } = useBranding();
     const [loading, setLoading] = useState(false);
     const [uzumLoading, setUzumLoading] = useState(false);
+    const [plans, setPlans] = useState([]);
+    const [plansLoading, setPlansLoading] = useState(true);
 
-    const currentPlan = branding?.subscription?.plan || 'Unknown';
+    React.useEffect(() => {
+        const fetchPlans = async () => {
+            try {
+                const { data } = await axiosClient.get('/billing/plans');
+                setPlans(data || []);
+            } catch (err) {
+                console.error("Failed to fetch plans:", err);
+            } finally {
+                setPlansLoading(false);
+            }
+        };
+        fetchPlans();
+    }, []);
+
+    const currentPlanCode = branding?.subscription?.plan || 'Unknown';
+    const planInfo = plans.find(p => p.id === currentPlanCode.toLowerCase());
     const status = branding?.subscription?.status || 'inactive';
     const nextBilling = branding?.subscription?.next_billing_date
         ? new Date(branding.subscription.next_billing_date).toLocaleDateString()
         : 'N/A';
+    const monthlyPrice = branding?.subscription?.monthly_price || planInfo?.price || 0;
 
     const handleClickCheckout = async () => {
         try {
@@ -79,7 +97,7 @@ const BillingSettings = () => {
                         children: (
                             <Card>
                                 <Alert
-                                    title={`Joriy Obuna Rejangiz: ${t(`plan.${currentPlan}`) || currentPlan.toUpperCase()}`}
+                                    title={`Joriy Obuna Rejangiz: ${t(`plan.${currentPlanCode.toLowerCase()}`) || currentPlanCode.toUpperCase()}`}
                                     description={`Holat: ${status.toUpperCase()} | Keyingi to'lov sanasi: ${nextBilling}`}
                                     type="info"
                                     showIcon
@@ -94,8 +112,18 @@ const BillingSettings = () => {
                                     />
                                 </div>
                                 <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
-                                    <Card title="Plan Details" size="small" style={{ width: 350 }}>
-                                        <h3>{t(`plan.${currentPlan}`) || currentPlan.toUpperCase()}</h3>
+                                    <Card title="Plan Details" size="small" style={{ width: 350 }} loading={plansLoading}>
+                                        <h3>{t(`plan.${currentPlanCode.toLowerCase()}`) || currentPlanCode.toUpperCase()}</h3>
+                                        <div style={{ marginBottom: 16 }}>
+                                            <Title level={4} style={{ margin: 0 }}>
+                                                {monthlyPrice.toLocaleString('uz')} <small>UZS/oy</small>
+                                            </Title>
+                                            {planInfo && (
+                                                <Text type="secondary">
+                                                    Max: {planInfo.student_limit} o'quvchi
+                                                </Text>
+                                            )}
+                                        </div>
                                         <p><BankOutlined /> Boshqaruv Tizimi</p>
                                         <p><ClockCircleOutlined /> 24/7 Qollab Quvvatlash</p>
                                         <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: '10px' }}>

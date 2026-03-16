@@ -44,12 +44,17 @@ const PlatformSettings = () => {
         axiosClient.get('/platform/settings/prices')
             .then(({ data }) => {
                 priceForm.setFieldsValue({
-                    small: data.small,
-                    medium: data.medium,
-                    large: data.large,
+                    small_price: data.small_price,
+                    medium_price: data.medium_price,
+                    large_price: data.large_price,
+                    enterprise_price: data.enterprise_price,
+                    small_limit: data.small_limit,
+                    medium_limit: data.medium_limit,
+                    large_limit: data.large_limit,
+                    enterprise_limit: data.enterprise_limit,
                 });
             })
-            .catch(() => message.warning('Could not load plan prices'))
+            .catch(() => message.warning('Could not load plan settings'))
             .finally(() => setPricesLoading(false));
     }, [priceForm]);
 
@@ -57,13 +62,18 @@ const PlatformSettings = () => {
         setPricesSaving(true);
         try {
             await axiosClient.put('/platform/settings/prices', {
-                small: values.small,
-                medium: values.medium,
-                large: values.large,
+                small_price: values.small_price,
+                medium_price: values.medium_price,
+                large_price: values.large_price,
+                enterprise_price: values.enterprise_price,
+                small_limit: values.small_limit,
+                medium_limit: values.medium_limit,
+                large_limit: values.large_limit,
+                enterprise_limit: values.enterprise_limit,
             });
-            message.success('✅ Plan prices updated successfully');
+            message.success('✅ Plan settings updated successfully');
         } catch {
-            message.error('Failed to update prices. Please try again.');
+            message.error('Failed to update settings. Please try again.');
         } finally {
             setPricesSaving(false);
         }
@@ -108,7 +118,7 @@ const PlatformSettings = () => {
 
             {/* ── Plan Pricing Card ─────────────────────────────────── */}
             <Card
-                title={<><DollarOutlined style={{ marginRight: 8 }} />Subscription Plan Prices (USD / month)</>}
+                title={<><DollarOutlined style={{ marginRight: 8 }} />Subscription Plan Settings (Price & Student Limit)</>}
                 style={{ borderRadius: 10, marginBottom: 24 }}
                 extra={<Tag color="blue">Live – affects revenue dashboard</Tag>}
             >
@@ -117,50 +127,88 @@ const PlatformSettings = () => {
                 ) : (
                     <Form form={priceForm} layout="vertical" onFinish={savePrices}>
                         <Row gutter={24}>
-                            <Col xs={24} sm={8}>
-                                <Form.Item
-                                    label={<><Tag color="green">Small</Tag> (up to 50 students)</>}
-                                    name="small"
-                                    rules={[{ required: true, message: 'Required' }]}
-                                >
-                                    <InputNumber
-                                        prefix="$"
-                                        min={0}
-                                        precision={2}
-                                        style={{ width: '100%' }}
-                                        size="large"
-                                    />
-                                </Form.Item>
+                            {/* Small Plan */}
+                            <Col xs={24} sm={12} lg={6}>
+                                <div style={{ marginBottom: 16 }}>
+                                    <Tag color="green" style={{ marginBottom: 8 }}>Small Plan</Tag>
+                                    <Form.Item
+                                        label="Monthly Price ($)"
+                                        name="small_price"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber prefix="$" min={0} precision={2} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Student Limit"
+                                        name="small_limit"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber min={1} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                </div>
                             </Col>
-                            <Col xs={24} sm={8}>
-                                <Form.Item
-                                    label={<><Tag color="blue">Medium</Tag> (51–150 students)</>}
-                                    name="medium"
-                                    rules={[{ required: true, message: 'Required' }]}
-                                >
-                                    <InputNumber
-                                        prefix="$"
-                                        min={0}
-                                        precision={2}
-                                        style={{ width: '100%' }}
-                                        size="large"
-                                    />
-                                </Form.Item>
+
+                            {/* Medium Plan */}
+                            <Col xs={24} sm={12} lg={6}>
+                                <div style={{ marginBottom: 16 }}>
+                                    <Tag color="blue" style={{ marginBottom: 8 }}>Medium Plan</Tag>
+                                    <Form.Item
+                                        label="Monthly Price ($)"
+                                        name="medium_price"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber prefix="$" min={0} precision={2} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Student Limit"
+                                        name="medium_limit"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber min={1} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                </div>
                             </Col>
-                            <Col xs={24} sm={8}>
-                                <Form.Item
-                                    label={<><Tag color="gold">Large</Tag> (151–500 students)</>}
-                                    name="large"
-                                    rules={[{ required: true, message: 'Required' }]}
-                                >
-                                    <InputNumber
-                                        prefix="$"
-                                        min={0}
-                                        precision={2}
-                                        style={{ width: '100%' }}
-                                        size="large"
-                                    />
-                                </Form.Item>
+
+                            {/* Large Plan */}
+                            <Col xs={24} sm={12} lg={6}>
+                                <div style={{ marginBottom: 16 }}>
+                                    <Tag color="gold" style={{ marginBottom: 8 }}>Large Plan</Tag>
+                                    <Form.Item
+                                        label="Monthly Price ($)"
+                                        name="large_price"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber prefix="$" min={0} precision={2} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Student Limit"
+                                        name="large_limit"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber min={1} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                </div>
+                            </Col>
+
+                            {/* Enterprise Plan */}
+                            <Col xs={24} sm={12} lg={6}>
+                                <div style={{ marginBottom: 16 }}>
+                                    <Tag color="purple" style={{ marginBottom: 8 }}>Enterprise Plan</Tag>
+                                    <Form.Item
+                                        label="Monthly Price ($)"
+                                        name="enterprise_price"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber prefix="$" min={0} precision={2} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Student Limit"
+                                        name="enterprise_limit"
+                                        rules={[{ required: true, message: 'Required' }]}
+                                    >
+                                        <InputNumber min={1} style={{ width: '100%' }} />
+                                    </Form.Item>
+                                </div>
                             </Col>
                         </Row>
                         <Button
@@ -170,7 +218,7 @@ const PlatformSettings = () => {
                             loading={pricesSaving}
                             style={{ background: '#1A1A2E' }}
                         >
-                            Save Prices
+                            Save Plan Settings
                         </Button>
                     </Form>
                 )}

@@ -267,24 +267,21 @@ export default function InstitutionSettings() {
 
                         <Card title="Telegram Bot (Ota-onalar xabarnomasi)" style={{ marginBottom: 24, border: '1px solid #1890ff' }}>
                             <Text>Ota-onalarni botga ulash uchun quyidagi maxsus havolani yuboring. Ushbu havola orqali profil avtomatik sizning o'quv markazingizga biriktiriladi:</Text>
-                            <div style={{ marginTop: 12, padding: 12, background: '#f0f5ff', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Space.Compact style={{ width: '100%' }}>
                                 <Input
-                                  value={`https://t.me/Ogohlanirgich_bot?start=inst_${branding?.id}`}
-                                  readOnly
-                                  addonAfter={
-                                    <Button
-                                      type="primary"
-                                      style={{ margin: -1, borderRadius: 0 }}
-                                      onClick={() => {
+                                    value={`https://t.me/Ogohlanirgich_bot?start=inst_${branding?.id}`}
+                                    readOnly
+                                />
+                                <Button
+                                    type="primary"
+                                    onClick={() => {
                                         navigator.clipboard.writeText(`https://t.me/Ogohlanirgich_bot?start=inst_${branding?.id}`);
                                         message.success("Nusxa olindi!");
-                                      }}
-                                    >
-                                      Nusxa olish
-                                    </Button>
-                                  }
-                                />
-                            </div>
+                                    }}
+                                >
+                                    Nusxa olish
+                                </Button>
+                            </Space.Compact>
                         </Card>
 
                         <Card title="Contact Information" style={{ marginBottom: 24 }}>

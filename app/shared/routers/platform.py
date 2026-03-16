@@ -110,42 +110,72 @@ def _hard_delete_user_bg(user_id: int, user_name: str) -> None:
 # ==================== Plan Pricing Helpers ====================
 
 _DEFAULT_PRICES = {
-    "plan_price_small":    50,
-    "plan_price_medium":  200,
-    "plan_price_large":   500,
+    "plan_price_small":      39,
+    "plan_price_medium":     69,
+    "plan_price_large":      89,
+    "plan_price_enterprise": 109,
+}
+
+_DEFAULT_LIMITS = {
+    "plan_limit_small":      50,
+    "plan_limit_medium":     150,
+    "plan_limit_large":      500,
+    "plan_limit_enterprise": 1000,
 }
 
 
 class PlanPricesIn(BaseModel):
-    small:  float
-    medium: float
-    large:  float
+    small_price: float
+    medium_price: float
+    large_price: float
+    enterprise_price: float
+    small_limit: int
+    medium_limit: int
+    large_limit: int
+    enterprise_limit: int
 
 
 class PlanPricesOut(BaseModel):
-    small:  float
-    medium: float
-    large:  float
+    small_price: float
+    medium_price: float
+    large_price: float
+    enterprise_price: float
+    small_limit: int
+    medium_limit: int
+    large_limit: int
+    enterprise_limit: int
 
 
 def _seed_default_prices(db: Session) -> None:
-    """Ensure the three default plan-price rows exist (safe to call on every boot)."""
+    """Ensure default plan prices and limits exist in the DB."""
+    # Prices
     for key, val in _DEFAULT_PRICES.items():
         if not db.query(PlatformSetting).filter_by(key=key).first():
             db.add(PlatformSetting(key=key, value=val, description=f"Monthly price for {key.split('_')[-1]} plan"))
+    
+    # Limits
+    for key, val in _DEFAULT_LIMITS.items():
+        if not db.query(PlatformSetting).filter_by(key=key).first():
+            db.add(PlatformSetting(key=key, value=val, description=f"Student limit for {key.split('_')[-1]} plan"))
+            
     db.commit()
 
 
-def _get_plan_prices(db: Session) -> dict:
-    """Return {SubscriptionPlan.SMALL: price, ...} from the DB (or defaults)."""
-    rows = db.query(PlatformSetting).filter(
-        PlatformSetting.key.in_(["plan_price_small", "plan_price_medium", "plan_price_large"])
-    ).all()
-    lookup = {r.key: float(r.value) for r in rows}
+def _get_plan_settings(db: Session) -> dict:
+    """Return all plan settings (prices and limits) from the DB."""
+    keys = list(_DEFAULT_PRICES.keys()) + list(_DEFAULT_LIMITS.keys())
+    rows = db.query(PlatformSetting).filter(PlatformSetting.key.in_(keys)).all()
+    lookup = {r.key: r.value for r in rows}
+    
     return {
-        SubscriptionPlan.SMALL:   lookup.get("plan_price_small",  _DEFAULT_PRICES["plan_price_small"]),
-        SubscriptionPlan.MEDIUM:  lookup.get("plan_price_medium", _DEFAULT_PRICES["plan_price_medium"]),
-        SubscriptionPlan.LARGE:   lookup.get("plan_price_large",  _DEFAULT_PRICES["plan_price_large"]),
+        "small_price":      float(lookup.get("plan_price_small",      _DEFAULT_PRICES["plan_price_small"])),
+        "medium_price":     float(lookup.get("plan_price_medium",     _DEFAULT_PRICES["plan_price_medium"])),
+        "large_price":      float(lookup.get("plan_price_large",      _DEFAULT_PRICES["plan_price_large"])),
+        "enterprise_price": float(lookup.get("plan_price_enterprise", _DEFAULT_PRICES["plan_price_enterprise"])),
+        "small_limit":      int(lookup.get("plan_limit_small",        _DEFAULT_LIMITS["plan_limit_small"])),
+        "medium_limit":     int(lookup.get("plan_limit_medium",       _DEFAULT_LIMITS["plan_limit_medium"])),
+        "large_limit":      int(lookup.get("plan_limit_large",        _DEFAULT_LIMITS["plan_limit_large"])),
+        "enterprise_limit": int(lookup.get("plan_limit_enterprise",    _DEFAULT_LIMITS["plan_limit_enterprise"])),
     }
 
 
@@ -156,14 +186,10 @@ def get_plan_prices(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    """Return the current subscription plan prices. Accessible by all authenticated users."""
-    _seed_default_prices(db)   # idempotent – creates rows only if missing
-    prices = _get_plan_prices(db)
-    return PlanPricesOut(
-        small=prices[SubscriptionPlan.SMALL],
-        medium=prices[SubscriptionPlan.MEDIUM],
-        large=prices[SubscriptionPlan.LARGE],
-    )
+    """Return the current subscription plan prices and limits. Accessible by all authenticated users."""
+    _seed_default_prices(db)
+    settings = _get_plan_settings(db)
+    return PlanPricesOut(**settings)
 
 
 @router.put("/settings/prices", response_model=PlanPricesOut)
@@ -172,20 +198,29 @@ def update_plan_prices(
     db: Session = Depends(get_db),
     current_user: User = Depends(verify_platform_owner),
 ):
-    """Update the subscription plan prices. Restricted to platform_owner."""
+    """Update the subscription plan prices and student limits. Restricted to platform_owner."""
     _seed_default_prices(db)
-    for key, val in [
-        ("plan_price_small",  payload.small),
-        ("plan_price_medium", payload.medium),
-        ("plan_price_large",  payload.large),
-    ]:
+    
+    updates = [
+        ("plan_price_small",      payload.small_price),
+        ("plan_price_medium",     payload.medium_price),
+        ("plan_price_large",      payload.large_price),
+        ("plan_price_enterprise", payload.enterprise_price),
+        ("plan_limit_small",      payload.small_limit),
+        ("plan_limit_medium",     payload.medium_limit),
+        ("plan_limit_large",      payload.large_limit),
+        ("plan_limit_enterprise", payload.enterprise_limit),
+    ]
+    
+    for key, val in updates:
         row = db.query(PlatformSetting).filter_by(key=key).first()
         if row:
             row.value = val
         else:
             db.add(PlatformSetting(key=key, value=val))
+            
     db.commit()
-    return PlanPricesOut(small=payload.small, medium=payload.medium, large=payload.large)
+    return PlanPricesOut(**payload.dict())
 
 
 # ==================== Dashboard ====================
@@ -196,7 +231,7 @@ def get_platform_dashboard(
     current_user: User = Depends(verify_platform_owner),
 ):
     try:
-        total_institutions = db.query(Institution).count()
+        total_institutions = db.query(Institution).filter(~Institution.subdomain.contains("__deleted_")).count()
         active_institutions = db.query(Institution).filter(Institution.is_active).count()
         total_users = db.query(User).count()
         individual_learners = db.query(User).filter(
@@ -206,12 +241,18 @@ def get_platform_dashboard(
 
         revenue_mtd = 0
         try:
-            plan_prices = _get_plan_prices(db)
+            settings = _get_plan_settings(db)
+            price_map = {
+                SubscriptionPlan.SMALL:      settings["small_price"],
+                SubscriptionPlan.MEDIUM:     settings["medium_price"],
+                SubscriptionPlan.LARGE:      settings["large_price"],
+                SubscriptionPlan.ENTERPRISE: settings["enterprise_price"],
+            }
             active_subs = db.query(InstitutionSubscription).filter(
                 InstitutionSubscription.status == "active"
             ).all()
             for sub in active_subs:
-                revenue_mtd += plan_prices.get(sub.plan, 0)
+                revenue_mtd += price_map.get(sub.plan, 0)
         except Exception as e:
             logger.warning(f"Revenue calc skipped: {e}")
 
@@ -237,8 +278,8 @@ def get_all_institutions(
     db: Session = Depends(get_db),
     current_user: User = Depends(verify_platform_owner),
 ):
-    # ✅ FIX: exclude soft-deleted institutions so they disappear immediately after delete
-    institutions = db.query(Institution).filter(Institution.is_active).all()
+    # ✅ FIX: return all non-deleted institutions (including suspended ones)
+    institutions = db.query(Institution).filter(~Institution.subdomain.contains("__deleted_")).all()
     result = []
     for inst in institutions:
         try:

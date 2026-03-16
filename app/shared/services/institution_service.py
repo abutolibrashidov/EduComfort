@@ -27,22 +27,29 @@ def robust_cascade_delete_institution(db: Session, institution: Institution):
             logger.error(f"Failed to scrub user {user.id} during institution delete: {e}")
             # Continue anyway to wipe as much as possible
 
-    # 2. Scrub any remaining data tied to institution_id
+    # Scrub any remaining data tied to institution_id
+    # Ordered to handle foreign key dependencies as much as possible
     cleanup_queries = [
-        "DELETE FROM branches WHERE institution_id = :iid",
-        "DELETE FROM groups WHERE institution_id = :iid",
-        "DELETE FROM announcements WHERE institution_id = :iid",
-        "DELETE FROM institution_subscriptions WHERE institution_id = :iid",
-        "DELETE FROM feedbacks WHERE institution_id = :iid",
-        "DELETE FROM teacher_payments WHERE institution_id = :iid",
-        "DELETE FROM expenses WHERE institution_id = :iid",
-        "DELETE FROM student_enrollments WHERE institution_id = :iid",
-        "DELETE FROM online_courses WHERE institution_id = :iid",
+        "DELETE FROM exam_results WHERE institution_id = :iid",
+        "DELETE FROM placement_test_results WHERE institution_id = :iid",
+        "DELETE FROM lesson_progress WHERE institution_id = :iid",
+        "DELETE FROM gradebook WHERE institution_id = :iid",
         "DELETE FROM attendance WHERE institution_id = :iid",
+        "DELETE FROM monthly_fees WHERE institution_id = :iid",
+        "DELETE FROM student_payments WHERE institution_id = :iid",
+        "DELETE FROM teacher_salaries WHERE institution_id = :iid",
+        "DELETE FROM teacher_payments WHERE institution_id = :iid",
         "DELETE FROM teacher_contracts WHERE institution_id = :iid",
         "DELETE FROM school_fees WHERE institution_id = :iid",
         "DELETE FROM library_books WHERE institution_id = :iid",
         "DELETE FROM inventory_items WHERE institution_id = :iid",
+        "DELETE FROM online_courses WHERE institution_id = :iid",
+        "DELETE FROM feedbacks WHERE institution_id = :iid",
+        "DELETE FROM announcements WHERE institution_id = :iid",
+        "DELETE FROM groups WHERE institution_id = :iid",
+        "DELETE FROM subjects WHERE institution_id = :iid",
+        "DELETE FROM branches WHERE institution_id = :iid",
+        "DELETE FROM institution_subscriptions WHERE institution_id = :iid",
     ]
 
     for q_str in cleanup_queries:

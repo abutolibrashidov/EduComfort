@@ -244,7 +244,7 @@ def update_current_institution(
     return institution
 
 
-@router.post("/upload-logo", response_model=InstitutionResponse)
+@router.post("/current/logo", response_model=InstitutionResponse)
 async def upload_institution_logo(
     file: UploadFile = File(...),
     current_user: User = Depends(get_current_user),

@@ -346,7 +346,7 @@ const LandingPage = () => {
                     viewport={{ once: true }} transition={{ duration: 0.55 }}>
                     <EduLogo size={52} dark animate={false} />
                     <h2 className="lp-cta-h2">{t('lp_cta_title') || "Bugun boshlang – bepul!"}</h2>
-                    <p className="lp-cta-p">{t('lp_cta_sub') || "Ta'lim markazingizni raqamli dunyoga olib chiqing. Hisob yarating va 14 kun bepul sinab ko'ring."}</p>
+                    <p className="lp-cta-p">{t('lp_cta_sub') || "Ta'lim markazingizni raqamli dunyoga olib chiqing. Hisob yarating va 5 kun bepul sinab ko'ring."}</p>
                     <div className="lp-cta-row">
                         <button className="lp-cta-white" onClick={() => navigate('/register-center?type=CENTER')}>{t('lp_register_center') || "Markaz sifatida ro'yxatdan o'ting"} →</button>
                         <button className="lp-cta-outline" style={{ borderColor: 'rgba(255,255,255,0.4)', color: 'rgba(255,255,255,0.5)', cursor: 'not-allowed' }} disabled>{t('lp_register_school') || "Maktab (Tez orada)"}</button>

@@ -423,7 +423,10 @@ export default function Sinflar() {
                         label="Sinfdagi o'quvchilar soni (maksimal)"
                         initialValue={30}
                     >
-                        <InputNumber min={5} max={60} style={{ width: '100%' }} addonAfter="ta o'quvchi" />
+                        <Space.Compact style={{ width: '100%' }}>
+                            <InputNumber min={5} max={60} style={{ flex: 1 }} />
+                            <div style={{ background: '#fafafa', border: '1px solid #d9d9d9', borderLeft: 0, padding: '0 11px', lineHeight: '30px', color: 'rgba(0, 0, 0, 0.45)' }}>ta o'quvchi</div>
+                        </Space.Compact>
                     </Form.Item>
                 </Form>
             </Modal>

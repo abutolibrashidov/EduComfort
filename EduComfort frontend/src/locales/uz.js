@@ -210,10 +210,10 @@ export const uz = {
     "billing.payment_methods": "To'lov usullari",
 
     // Plans
-    "plan.small": "Small (50 o'quvchigacha)",
-    "plan.medium": "Medium (51-150 o'quvchi)",
-    "plan.large": "Large (151-300 o'quvchi)",
-    "plan.enterprise": "Enterprise (300+ o'quvchi)",
+    "plan.small": "Small",
+    "plan.medium": "Medium",
+    "plan.large": "Large",
+    "plan.enterprise": "Enterprise",
 
     // Layout
     "super_admin": "Super Admin",

@@ -165,13 +165,15 @@ const GradeLevels = () => {
                         label="Oylik to'lov miqdori (ixtiyoriy)"
                         extra="Bo'sh qoldirsangiz, muassasa umumiy narxi qo'llaniladi"
                     >
-                        <InputNumber
-                            min={0}
-                            style={{ width: '100%' }}
-                            addonAfter="so'm"
-                            placeholder="masalan: 500000"
-                            formatter={v => v ? `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}
-                        />
+                        <Space.Compact style={{ width: '100%' }}>
+                            <InputNumber
+                                min={0}
+                                style={{ flex: 1 }}
+                                placeholder="masalan: 500000"
+                                formatter={v => v ? `${v}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}
+                            />
+                            <div style={{ background: '#fafafa', border: '1px solid #d9d9d9', borderLeft: 0, padding: '0 11px', lineHeight: '30px', color: 'rgba(0, 0, 0, 0.45)' }}>so'm</div>
+                        </Space.Compact>
                     </Form.Item>
                 </Form>
             </Modal>

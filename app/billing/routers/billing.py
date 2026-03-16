@@ -65,36 +65,43 @@ class RecordPaymentRequest(BaseModel):
 # ──────────────────────────────────────────────────────────
 
 @router.get("/plans")
-def get_plans():
-    """Mavjud obuna rejalari"""
+def get_plans(db: Session = Depends(get_db)):
+    """Mavjud obuna rejalari (dinamik narxlar va cheklovlar bilan)"""
+    from app.shared.routers.platform import _get_plan_settings
+    settings = _get_plan_settings(db)
+    
     return [
         {
             "id": "small",
             "name": "🌱 Kichik Markaz",
-            "price_example": 200_000,
+            "price": settings["small_price"],
+            "student_limit": settings["small_limit"],
             "features": ["Barcha imkoniyatlar", "SMS xabarnomalar", "Gamifikatsiya"],
-            "description": "50 tagacha o'quvchisi bor markazlar uchun"
+            "description": f"{settings['small_limit']} tagacha o'quvchisi bor markazlar uchun"
         },
         {
             "id": "medium",
             "name": "🌿 O'rta Markaz",
-            "price_example": 400_000,
+            "price": settings["medium_price"],
+            "student_limit": settings["medium_limit"],
             "features": ["Barcha imkoniyatlar", "SMS xabarnomalar", "Gamifikatsiya"],
-            "description": "51 dan 150 tagacha o'quvchi uchun"
+            "description": f"{settings['small_limit'] + 1} dan {settings['medium_limit']} tagacha o'quvchi uchun"
         },
         {
             "id": "large",
             "name": "🌳 Yirik Markaz",
-            "price_example": 700_000,
+            "price": settings["large_price"],
+            "student_limit": settings["large_limit"],
             "features": ["Barcha imkoniyatlar", "Cheklanmagan o'qituvchilar"],
-            "description": "151 dan 300 tagacha o'quvchi uchun"
+            "description": f"{settings['medium_limit'] + 1} dan {settings['large_limit']} tagacha o'quvchi uchun"
         },
         {
             "id": "enterprise",
             "name": "🏢 Korporativ",
-            "price_example": 1_000_000,
+            "price": settings["enterprise_price"],
+            "student_limit": settings["enterprise_limit"],
             "features": ["Barcha imkoniyatlar", "Ustuvor qo'llab-quvvatlash"],
-            "description": "300 dan ortiq o'quvchilar uchun"
+            "description": f"{settings['large_limit']} dan ortiq o'quvchilar uchun"
         },
     ]
 
