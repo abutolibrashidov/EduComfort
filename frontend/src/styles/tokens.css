@@ -1,0 +1,166 @@
+/* ==========================================================================
+   EduComfort design tokens
+   Single source of truth for colour, type, spacing, radius, shadow & motion.
+   Public pages (landing, auth, legal) must only use these variables.
+   ========================================================================== */
+
+:root {
+  /* Brand */
+  --brand-50: #eef4ff;
+  --brand-100: #dbe7ff;
+  --brand-200: #bfd4ff;
+  --brand-400: #4d8dff;
+  --brand-500: #0061f2;
+  --brand-600: #0052d4;
+  --brand-700: #0047c8;
+
+  /* Accents */
+  --violet-50: #f5f3ff;
+  --violet-100: #ede9fe;
+  --violet-500: #7c3aed;
+  --violet-600: #6d28d9;
+  --success: #10b981;
+  --success-600: #059669;
+  --success-50: #ecfdf5;
+  --warning: #f59e0b;
+  --warning-50: #fffbeb;
+  --danger: #ef4444;
+  --danger-600: #dc2626;
+  --danger-50: #fef2f2;
+
+  /* Neutrals */
+  --gray-50: #f9fafb;
+  --gray-100: #f2f4f7;
+  --gray-200: #e4e7ec;
+  --gray-300: #d0d5dd;
+  --gray-400: #98a2b3;
+  --gray-500: #667085;
+  --gray-600: #475467;
+  --gray-700: #344054;
+  --gray-800: #1d2939;
+  --gray-900: #0b1220;
+
+  /* Semantic surfaces (overridden in dark mode) */
+  --bg: #ffffff;
+  --bg-subtle: var(--gray-50);
+  --bg-muted: var(--gray-100);
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --border: var(--gray-200);
+  --border-strong: var(--gray-300);
+  --text: var(--gray-900);
+  --text-secondary: var(--gray-600);
+  --text-muted: var(--gray-500);
+  --text-on-brand: #ffffff;
+  --link: var(--brand-600);
+  --ring: var(--brand-500);
+  --ring-soft: var(--brand-100);
+
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-blur: blur(16px);
+
+  /* Gradients */
+  --grad-brand: linear-gradient(135deg, #0061f2 0%, #3b82f6 50%, #7c3aed 100%);
+  --grad-brand-soft: linear-gradient(135deg, var(--brand-50) 0%, var(--brand-100) 100%);
+  --grad-mesh:
+    radial-gradient(40% 50% at 15% 20%, rgba(0, 97, 242, 0.16) 0%, transparent 70%),
+    radial-gradient(35% 45% at 85% 15%, rgba(124, 58, 237, 0.14) 0%, transparent 70%),
+    radial-gradient(45% 55% at 70% 85%, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
+  --grad-text: linear-gradient(120deg, #0061f2 0%, #3b82f6 45%, #7c3aed 100%);
+
+  /* Typography */
+  --font-sans: "Inter", "InterVariable", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --fs-display: clamp(2.5rem, 6vw, 4.5rem);
+  --fs-h2: clamp(1.875rem, 4vw, 3rem);
+  --fs-h3: 1.25rem;
+  --fs-lead: clamp(1.0625rem, 1.6vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-xs: 0.75rem;
+  --lh-body: 1.7;
+  --tracking-tight: -0.03em;
+
+  /* Spacing (8px grid) */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 24px;
+  --sp-6: 32px;
+  --sp-7: 48px;
+  --sp-8: 64px;
+  --sp-9: 96px;
+  --sp-10: 128px;
+
+  /* Radius */
+  --r-sm: 8px;
+  --r-control: 12px;
+  --r-card: 20px;
+  --r-block: 28px;
+  --r-full: 999px;
+
+  /* Shadows (blue tinted) */
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 24px rgba(0, 97, 242, 0.08);
+  --shadow-lg: 0 1px 2px rgba(16, 24, 40, 0.05), 0 8px 24px rgba(0, 97, 242, 0.08), 0 24px 64px rgba(0, 97, 242, 0.12);
+  --shadow-brand: 0 8px 24px rgba(0, 97, 242, 0.28);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 150ms;
+  --dur: 250ms;
+  --dur-slow: 450ms;
+
+  /* Layout */
+  --container: 1280px;
+  --gutter: 20px;
+  --nav-h: 72px;
+}
+
+@media (min-width: 768px) {
+  :root { --gutter: 32px; }
+}
+
+/* ---------- Dark theme ---------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+  --brand-50: rgba(77, 141, 255, 0.10);
+  --brand-100: rgba(77, 141, 255, 0.18);
+  --brand-200: rgba(77, 141, 255, 0.30);
+  --brand-600: #6ea2ff;
+  --brand-700: #8fb7ff;
+  --violet-50: rgba(139, 92, 246, 0.12);
+  --violet-100: rgba(139, 92, 246, 0.2);
+  --success-50: rgba(16, 185, 129, 0.12);
+  --warning-50: rgba(245, 158, 11, 0.12);
+  --danger-50: rgba(239, 68, 68, 0.12);
+
+  --bg: #070b14;
+  --bg-subtle: #0b1220;
+  --bg-muted: #111a2c;
+  --surface: #0e1626;
+  --surface-raised: #142036;
+  --border: rgba(148, 163, 184, 0.16);
+  --border-strong: rgba(148, 163, 184, 0.28);
+  --text: #f1f5f9;
+  --text-secondary: #b6c2d4;
+  --text-muted: #8a99b0;
+  --link: #8fb7ff;
+  --ring: #4d8dff;
+  --ring-soft: rgba(77, 141, 255, 0.25);
+
+  --glass-bg: rgba(10, 16, 28, 0.7);
+  --glass-border: rgba(148, 163, 184, 0.14);
+
+  --grad-mesh:
+    radial-gradient(40% 50% at 15% 20%, rgba(0, 97, 242, 0.26) 0%, transparent 70%),
+    radial-gradient(35% 45% at 85% 15%, rgba(124, 58, 237, 0.24) 0%, transparent 70%),
+    radial-gradient(45% 55% at 70% 85%, rgba(59, 130, 246, 0.16) 0%, transparent 70%);
+  --grad-text: linear-gradient(120deg, #6ea2ff 0%, #60a5fa 45%, #a78bfa 100%);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35), 0 24px 64px rgba(0, 30, 90, 0.35);
+}

@@ -16,13 +16,16 @@ jobs:
     name: Backend – Lint & Test
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: postgresql+psycopg2://neondb_owner:npg_A03dorqIHTvj@ep-autumn-base-a1xn6i20-pooler.ap-southeast-1.aws.neon.tech/educomfort?sslmode=require
-      SECRET_KEY: 24efcc42bbef44b7f950d5b34e57479d74eca53cddc82772bdb9b8d3173451beb2f699deb04d38a332a1dfe5047fea00e4b72f391b75be4b00df76ee85cb1b81
+      # Set these in GitHub → Settings → Secrets and variables → Actions.
+      # When missing, the next step falls back to a throwaway SQLite DB and CI key.
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
       ENVIRONMENT: development
       CORS_ORIGINS: http://localhost:5173
     defaults:
       run:
         shell: bash
+        working-directory: backend
 
     steps:
       - uses: actions/checkout@v4
@@ -37,7 +40,7 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
-          cache-dependency-path: requirements.txt
+          cache-dependency-path: backend/requirements.txt
 
       - name: Install system dependencies
         run: |
@@ -71,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "EduComfort frontend"
+        working-directory: frontend
 
     steps:
       - uses: actions/checkout@v4
@@ -81,7 +84,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: npm
-          cache-dependency-path: "EduComfort frontend/package-lock.json"
+          cache-dependency-path: "frontend/package-lock.json"
 
       - name: Install dependencies
         run: npm ci
@@ -120,7 +123,7 @@ jobs:
       #     vercel-token: ${{ secrets.VERCEL_TOKEN }}
       #     vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
       #     vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
-      #     working-directory: "EduComfort frontend"
+      #     working-directory: frontend
 
       - name: CI passed
         run: echo "✅ All checks passed. Configure deploy steps above for your provider."
