@@ -146,12 +146,12 @@ function App() {
         <Routes>
           {/* STANDALONE PUBLIC ROUTES - own layout/navbar */}
           <Route path="/" element={<LandingPage />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
 
           {/* AUTH ROUTES - shared AuthLayout (brand panel + animated page transitions) */}
           <Route element={<AuthLayout />}>
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/register" element={<LearnerRegistration />} />
             <Route path="/register-center" element={<CenterRegistration />} />
           </Route>

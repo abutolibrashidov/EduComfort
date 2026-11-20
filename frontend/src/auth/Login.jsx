@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { message } from "antd";
-import { Lock, Mail } from "lucide-react";
+import { Info, Lock, Mail } from "lucide-react";
 import { loginUser, decodeToken } from "../api/auth";
 import Button from "../components/public/Button";
 import { Checkbox, PasswordField, TextField } from "../components/public/Input";
@@ -11,6 +11,16 @@ import { GoogleIcon, TelegramIcon } from "../components/public/BrandIcons";
 const REMEMBER_KEY = "remember_login";
 
 const TelegramBrand = () => <span className="auth-telegram"><TelegramIcon size={18} /></span>;
+
+// Turns an axios error into a message the user can act on, in the current language.
+const loginErrorMessage = (err, t) => {
+  const status = err?.response?.status;
+  if (!err?.response) return t("pub.login.errNetwork");
+  if (status === 401) return t("pub.login.errInvalid");
+  if (status === 403) return t("pub.login.errInactive");
+  if (status === 429) return t("pub.login.errTooMany");
+  return t("pub.login.errServer");
+};
 
 const readRemembered = () => {
   try { return localStorage.getItem(REMEMBER_KEY) || ""; } catch { return ""; }
@@ -67,13 +77,7 @@ const Login = () => {
       // Hard redirect ensures global BrandingContext mounts and injects theme CSS correctly
       window.location.href = routes[role] || "/";
     } catch (err) {
-      let msg = t('login_failed') || "Kirish amalga oshmadi";
-      if (err?.response?.data?.detail) {
-        const d = err.response.data.detail;
-        if (Array.isArray(d) && d.length > 0) msg = d[0].msg || msg;
-        else if (typeof d === "string") msg = d;
-      }
-      message.error(msg);
+      message.error(loginErrorMessage(err, t));
       localStorage.removeItem("sp_token");
       localStorage.removeItem("sp_user");
       setShake((n) => n + 1);
@@ -144,6 +148,11 @@ const Login = () => {
       <div className="auth-social">
         <Button variant="secondary" icon={GoogleIcon} onClick={soon} aria-label={t("pub.login.google")}>Google</Button>
         <Button variant="secondary" icon={TelegramBrand} onClick={soon} aria-label={t("pub.login.telegram")}>Telegram</Button>
+      </div>
+
+      <div className="auth-note" role="note">
+        <Info size={18} strokeWidth={1.75} aria-hidden="true" />
+        <p>{t("pub.login.memberNote")}</p>
       </div>
 
       <p className="auth-foot">

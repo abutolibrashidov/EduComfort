@@ -23,6 +23,25 @@ def _password_fingerprint(user: User) -> str:
     return hashlib.sha256((user.password_hash or "").encode()).hexdigest()[:16]
 
 
+def _login_filter(login_val: str):
+    """Match a user by email (case-insensitive) or phone in any common Uzbek format.
+
+    "90 123 45 67", "901234567", "998901234567" and "+998 (90) 123-45-67" all resolve
+    to the stored "+998901234567" form.
+    """
+    import re
+    from sqlalchemy import func, or_
+
+    conditions = [func.lower(User.email) == login_val.lower(), User.phone_number == login_val]
+    if re.fullmatch(r"[\d\s()+\-]+", login_val):
+        digits = re.sub(r"\D", "", login_val)
+        if len(digits) == 9:
+            digits = "998" + digits
+        if digits:
+            conditions += [User.phone_number == "+" + digits, User.phone_number == digits]
+    return or_(*conditions)
+
+
 @router.post("/login")
 @limiter.limit("5/minute")
 def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
@@ -33,7 +52,7 @@ def login(request: Request, data: LoginRequest, db: Session = Depends(get_db)):
     try:
         user = (
             db.query(User)
-            .filter((User.email == login_val) | (User.phone_number == login_val))
+            .filter(_login_filter(login_val))
             .first()
         )
 
@@ -516,7 +535,7 @@ def forgot_password(
     login_val = data.login.strip()
     user = (
         db.query(User)
-        .filter((User.email == login_val) | (User.phone_number == login_val))
+        .filter(_login_filter(login_val))
         .first()
     )
 

@@ -210,6 +210,17 @@
 .auth-social .ui-btn__label { overflow: hidden; text-overflow: ellipsis; }
 .auth-telegram { color: #229ed9; display: inline-flex; }
 @media (max-width: 380px) { .auth-social { grid-template-columns: minmax(0, 1fr); } }
+.auth-note {
+  display: flex; gap: 10px; align-items: flex-start;
+  margin: 24px 0 0; padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.875rem; line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--brand-50);
+  border: 1px solid var(--brand-200);
+}
+.auth-note svg { flex: none; margin-top: 1px; color: var(--brand-600); }
+.auth-head + .auth-note { margin: -8px 0 24px; }
 .auth-foot { margin-top: 28px; text-align: center; font-size: 0.9375rem; color: var(--text-secondary); }
 .auth-foot a { margin-left: 4px; }
 

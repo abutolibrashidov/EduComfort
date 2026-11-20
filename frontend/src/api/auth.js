@@ -3,8 +3,6 @@ import axiosClient from "./axiosClient";
 // Login
 export async function loginUser(login, password) {
   const payload = { login, password };
-  console.log("Posting to:", axiosClient.defaults.baseURL + "/auth/login");
-
   const res = await axiosClient.post("/auth/login", payload);
 
   if (res?.data?.access_token) {

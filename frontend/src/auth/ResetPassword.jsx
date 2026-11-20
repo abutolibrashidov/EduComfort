@@ -1,96 +1,121 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Typography, message } from 'antd';
-import { LockOutlined } from '@ant-design/icons';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { ArrowLeft, CheckCircle2, KeyRound, Link2Off, Lock } from 'lucide-react';
 import axiosClient from '../api/axiosClient';
-import EduLogo from '../components/EduLogo';
-
-const { Title, Text } = Typography;
+import Button from '../components/public/Button';
+import { PasswordField } from '../components/public/Input';
 
 const ResetPassword = () => {
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const { t } = useTranslation();
-    const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
 
-    const token = searchParams.get('token');
+  const [values, setValues] = useState({ password: '', confirm: '' });
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
+  const [shake, setShake] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState('');
+  const [done, setDone] = useState(false);
 
-    const onFinish = async (values) => {
-        if (!token) {
-            message.error("Invalid or missing reset token.");
-            return;
-        }
+  const validate = (v) => {
+    const e = {};
+    if (!v.password) e.password = t('pub.common.required');
+    else if (v.password.length < 6) e.password = t('pub.common.minChars', { n: 6 });
+    if (!v.confirm) e.confirm = t('pub.common.required');
+    else if (v.confirm !== v.password) e.confirm = t('pub.register.mismatch');
+    return e;
+  };
 
-        setLoading(true);
-        try {
-            const { data } = await axiosClient.post('/auth/reset-password', {
-                token: token,
-                new_password: values.password
-            });
-            message.success(data.message || 'Password reset successful.');
-            setTimeout(() => navigate('/login'), 2000);
-        } catch (err) {
-            message.error(err?.response?.data?.detail || 'Failed to reset password.');
-        } finally {
-            setLoading(false);
-        }
-    };
+  const field = (key) => ({
+    value: values[key],
+    onChange: (e) => {
+      const next = { ...values, [key]: e.target.value };
+      setValues(next);
+      if (touched[key] || (key === 'password' && touched.confirm)) setErrors(validate(next));
+    },
+    onBlur: () => { setTouched((s) => ({ ...s, [key]: true })); if (values[key]) setErrors(validate(values)); },
+    error: touched[key] ? errors[key] : undefined,
+    shake,
+    disabled: loading,
+  });
 
-    if (!token) {
-        return (
-            <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', justifyContent: 'center' }}>
-                <Text type="danger" strong>Missing Reset Token. Please use the link sent to your email.</Text>
-            </div>
-        );
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const found = validate(values);
+    setErrors(found);
+    setTouched({ password: true, confirm: true });
+    if (Object.keys(found).length) { setShake((n) => n + 1); return; }
+
+    setLoading(true);
+    setServerError('');
+    try {
+      await axiosClient.post('/auth/reset-password', { token, new_password: values.password });
+      setDone(true);
+    } catch (err) {
+      setServerError(err?.response ? t('pub.reset.failed') : t('pub.login.errNetwork'));
+      setShake((n) => n + 1);
+    } finally {
+      setLoading(false);
     }
+  };
 
+  if (!token) {
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f0f2f5', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ background: '#fff', padding: 40, borderRadius: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', width: '100%', maxWidth: 400 }}>
-                <div style={{ textAlign: 'center', marginBottom: 24 }}>
-                    <EduLogo size={40} dark animate={false} />
-                    <Title level={3} style={{ marginTop: 16 }}>{t('reset_password', 'Set New Password')}</Title>
-                </div>
-
-                <Form layout="vertical" onFinish={onFinish} size="large">
-                    <Form.Item
-                        name="password"
-                        rules={[
-                            { required: true, message: t('required_field', 'Required') },
-                            { min: 6, message: t('password_min_6', 'Minimum 6 characters') }
-                        ]}
-                    >
-                        <Input.Password prefix={<LockOutlined />} placeholder={t('new_password', 'New Password')} />
-                    </Form.Item>
-
-                    <Form.Item
-                        name="confirm_password"
-                        dependencies={['password']}
-                        rules={[
-                            { required: true, message: t('required_field', 'Required') },
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error(t('passwords_do_not_match', 'The two passwords do not match')));
-                                },
-                            }),
-                        ]}
-                    >
-                        <Input.Password prefix={<LockOutlined />} placeholder={t('confirm_new_password', 'Confirm New Password')} />
-                    </Form.Item>
-
-                    <Form.Item>
-                        <Button type="primary" htmlType="submit" block loading={loading}>
-                            {t('save_new_password', 'Save New Password')}
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </div>
-        </div>
+      <div className="auth-head auth-head--center">
+        <span className="auth-head__icon" aria-hidden="true"><Link2Off size={28} strokeWidth={1.75} /></span>
+        <h1>{t('pub.reset.missingTitle')}</h1>
+        <p>{t('pub.reset.missingText')}</p>
+        <Button variant="primary" size="lg" block to="/forgot-password" arrow>{t('pub.reset.requestNew')}</Button>
+      </div>
     );
+  }
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      {done ? (
+        <motion.div key="done" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}>
+          <div className="auth-head auth-head--center" role="status">
+            <motion.span className="auth-head__icon is-success" aria-hidden="true"
+              initial={{ scale: 0.4 }} animate={{ scale: 1 }} transition={{ type: 'spring', stiffness: 380, damping: 18 }}>
+              <CheckCircle2 size={28} strokeWidth={1.75} />
+            </motion.span>
+            <h1>{t('pub.reset.successTitle')}</h1>
+            <p>{t('pub.reset.successText')}</p>
+          </div>
+          <Button variant="primary" size="lg" block to="/login" arrow>{t('pub.reset.toLogin')}</Button>
+        </motion.div>
+      ) : (
+        <motion.div key="form" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}>
+          <div className="auth-head auth-head--center">
+            <span className="auth-head__icon" aria-hidden="true"><KeyRound size={28} strokeWidth={1.75} /></span>
+            <h1>{t('pub.reset.title')}</h1>
+            <p>{t('pub.reset.sub')}</p>
+          </div>
+          <form className="auth-form" onSubmit={onSubmit} noValidate>
+            <PasswordField label={t('pub.reset.password')} icon={Lock} autoComplete="new-password"
+              showStrength {...field('password')} />
+            <PasswordField label={t('pub.register.confirm')} icon={Lock} autoComplete="new-password"
+              {...field('confirm')} />
+            {serverError && <p className="ui-field__error" role="alert">{serverError}</p>}
+            <Button type="submit" variant="primary" size="lg" block arrow loading={loading}
+              loadingText={t('pub.reset.submitting')}>
+              {t('pub.reset.submit')}
+            </Button>
+          </form>
+          <p className="auth-foot">
+            <Link to="/login" className="ui-link" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+              <ArrowLeft size={16} strokeWidth={2} aria-hidden="true" /> {t('pub.forgot.back')}
+            </Link>
+          </p>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 };
 
 export default ResetPassword;

@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { message } from 'antd';
-import { ArrowLeft, Building2, Check, GitBranch, Lock, Mail, MapPin, PartyPopper, Phone, School, User } from 'lucide-react';
+import { ArrowLeft, Building2, Check, GitBranch, Info, Lock, Mail, MapPin, PartyPopper, Phone, School, User } from 'lucide-react';
 import axiosClient from '../../api/axiosClient';
 import Button from '../../components/public/Button';
 import Stepper from '../../components/public/Stepper';
@@ -47,6 +47,16 @@ const Confetti = () => {
             ))}
         </div>
     );
+};
+
+// Maps backend errors to translated, actionable messages.
+const registerErrorMessage = (err, t) => {
+    if (!err?.response) return t('pub.login.errNetwork');
+    const { status, data } = err.response;
+    const detail = typeof data?.detail === 'string' ? data.detail.toLowerCase() : '';
+    if (status === 429) return t('pub.register.tooMany');
+    if (detail.includes('already')) return t('pub.register.exists');
+    return t('pub.register.failed');
 };
 
 const CenterRegistration = () => {
@@ -145,9 +155,7 @@ const CenterRegistration = () => {
 
             setDone(true);
         } catch (err) {
-            console.error(err);
-            const detail = err.response?.data?.detail;
-            message.error(typeof detail === 'string' ? detail : t('pub.register.failed'));
+            message.error(registerErrorMessage(err, t));
             setShake((n) => n + 1);
         } finally {
             setLoading(false);
@@ -202,6 +210,14 @@ const CenterRegistration = () => {
             <div className="auth-head">
                 <h1>{t('pub.register.title')}</h1>
                 <p>{t('pub.register.sub')}</p>
+            </div>
+
+            <div className="auth-note" role="note">
+                <Info size={18} strokeWidth={1.75} aria-hidden="true" />
+                <p>
+                    {t('pub.register.ownerNote')}{' '}
+                    <Link to="/login" className="ui-link">{t('pub.register.ownerNoteLink')}</Link>
+                </p>
             </div>
 
             <div className="reg-types" role="radiogroup" aria-label={t('pub.register.typeLabel')}>
