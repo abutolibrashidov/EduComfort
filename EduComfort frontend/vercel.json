@@ -1,0 +1,12 @@
+{
+  "framework": null,
+  "installCommand": "cd ../frontend && npm ci",
+  "buildCommand": "cd ../frontend && npm run build && rm -rf \"../EduComfort frontend/dist\" && cp -r dist \"../EduComfort frontend/dist\"",
+  "outputDirectory": "dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
